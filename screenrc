@@ -1,0 +1,4 @@
+escape ^pp
+bind ^m prev
+shell -$SHELL
+defscrollback 15000
