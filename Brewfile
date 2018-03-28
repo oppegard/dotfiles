@@ -1,5 +1,6 @@
 brew 'chruby'
 brew 'git'
+brew 'go@1.8', link: true
 brew 'ruby-install'
 
 tap 'caskroom/cask'
@@ -13,6 +14,7 @@ cask 'google-chrome'
 cask 'intellij-idea-ce'
 cask 'iTerm2'
 cask 'java8'
+cask 'slack'
 cask 'spectacle'
 cask 'virtualbox'
 cask 'zoomus'
