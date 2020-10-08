@@ -8,4 +8,7 @@
   killall Dock
 ```
 
-- Enable TouchID Auth for `sudo` commands in iTerm2: https://gitlab.com/gnachman/iterm2/-/issues/7608
+- Enable TouchID Auth for `sudo` commands in iTerm2 (taken from [blog](https://antkowiak.it/en/mac-os-en/enable-touchid-for-sudo-in-iterm-2/)).
+  1. Add `auth sufficient pam_tid.so` to the **top** of `/etc/pam.d/sudo`
+  1. Go to iTerm2 Preferences (⌘,). In Advanced(⚙) Tab, search for "Allow sessions to survive logging out and back in." and set the value to No.
+  1. Restart iTerm2 (maybe?)
