@@ -7,3 +7,5 @@
   defaults write com.apple.Dock appswitcher-all-displays -bool true
   killall Dock
 ```
+
+- Enable TouchID Auth for `sudo` commands in iTerm2: https://gitlab.com/gnachman/iterm2/-/issues/7608
