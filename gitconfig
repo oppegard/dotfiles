@@ -46,3 +46,5 @@
 [user]
 	name = Glenn Oppegard
 	email = oppegard@gmail.com
+[rerere]
+	enabled = true
