@@ -9,6 +9,7 @@
 	lg = log -p --pretty=fuller --abbrev-commit
 	lgg = log --pretty=fuller --abbrev-commit --stat
 	blog = log origin/main... --left-right
+	adp = add -p
 [apply]
 	whitespace = nowarn
 [branch]
