@@ -68,7 +68,7 @@ ZSH_CUSTOM=$HOME/workspace/dotfiles/zshcustom
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(direnv)
+plugins=(direnv git-prompt)
 
 source $ZSH/oh-my-zsh.sh
 
