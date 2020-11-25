@@ -12,3 +12,5 @@
   1. Add `auth sufficient pam_tid.so` to the **top** of `/etc/pam.d/sudo`
   1. Go to iTerm2 Preferences (⌘,). In Advanced(⚙) Tab, search for "Allow sessions to survive logging out and back in." and set the value to No.
   1. Restart iTerm2 (maybe?)
+
+- https://sourabhbajaj.com/mac-setup/
