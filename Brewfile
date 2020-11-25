@@ -15,6 +15,18 @@ cask 'rectangle'
 cask 'slack'
 # cask 'zoomus'
 
+# QuickLook plugins:
+# - https://github.com/sindresorhus/quick-look-plugins
+# - https://sourabhbajaj.com/mac-setup/Homebrew/Cask.html
+cask 'betterzip'
+cask 'qlcolorcode'
+cask 'qlImageSize'
+cask 'qlmarkdown'
+cask 'qlstephen'
+cask 'quicklook-csv'
+cask 'quicklook-json'
+cask 'suspicious-package'
+
 brew 'mas'
 mas 'Keynote',  id: 409183694
 mas 'Numbers',  id: 409203825
