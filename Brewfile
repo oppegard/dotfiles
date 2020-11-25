@@ -1,25 +1,22 @@
-brew 'chruby'
+brew 'coreutils'
 brew 'git'
-brew 'go@1.8', link: true
-brew 'ruby-install'
 
-tap 'caskroom/cask'
-tap 'caskroom/versions'
+tap 'homebrew/cask'
+tap 'homebrew/cask-versions'
 cask '1Password'
-cask 'clipy'
+cask 'bartender'
 cask 'docker'
-cask 'dropbox'
+# cask 'dropbox'
 cask 'firefox'
 cask 'google-chrome'
-cask 'intellij-idea-ce'
 cask 'iTerm2'
-cask 'java8'
+cask 'pastebot'
+cask 'rectangle'
 cask 'slack'
-cask 'spectacle'
-cask 'virtualbox'
-cask 'zoomus'
+# cask 'zoomus'
 
 brew 'mas'
-mas 'Keynote', id: 409183694
-mas 'Numbers', id: 409203825
-mas 'Pages',   id: 409201541
+mas 'Keynote',  id: 409183694
+mas 'Numbers',  id: 409203825
+mas 'Pages',    id: 409201541
+mas 'Gestimer', id: 990588172

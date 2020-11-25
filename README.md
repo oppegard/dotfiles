@@ -14,3 +14,13 @@
   1. Restart iTerm2 (maybe?)
 
 - https://sourabhbajaj.com/mac-setup/
+
+## Preferences
+
+```sh
+brew install coreutils # realpath
+ln -sf $(realpath Preferences.sublime-settings) \
+   ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings
+cp com.knollsoft.Rectangle.plist \
+   ~/Library/Preferences/com.knollsoft.Rectangle.plist # Rectangle overwrite a symlinked prefs file
+```
