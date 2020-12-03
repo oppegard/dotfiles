@@ -13,6 +13,7 @@ cask 'iTerm2'
 cask 'pastebot'
 cask 'rectangle'
 cask 'slack'
+cask 'sublime-text'
 # cask 'zoomus'
 
 # QuickLook plugins:
