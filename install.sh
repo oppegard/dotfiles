@@ -1,32 +1,31 @@
 #!/usr/bin/env bash
-set -e
+set -e -o pipefail
+if [[ $SHELL =~ "zsh" ]]; then
+  echo "Verified running zsh shell"
+else
+  echo Unsupported shell $SHELL
+  exit 1
+fi
 
 DOTFILES_DIR="$(pwd)"
-
-###############################################################################
-# Homebrew / Cask                                                             #
-###############################################################################
-
-if [[ ! -f /usr/local/bin/brew ]]; then
-  echo "Installing homebrew"
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+if [[ $(basename "$DOTFILES_DIR") != "dotfiles" ]]; then
+  echo "Script doesn't appear to have been invoked from the dotfiles directory."
+  echo "Currently in $(pwd). Exiting."
+  exit 1
 fi
 
-echo "brew bundling..."
-brew bundle
+echo Setting up zsh
+ZDOTDIR="${ZDOTDIR:-$HOME}"
+echo ZDOTDIR is "$ZDOTDIR"
+(
+  set -x
+  ln -sf "$DOTFILES_DIR"/zshenv "$ZDOTDIR"/.zshenv
+  ln -sf "$DOTFILES_DIR"/zprofile "$ZDOTDIR"/.zprofile
+  ln -sf "$DOTFILES_DIR"/zshrc "$ZDOTDIR"/.zshrc
+)
 
-
-###############################################################################
-# Nix                                                                         #
-###############################################################################
-if [[ ! -f ~/.bash_it ]]; then
-  git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
-fi
-
-ln -sf "${DOTFILES_DIR}/bash_profile" ~/.bash_profile
-
-###############################################################################
-# Spectacle.app                                                               #
-###############################################################################
-mkdir -p ~/Library/Application\ Support/Spectacle/
-ln -sf "${DOTFILES_DIR}/spectacle.json" ~/Library/Application\ Support/Spectacle/Shortcuts.json
+echo Setting up misc
+(
+  set -x
+  ln -sf "$DOTFILES_DIR"/bin "$HOME"/bin
+)

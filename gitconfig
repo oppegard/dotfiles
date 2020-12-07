@@ -48,3 +48,5 @@
 	email = oppegard@gmail.com
 [rerere]
 	enabled = true
+[init]
+	defaultBranch = main

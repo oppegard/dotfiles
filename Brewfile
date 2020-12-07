@@ -1,12 +1,29 @@
-brew 'coreutils'
-brew 'git'
+def work_machine?
+    snitches = [
+        'IntelligentHubAgent',
+        'Enterprise Connect',
+        'Confer.app', # Carbon Black
+        'CbDefense' # Carbon Black
+    ]
+    snitches.reduce(false) { |memo, snitch| system("pgrep -iq '#{snitch}'") || memo }
+end
 
+puts "DETECTING IF WORK MACHINE: #{work_machine?}"
+
+tap 'homebrew/bundle'
+tap 'homebrew/core'
 tap 'homebrew/cask'
 tap 'homebrew/cask-versions'
+
+brew 'coreutils'
+brew 'git'
+tap 'git-duet/tap'
+brew 'git-duet'
+
 cask '1Password'
 cask 'bartender'
 cask 'docker'
-# cask 'dropbox'
+cask 'dropbox' unless work_machine?
 cask 'firefox'
 cask 'google-chrome'
 cask 'iTerm2'
@@ -27,6 +44,7 @@ cask 'qlstephen'
 cask 'quicklook-csv'
 cask 'quicklook-json'
 cask 'suspicious-package'
+system('qlmanage -r')
 
 brew 'mas'
 mas 'Keynote',  id: 409183694

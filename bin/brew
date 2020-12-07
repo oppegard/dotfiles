@@ -1,0 +1,8 @@
+#!/bin/bash
+set +o posix
+
+if [[ $(arch) == "amd64" ]]; then
+  /opt/homebrew/bin/brew "$@"
+else
+  /usr/local/bin/brew "$@"
+fi

@@ -34,3 +34,13 @@ ln -sf $(realpath Preferences.sublime-settings) \
 cp com.knollsoft.Rectangle.plist \
    ~/Library/Preferences/com.knollsoft.Rectangle.plist # Rectangle overwrite a symlinked prefs file
 ```
+
+## SSH Setup
+Copy `memex_id_ed25519` and `id_ed25519` from 1Password to `~/.ssh/`.
+
+```
+chmod 0600 ~/.ssh/*id*
+
+$ crontab -e
+*/15 * * * * $HOME/workspace/dotfiles/zk_sync.sh >/dev/null 2>&1
+```
