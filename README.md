@@ -9,13 +9,13 @@
   killall Dock
 ```
 
-### Enable TouchID Auth for `sudo` commands in iTerm2 (taken from [blog](https://antkowiak.it/en/mac-os-en/enable-touchid-for-sudo-in-iterm-2/)).
+## Enable TouchID Auth for `sudo` commands in iTerm2 ([source](https://antkowiak.it/en/mac-os-en/enable-touchid-for-sudo-in-iterm-2/)).
   1. Add `auth sufficient pam_tid.so` to the **top** of `/etc/pam.d/sudo`
   1. Go to iTerm2 Preferences (⌘,). In Advanced(⚙) Tab, search for "Allow sessions to survive logging out and back in." and set the value to No.
   1. Restart iTerm2 (maybe?)
 
 
-### Enable QuickLook Plugins
+## Enable QuickLook Plugins
 
 ```
 for plugin in ~/Library/QuickLook/*qlgenerator; do
@@ -28,19 +28,24 @@ qlmanage -r
 ## Preferences
 
 ```sh
+# Sublibe Settings
 brew install coreutils # realpath
 ln -sf $(realpath Preferences.sublime-settings) \
    ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings
+
+# Rectangle.app Settings
+# Rectangle overwrite a symlinked prefs file. If changes are made to Rectangle prefs, we need to copy back to this repo.
 cp com.knollsoft.Rectangle.plist \
-   ~/Library/Preferences/com.knollsoft.Rectangle.plist # Rectangle overwrite a symlinked prefs file
+   ~/Library/Preferences/com.knollsoft.Rectangle.plist
+
+# Finder: show all hidden files
+defaults write com.apple.Finder AppleShowAllFiles true
+killall Finder
 ```
 
 ## SSH Setup
-Copy `memex_id_ed25519` and `id_ed25519` from 1Password to `~/.ssh/`.
+From 1Password, copy `memex_id_ed25519` and `id_ed25519` to `~/.ssh/`.
 
 ```
 chmod 0600 ~/.ssh/*id*
-
-$ crontab -e
-*/15 * * * * $HOME/workspace/dotfiles/zk_sync.sh >/dev/null 2>&1
 ```
