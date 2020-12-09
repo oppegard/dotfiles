@@ -24,7 +24,6 @@
 [core]
 	excludesfile = ~/.gitignore_global
 	pager = less -FXRS -x2
-	hooksPath = ~/workspace/git-hooks-core
 [fetch]
 	prune = true
 [pull]
