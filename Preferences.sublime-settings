@@ -1,5 +1,6 @@
 {
 	"font_size": 13,
+	"git_diff_target": "head",
 	"ignored_packages":
 	[
 		"Vintage"

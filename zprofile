@@ -1,1 +1,3 @@
-export PATH=$HOME/bin:$HOME/.local/bin:/opt/homebrew/bin:$PATH
+# Two hombrew installs not working
+# export PATH=/opt/homebrew/bin:$PATH
+export PATH=$HOME/bin:$HOME/.local/bin:$PATH

@@ -5,3 +5,5 @@
 # 3. Interactive login shell? /etc/zshrc and then $ZDOTDIR/.zshrc
 # 4. Login shell? /etc/zlogin and $ZDOTDIR/.zlogin
 # 5. Login shell exiting via `exit`? $ZDOTDIR/.zlogout and then /etc/zlogout
+
+export HOMEBREW_NO_ANALYTICS=1

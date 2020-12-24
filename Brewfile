@@ -8,6 +8,15 @@ def work_machine?
     snitches.reduce(false) { |memo, snitch| system("pgrep -iq '#{snitch}'") || memo }
 end
 
+def fix_ql_plugins
+	Dir["#{ENV['HOME']}/Library/QuickLook/*qlgenerator"].each do |plugin|
+		puts "Enabling #{plugin}"
+		system("xattr -d -r com.apple.quarantine #{plugin}")
+	end
+	puts "Reseting Quick Look Server"
+	system("qlmanage -r")
+end
+
 puts "DETECTING IF WORK MACHINE: #{work_machine?}"
 
 tap 'homebrew/bundle'
@@ -44,7 +53,8 @@ cask 'qlstephen'
 cask 'quicklook-csv'
 cask 'quicklook-json'
 cask 'suspicious-package'
-system('qlmanage -r')
+fix_ql_plugins
+
 
 brew 'mas'
 mas 'Keynote',  id: 409183694
