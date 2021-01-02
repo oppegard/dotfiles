@@ -13,11 +13,11 @@ def fix_ql_plugins
 		puts "Enabling #{plugin}"
 		system("xattr -d -r com.apple.quarantine #{plugin}")
 	end
-	puts "Reseting Quick Look Server"
+	puts "Resetting Quick Look Server"
 	system("qlmanage -r")
 end
 
-puts "DETECTING IF WORK MACHINE: #{work_machine?}"
+puts "IS WORK MACHINE?: #{work_machine?}"
 
 tap 'homebrew/bundle'
 tap 'homebrew/core'
