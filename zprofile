@@ -1,1 +1,1 @@
-export PATH=$HOME/bin:$HOME/.local/bin:$PATH
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/sbin:$PATH
