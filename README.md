@@ -1,10 +1,19 @@
 # dotfiles
 
-- [Hard to discover tips and apps for making macOS pleasant](https://thume.ca/2020/09/04/macos-tips/)
-- https://sourabhbajaj.com/mac-setup/
+Another dotfiles repo.
 
-### Make cmd-tab app switcher appear on all monitors:
-```
+
+# New Mac Setup
+
+TODO: automate where sensible 🤖
+
+## Install Fonts
+
+- [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans)
+- [iA Writer Mono & Quattro](https://github.com/iaolo/iA-Fonts)
+
+## Make cmd-tab app switcher appear on all monitors:
+```sh
   defaults write com.apple.Dock appswitcher-all-displays -bool true
   killall Dock
 ```
@@ -17,7 +26,7 @@
 
 ## Enable QuickLook Plugins
 
-```
+```sh
 for plugin in ~/Library/QuickLook/*qlgenerator; do
   echo enabling $plugin;
   xattr -d -r com.apple.quarantine ${plugin}
@@ -28,7 +37,7 @@ qlmanage -r
 ## Preferences
 
 ```sh
-# Sublibe Settings
+# Sublime Settings
 brew install coreutils # realpath
 ln -sf $(realpath Preferences.sublime-settings) \
    ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings
@@ -46,6 +55,28 @@ killall Finder
 ## SSH Setup
 From 1Password, copy `memex_id_ed25519` and `id_ed25519` to `~/.ssh/`.
 
-```
+```sh
 chmod 0600 ~/.ssh/*id*
 ```
+
+
+# Resources
+
+## Single Site Browsers (SSB)
+
+[BZG](https://www.bzgapps.com) provides:
+- Unite for WebKit-based SSB
+- Coherence X
+
+## launchd
+
+Website explaining launchd, LaunchAgents, and LaunchDaemons: [https://www.launchd.info](https://www.launchd.info)
+
+[LaunchControl](https://www.soma-zone.com/LaunchControl/)
+> LaunchControl is a fully-featured launchd GUI allowing you to create, manage and debug system- and user services on your Mac
+
+
+## Third-Party Sites
+
+- [Hard to discover tips and apps for making macOS pleasant](https://thume.ca/2020/09/04/macos-tips/)
+- [https://sourabhbajaj.com/mac-setup/](https://sourabhbajaj.com/mac-setup/)
