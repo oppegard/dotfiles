@@ -1159,7 +1159,7 @@ echo -n $ref</string>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>keyword</key>
-				<string>t</string>
+				<string>ot</string>
 				<key>subtext</key>
 				<string></string>
 				<key>text</key>
@@ -1341,9 +1341,11 @@ echo -n $ref</string>
 				<key>focusedappvariablename</key>
 				<string></string>
 				<key>hotkey</key>
-				<integer>0</integer>
+				<integer>11</integer>
 				<key>hotmod</key>
-				<integer>0</integer>
+				<integer>1179648</integer>
+				<key>hotstring</key>
+				<string>B</string>
 				<key>leftcursor</key>
 				<false/>
 				<key>modsmode</key>
