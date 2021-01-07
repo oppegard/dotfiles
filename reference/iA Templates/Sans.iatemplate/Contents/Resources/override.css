@@ -1,0 +1,6 @@
+
+@import url("style/style-lang.css");
+
+html :lang(grc) {
+    font-family: iAWriterDuo5, sans-serif;
+}

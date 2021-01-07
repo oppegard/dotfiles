@@ -1,0 +1,298 @@
+/**
+ * iA Writer Template “Classic (Serif)”
+ */
+
+@import url("style/style-core.css");
+
+@import url("style/style-IBMPlexSerif.css");
+@import url("style/style-code.css");
+
+@import url("style/typography-core.css");
+@import url("style/typography-IBMPlexSansSerif.css");
+
+body {
+  max-width: 37.5em;
+}
+
+@media print {
+  body {
+    max-width: 365pt;
+  }
+}
+
+/* Headings */
+
+h1 {
+  margin-top: calc((62 / 23) * 1em);
+  margin-bottom: calc((62 / 23) * 1em);
+  font-size: calc((23 / 19) * 1em); /* 1.2105em = 23px @ font-size: 19px */
+  line-height: calc(31 / 23); /* 1.3478 = 31px @ font-size: 23px */
+}
+
+h2 {
+  margin-top: calc((62 / 21) * 1em);
+  margin-bottom: calc((31 / 21) * 1em);
+  font-size: calc((21 / 19) * 1em); /* 1.1053em = 21px @ font-size: 19px */
+  line-height: calc(31 / 21); /* 1.4762 = 31px @ font-size: 21px */
+}
+
+h3,
+h4,
+h5,
+h6 {
+  margin-top: calc((31 / 19) * 1em);
+  font-size: 1em;
+}
+
+h3,
+h4,
+h5 {
+  margin-bottom: 0;
+}
+
+h3,
+h4 {
+  line-height: calc(31 / 19); /* 1.6316 = 31px @ font-size: 19px */
+}
+
+h4 {
+  font-style: italic;
+}
+
+h5 {
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Display h6 as run-in: see core.css */
+
+/* Subheading adjustments */
+
+h1 + h1 {
+  margin-top: calc((46 / 23) * -1em);
+}
+
+h1 + h2 {
+  margin-top: calc((46 / 21) * -1em);
+}
+
+h2 + h1 {
+  margin-top: calc((15 / 23) * -1em);
+}
+
+h2 + h2 {
+  margin-top: calc((15 / 21) * -1em);
+}
+
+:-webkit-any(h1, h2, h3, h4, h5, h6) + :-webkit-any(h3, h4, h5, h6),
+body > h6:first-child {
+  margin-top: 0;
+}
+
+/* Vertical margins */
+p,
+ol,
+ul,
+dl,
+figure,
+blockquote,
+pre,
+table {
+  margin: calc((31 / 19) * 1em) auto 0;
+}
+
+/* Collapse vertical margin between headers and block-level elements */
+:-webkit-any(h3, h4, h5) + :-webkit-any(p, ol, ul, dl, figure, blockquote, pre, table),
+:-webkit-any(h1, h2, h3, h4, h5) + h6 + *,
+hr + h6 {
+  margin-top: 0;
+}
+
+/* Lists */
+@media screen and (min-width: 760px) {
+  ul,
+  ol {
+    padding-left: calc((40 / 19) * 1em); /* 2.1053em = ~40px for font-size: 19px. em works better for RWD than % */
+  }
+}
+
+/* Use custom bullet for unordered lists */
+ul {
+  list-style: none;
+}
+
+ul > li:before {
+  content: "• ";
+  float: left; /* Take out of flow to avoid changing left edge alignment or pushing child paragraph down */
+  margin-left: calc((21 / 19) * -1em); /* -1.1053em = 21px @ font-size: 19px. em works better for RWD than % */
+}
+
+/* Indent ordered lists in blockquotes */
+blockquote ol,
+blockquote ul {
+  margin-left: calc((31 / 19) * -1em);
+}
+
+/* Blockquotes */
+blockquote {
+  margin-left: calc((16 / 19) * -1em); /* 16px at width: 1080px */
+  margin-right: calc((16 / 19) * -1em); /* 16px at width: 1080px */
+  padding-left: calc((40 / 19) * 1em); /* 40px at width: 1080px */
+  padding-right: calc((40 / 19) * 1em); /* 40px at width: 1080px */
+  font-style: italic;
+}
+
+blockquote em strong,
+blockquote strong em {
+  font-weight: 700;
+}
+
+/* Override core.css */
+@media screen and (min-width: 100px) {
+  hr {
+    margin-top: calc((31 / 19) * 1em);
+    margin-bottom: calc((30 / 19) * 1em); /* -1px for border-bottom */
+  }
+}
+
+/* Tables */
+
+table {
+  font-size: calc((16 / 19) * 1em); /* 0.8421em = 16px @ font-size: 19px */
+  line-height: calc(25 / 16); /* 1.5625 = 25px @ font-size: 16px; */
+}
+
+/* Table label
+   13.86672HACK Small caps temporary workaround via all caps in smaller IBMPlexSerif Bold. See h6 above for more info */
+th {
+  font-size: 86.667%; /* = 13.8667px @ 16px */
+  line-height: calc(25 / 13.8667); /* 1.8029 = 25px @ font-size: 13.8667px */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: calc((0.25 / 13.86672) * 1em); /* 0.0181em, 0.25px @ font-size: 13.86672px */
+}
+
+/* @media Rules */
+
+/* Combined horizontal line styles, supplimenting core.css */
+
+/* Adjust border color to imitate sub-pixel lines */
+@media screen and (min-width: 150px) {
+  hr,
+  caption,
+  tbody th,
+  td {
+    border-bottom-color: #888;
+  }
+
+  tbody th,
+  td {
+    border-top-color: #888;
+  }
+}
+
+/* Intended border color from 200px */
+@media screen and (min-width: 200px) {
+  hr,
+  caption,
+  tbody th,
+  td {
+    border-bottom-color: #1a1a1a;
+  }
+
+  tbody th,
+  td {
+    border-top-color: #1a1a1a;
+  }
+}
+
+/** OBJECTS → see core.css base styles for:
+ *  - Indent Paragraphs
+ *  - Footnotes
+ *  - Task lists
+ */
+
+/* Indent Paragraphs */
+.indent-paragraphs p + p {
+  text-indent: calc((21 / 19) * 1em); /* 1.1053em = 21px @ font-size: 19px */
+}
+
+
+/* Night Mode */
+
+/* Imitate sub-pixel line for narrow widths */
+
+/* First tweakpoint modifying core.css */
+@media screen and (min-width: 150px) {
+  .night-mode hr,
+  .night-mode caption,
+  .night-mode tbody th,
+  .night-mode td {
+    border-bottom-color: #888;
+  }
+
+  .night-mode tbody th,
+  .night-mode td {
+    border-top-color: #888;
+  }
+}
+
+/* Intended border color from 200px */
+@media screen and (min-width: 200px) {
+  .night-mode hr,
+  .night-mode caption,
+  .night-mode tbody th,
+  .night-mode td {
+    border-bottom-color: #dedede;
+  }
+
+  .night-mode tbody th,
+  .night-mode td {
+    border-top-color: #dedede;
+  }
+}
+
+/* Intended border color from 200px for OS X */
+@media screen and (min-width: 200px) and (min-device-width: 1152px) {
+  .night-mode hr,
+  .night-mode caption,
+  .night-mode tbody th,
+  .night-mode td {
+    border-bottom-color: #cccccc;
+  }
+
+  .night-mode tbody th,
+  .night-mode td {
+    border-top-color: #cccccc;
+  }
+}
+
+/* Footnotes */
+.footnotes {
+  font-size: calc((18 / 19) * 1em); /* 0.9474em = 18px @ font-size: 18px */
+  line-height: calc(31 / 18); /* 1.7222 = 31px @ font-size: 18px */
+}
+
+/* Code */
+
+code,
+samp,
+kbd {
+  font-size: 0.94em;
+}
+
+/* Task Lists */
+
+ol .task-list-item {
+  --checkbox-counter-offset: calc(0.65 * var(--checkbox-size));
+}
+
+.task-list-item-checkbox {
+  background-position: 35% 48%; /* tweaks */
+}
+
+/* Position ordinal counters so 1-9 left-align with left content edge. Subsequent counters will begin in gutter. *
+ol .task-list-item {
+  margin-left: -14px;
+  padding-left: 14px;
+}*/
