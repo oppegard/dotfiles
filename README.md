@@ -8,7 +8,6 @@ Another dotfiles repo.
 TODO: automate where sensible 🤖
 
 ## Install Fonts
-
 - [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans)
 - [iA Writer Mono & Quattro](https://github.com/iaolo/iA-Fonts)
 
@@ -16,6 +15,11 @@ TODO: automate where sensible 🤖
 ```sh
   defaults write com.apple.Dock appswitcher-all-displays -bool true
   killall Dock
+```
+
+## Screenshots to save to ~/Desktop/Screenshots
+```sh
+defaults write  com.apple.screencapture location ~/Desktop/Screenshots
 ```
 
 ## Enable TouchID Auth for `sudo` commands in iTerm2 ([source](https://antkowiak.it/en/mac-os-en/enable-touchid-for-sudo-in-iterm-2/)).
