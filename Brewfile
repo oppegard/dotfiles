@@ -40,6 +40,7 @@ cask 'pastebot'
 cask 'rectangle'
 cask 'slack'
 cask 'sublime-text'
+cask 'apparition47/tap/mailtrackerblocker'
 # cask 'zoomus'
 
 # QuickLook plugins:
