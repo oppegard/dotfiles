@@ -50,3 +50,7 @@
 	enabled = true
 [init]
 	defaultBranch = main
+[includeIf "gitdir:~/workspace/wf/"]
+    path = ~/.gitconfig-work
+[includeIf "gitdir:~/workspace/hl-"]
+    path = ~/.gitconfig-work

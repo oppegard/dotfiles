@@ -7,3 +7,12 @@
 # 5. Login shell exiting via `exit`? $ZDOTDIR/.zlogout and then /etc/zlogout
 
 export HOMEBREW_NO_ANALYTICS=1
+
+##### PATH #####
+# zsh is "smart" and removes dirs from PATH that don't exist
+PATH="${HOME}/.local/bin:${PATH}" # pipx
+PATH="/Library/Frameworks/Python.framework/Versions/3.9/bin:${PATH}" # Python 3.9 for...?
+PATH="${GOPATH}/bin:${PATH}" # GOBIN
+
+PATH="${HOME}/bin:/usr/local/sbin:${PATH}"
+export PATH
