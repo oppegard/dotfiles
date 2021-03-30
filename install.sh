@@ -27,5 +27,6 @@ echo ZDOTDIR is "$ZDOTDIR"
 echo Setting up misc
 (
   set -x
+  # if ~/bin symlink is already set up, this will create another symlink at ~/bin/bin :(
   ln -sf "$DOTFILES_DIR"/bin "$HOME"/bin
 )
