@@ -1,0 +1,36 @@
+#!/bin/bash
+set -euo pipefail
+
+trap "docker kill jaeger >/dev/null 2>&1 || true" EXIT
+
+WF_PROXY_HOST_PORT="host.docker.internal:30000"
+docker stats jaeger --no-stream >/dev/null || docker run -d --name jaeger \
+	-e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \
+  -e REPORTER_TCHANNEL_HOST_PORT="http://${WF_PROXY_HOST_PORT}/api/traces" \
+  -e REPORTER_TYPE=tchannel \
+	-p 5775:5775/udp \
+	-p 6831:6831/udp \
+	-p 6832:6832/udp \
+	-p 5778:5778 \
+	-p 16686:16686 \
+	-p 14268:14268 \
+	-p 14250:14250 \
+	-p 9411:9411 \
+	jaegertracing/all-in-one:1.19
+
+docker kill hotrod >/dev/null 2>&1 || true
+docker rm hotrod >/dev/null 2>&1 || true
+
+# kill McAffee daemon
+sudo lsof -i tcp:8081 | awk '/LISTEN/ {print $2}' | xargs sudo kill
+
+# IP/host to reach WF Proxy on 30000 from inside container
+WF_PROXY_HOST=10.0.0.179
+docker run --rm -it --name hotrod \
+	--link jaeger \
+	-p8081-8083:8081-8083 \
+  -p 38080:8080 \
+  -e JAEGER_ENDPOINT="http://${WF_PROXY_HOST_PORT}/api/traces" \
+	-e JAEGER_AGENT_HOST="jaeger" \
+	jaegertracing/example-hotrod:1.19 \
+	all $@

@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd $HOME/workspace/wf/wavefront-proxy/proxy
+
+JAR=target/proxy-11.0-RC2-SNAPSHOT-uber.jar
+[[ -e $JAR ]] || mvn install -DskipTests
+
+lsof -i tcp:2878|awk '/LISTEN/ {print $2}'|xargs kill || true
+java -jar $JAR -f config.ini 2>&1
