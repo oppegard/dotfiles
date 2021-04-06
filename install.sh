@@ -28,5 +28,13 @@ echo Setting up misc
 (
   set -x
   # if ~/bin symlink is already set up, this will create another symlink at ~/bin/bin :(
-  ln -sf "$DOTFILES_DIR"/bin "$HOME"/bin
+  if [[ -e "$HOME/bin" ]]; then
+    echo "SKIPPING symlink of HOME/bin as it already exists."
+  else
+    ln -sf "$DOTFILES_DIR/bin" "$HOME/bin"
+  fi
 )
+
+echo Setting up starship
+mkdir -p "${HOME}/.config"
+ln -sf "$DOTFILES_DIR/starship.toml" "${HOME}/.config/starship.toml"

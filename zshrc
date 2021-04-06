@@ -7,4 +7,5 @@ export EDITOR=$VISUAL
 
 bindkey "^X\\x7f" backward-kill-line
 
+eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
