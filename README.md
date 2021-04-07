@@ -10,6 +10,10 @@ TODO: automate where sensible 🤖
 ## Install Fonts
 - [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans)
 - [iA Writer Mono & Quattro](https://github.com/iaolo/iA-Fonts)
+- Source Code Pro
+  - *Sauce* Code variant preferred for [Starship](https://starship.rs/)
+  - `brew tap homebrew/cask-fonts && brew install font-sauce-code-pro-nerd-font`
+  - Assign font in iTerm and IntelliJ
 
 ## Make cmd-tab app switcher appear on all monitors:
 ```sh
@@ -50,15 +54,13 @@ brew install coreutils # realpath
 ln -sf $(realpath Preferences.sublime-settings) \
    ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings
 
-# Rectangle.app Settings
-# Rectangle overwrite a symlinked prefs file. If changes are made to Rectangle prefs, we need to copy back to this repo.
-cp com.knollsoft.Rectangle.plist \
-   ~/Library/Preferences/com.knollsoft.Rectangle.plist
-
 # Finder: show all hidden files
 defaults write com.apple.Finder AppleShowAllFiles true
 killall Finder
 ```
+
+### Rectangle.app Prefs
+Launch Rectangle, open the Preferences pane, and import the prefs file (`Rectangle.json`)
 
 ## SSH Setup
 From 1Password, copy `memex_id_ed25519` and `id_ed25519` to `~/.ssh/`.
