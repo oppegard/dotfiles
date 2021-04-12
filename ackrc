@@ -1,0 +1,4 @@
+# Maven output
+--ignore-dir=target/
+# IntelliJ .iml
+--ignore-file=ext:iml

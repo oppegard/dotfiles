@@ -38,3 +38,7 @@ echo Setting up misc
 echo Setting up starship
 mkdir -p "${HOME}/.config"
 ln -sf "$DOTFILES_DIR/starship.toml" "${HOME}/.config/starship.toml"
+
+echo Setting up ack
+mkdir -p "${HOME}/.config"
+ln -sf "$DOTFILES_DIR/ackrc" "${HOME}/.ackrc"
