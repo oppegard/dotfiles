@@ -9,6 +9,7 @@
 	cane = commit --amend --no-edit
 	lg = log -p --pretty=fuller --abbrev-commit
 	lgg = log --pretty=fuller --abbrev-commit --stat
+	lola = log --graph --decorate --oneline --all
 	blog = log origin/main... --left-right
 	adp = add -p
 [apply]

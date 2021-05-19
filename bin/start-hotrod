@@ -21,16 +21,4 @@ docker stats jaeger --no-stream >/dev/null || docker run -d --name jaeger \
 docker kill hotrod >/dev/null 2>&1 || true
 docker rm hotrod >/dev/null 2>&1 || true
 
-# kill McAffee daemon
-sudo lsof -i tcp:8081 | awk '/LISTEN/ {print $2}' | xargs sudo kill
-
-# IP/host to reach WF Proxy on 30000 from inside container
-WF_PROXY_HOST=10.0.0.179
-docker run --rm -it --name hotrod \
-	--link jaeger \
-	-p8081-8083:8081-8083 \
-  -p 38080:8080 \
-  -e JAEGER_ENDPOINT="http://${WF_PROXY_HOST_PORT}/api/traces" \
-	-e JAEGER_AGENT_HOST="jaeger" \
-	jaegertracing/example-hotrod:1.19 \
-	all $@
+cd $HOME/workspace/wf/opentelemetry-collector-contrib

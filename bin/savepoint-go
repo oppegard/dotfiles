@@ -26,7 +26,7 @@ function unroll() {
 
     echo "Linting"
     pushd "$projectdir" >/dev/null || exit 1
-    golangci-lint run --out-format tab --new-from-rev $(squashHead) || exit
+    golangci-lint run --allow-parallel-runners --out-format tab --new-from-rev $(squashHead) || exit
     popd >/dev/null || exit 1
   fi
 
@@ -48,8 +48,10 @@ function watch() {
 
   shift
   while true; do
+	(cd "${testdir}"; go test ./... && ${script} commit "(test-suite-passed) $*") || true
     fswatch -e .git/ -r1 ${testdir}
-    (cd "${testdir}"; go test ./... && ${script} commit "(test-suite-passed) $*") || true
+    echo '🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠'
+    printf '\e[2J\e[3J\e[H' && clear
   done
 }
 
