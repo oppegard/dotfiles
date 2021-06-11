@@ -1,11 +1,22 @@
 alias l='ls -lFh'
 alias la='ls -lFha'
 
+##### TObs START #####
+ssh-add -l | grep -q 'SHA256:wGrO2n9iXDV0Tv5k6QccgyO4TGGxCAvk80A8mxiYA+w' || ssh-add ~/.ssh/ec2key.pem
+ssh-add -l | grep -q 'SHA256:ZLtBR8T2gu9pZsEQxa8s/c+nTy9L5dEIVnkh4rei93A' || ssh-add ~/.ssh/prodkey.pem
+##### TObs END   #####
+
+
 ##### HISTORY CONFIGURATION #####
 SAVEHIST=5000
 HISTSIZE=5000
 setopt EXTENDED_HISTORY  #Save command timestamp and the duration to the history file.
 setopt APPEND_HISTORY    #Append history to the history file (no overwriting)
+
+
+##### MISCELLANEOUS #####
+
+setopt interactivecomments # allow use of '#' for comments on CLI
 
 
 ##### EDITOR CONFIGURATION #####
@@ -20,6 +31,8 @@ export GIT_DUET_ROTATE_AUTHOR=true
 eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
 
+
+##### AUTOCOMPLETE #####
 
 # The code below sets all of `zsh-autocomplete`'s settings.
 # https://github.com/marlonrichert/zsh-autocomplete/blob/main/.zshrc
