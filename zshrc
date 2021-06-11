@@ -37,7 +37,6 @@ eval "$(starship init zsh)"
 # The code below sets all of `zsh-autocomplete`'s settings.
 # https://github.com/marlonrichert/zsh-autocomplete/blob/main/.zshrc
 
-
 zstyle ':autocomplete:*' default-context ''
 # '': Start each new command line with normal autocompletion.
 # history-incremental-search-backward: Start in live history search mode.
