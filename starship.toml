@@ -1,10 +1,16 @@
 add_newline = false
 command_timeout = 1000
 
+[git_commit]
+commit_hash_length = 4
+
 [aws]
 disabled = true
 
 [gcloud]
+disabled = true
+
+[golang]
 disabled = true
 
 [java]

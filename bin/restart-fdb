@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euxo pipefail
+
+sudo launchctl unload /Library/LaunchDaemons/com.foundationdb.fdbmonitor.plist
+sleep 5
+sudo launchctl load /Library/LaunchDaemons/com.foundationdb.fdbmonitor.plist
+while ! fdbcli --exec status | grep -s 'Healthy'; do sleep 2; done
+fdbcli --exec status

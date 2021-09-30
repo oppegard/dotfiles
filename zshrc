@@ -1,5 +1,6 @@
 alias l='ls -lFh'
 alias la='ls -lFha'
+alias ports='lsof -nP -iTCP -sTCP:LISTEN'
 
 ##### TObs START #####
 ssh-add -l | grep -q 'SHA256:wGrO2n9iXDV0Tv5k6QccgyO4TGGxCAvk80A8mxiYA+w' || ssh-add ~/.ssh/ec2key.pem
@@ -17,6 +18,8 @@ setopt APPEND_HISTORY    #Append history to the history file (no overwriting)
 ##### MISCELLANEOUS #####
 
 setopt interactivecomments # allow use of '#' for comments on CLI
+
+eval "$(rbenv init -)"
 
 
 ##### EDITOR CONFIGURATION #####

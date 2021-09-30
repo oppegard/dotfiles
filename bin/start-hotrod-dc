@@ -2,7 +2,7 @@
 set -euox pipefail
 
 export COMPOSE_PROJECT_NAME=hotrod
-export COMPOSE_FILE=$HOME/workspace/wf/opentelemetry-collector-contrib/local/docker-compose.yml
+export COMPOSE_FILE=$HOME/workspace/otel/opentelemetry-collector-contrib/local/docker-compose.yml
 
 trap "docker-compose down || true" EXIT
 docker-compose up

@@ -24,7 +24,7 @@
 	status = auto
 	ui = auto
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesFile = ~/.gitignore_global
 	pager = less -FXRS -x2
 [fetch]
 	prune = true
@@ -46,12 +46,16 @@
 	allowed = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 [user]
 	name = Glenn Oppegard
-	email = glenn@dubkat.com
+	email = oppegard@gmail.com
 [rerere]
 	enabled = true
 [init]
 	defaultBranch = main
 [includeIf "gitdir:~/workspace/wf/"]
     path = ~/.gitconfig-work
-[includeIf "gitdir:~/workspace/hl-"]
+[includeIf "gitdir:~/workspace/hyperlogs"]
+    path = ~/.gitconfig-work
+[includeIf "gitdir:~/workspace/otel"]
+    path = ~/.gitconfig-work
+[includeIf "gitdir:~/workspace/cf"]
     path = ~/.gitconfig-work

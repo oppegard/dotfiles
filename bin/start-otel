@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euxo pipefail
 
-cd $HOME/workspace/wf/opentelemetry-collector-contrib
+cd $HOME/workspace/otel/opentelemetry-collector-contrib
 make otelcontribcol
 ./bin/otelcontribcol_darwin_amd64 --config ./local/otel-collector-config.yml

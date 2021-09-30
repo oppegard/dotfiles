@@ -21,4 +21,4 @@ docker stats jaeger --no-stream >/dev/null || docker run -d --name jaeger \
 docker kill hotrod >/dev/null 2>&1 || true
 docker rm hotrod >/dev/null 2>&1 || true
 
-cd $HOME/workspace/wf/opentelemetry-collector-contrib
+cd $HOME/workspace/otel/opentelemetry-collector-contrib

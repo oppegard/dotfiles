@@ -33,6 +33,16 @@ echo Setting up misc
   else
     ln -sf "$DOTFILES_DIR/bin" "$HOME/bin"
   fi
+  if [[ -e "$HOME/.gitconfig" ]]; then
+    echo "SKIPPING symlink of HOME/.gitconfig as it already exists."
+  else
+    ln -sf "$DOTFILES_DIR/gitconfig" "$HOME/.gitconfig"
+  fi
+  if [[ -e "$HOME/.gitignore_global" ]]; then
+    echo "SKIPPING symlink of HOME/.gitignore_global as it already exists."
+  else
+    ln -sf "$DOTFILES_DIR/gitignore_global" "$HOME/.gitignore_global"
+  fi
 )
 
 echo Setting up starship
