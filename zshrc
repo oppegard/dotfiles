@@ -2,27 +2,33 @@ alias l='ls -lFh'
 alias la='ls -lFha'
 alias ports='lsof -nP -iTCP -sTCP:LISTEN'
 
-##### TObs START #####
+############### WORK START ###############
+if [[ `hostname` == "goppegard-a01" ]]; then
+
 ssh-add -l | grep -q 'SHA256:wGrO2n9iXDV0Tv5k6QccgyO4TGGxCAvk80A8mxiYA+w' || ssh-add ~/.ssh/ec2key.pem
 ssh-add -l | grep -q 'SHA256:ZLtBR8T2gu9pZsEQxa8s/c+nTy9L5dEIVnkh4rei93A' || ssh-add ~/.ssh/prodkey.pem
-##### TObs END   #####
+
+fi
+##### WORK END   #####
 
 
-##### HISTORY CONFIGURATION #####
+############### HISTORY CONFIGURATION ###############
 SAVEHIST=5000
 HISTSIZE=5000
 setopt EXTENDED_HISTORY  #Save command timestamp and the duration to the history file.
 setopt APPEND_HISTORY    #Append history to the history file (no overwriting)
 
 
-##### MISCELLANEOUS #####
+############### MISCELLANEOUS ###############
 
 setopt interactivecomments # allow use of '#' for comments on CLI
 
 eval "$(rbenv init -)"
 
+source $HOME/bin/z.sh
 
-##### EDITOR CONFIGURATION #####
+
+############### EDITOR CONFIGURATION ###############
 # export VISUAL="/usr/local/bin/subl --new-window --wait"
 # export VISUAL="/usr/local/bin/idea -w -e"
 # export EDITOR=$VISUAL
@@ -35,7 +41,7 @@ eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
 
 
-##### AUTOCOMPLETE #####
+############### AUTOCOMPLETE ###############
 
 # The code below sets all of `zsh-autocomplete`'s settings.
 # https://github.com/marlonrichert/zsh-autocomplete/blob/main/.zshrc
