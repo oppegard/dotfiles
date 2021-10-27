@@ -24,6 +24,7 @@ echo ZDOTDIR is "$ZDOTDIR"
   ln -sf "$DOTFILES_DIR"/zshrc "$ZDOTDIR"/.zshrc
 )
 
+# TODO: instead of skipping, have it make a backup and link anyways?
 echo Setting up misc
 (
   set -x
@@ -42,6 +43,11 @@ echo Setting up misc
     echo "SKIPPING symlink of HOME/.gitignore_global as it already exists."
   else
     ln -sf "$DOTFILES_DIR/gitignore_global" "$HOME/.gitignore_global"
+  fi
+  if [[ -e "$HOME/.vimrc" ]]; then
+    echo "SKIPPING symlink of HOME/.vimrc as it already exists."
+  else
+    ln -sf "$DOTFILES_DIR/vimrc" "$HOME/.vimrc"
   fi
 )
 
