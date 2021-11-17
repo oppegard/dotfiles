@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 set -e -o pipefail
 if [[ $SHELL =~ "zsh" ]]; then
-  echo "Verified running zsh shell"
+  echo "Verified running Z shell"
 else
   echo Unsupported shell $SHELL
   exit 1
@@ -14,47 +14,32 @@ if [[ $(basename "$DOTFILES_DIR") != "dotfiles" ]]; then
   exit 1
 fi
 
-echo Setting up zsh
+mkdir -p "${HOME}/.config"
 ZDOTDIR="${ZDOTDIR:-$HOME}"
 echo ZDOTDIR is "$ZDOTDIR"
-(
-  set -x
-  ln -sf "$DOTFILES_DIR"/zshenv "$ZDOTDIR"/.zshenv
-  ln -sf "$DOTFILES_DIR"/zprofile "$ZDOTDIR"/.zprofile
-  ln -sf "$DOTFILES_DIR"/zshrc "$ZDOTDIR"/.zshrc
+
+declare -A files_to_link
+files_to_link=(
+  $ZDOTDIR/.zshenv            $DOTFILES_DIR/zshenv
+  $ZDOTDIR/.zprofile          $DOTFILES_DIR/zprofile
+  $ZDOTDIR/.zshrc             $DOTFILES_DIR/zshrc
+  $HOME/bin                   $DOTFILES_DIR/bin
+  $HOME/.ackrc                $DOTFILES_DIR/ackrc
+  $HOME/.gitconfig            $DOTFILES_DIR/gitconfig
+  $HOME/.gitignore_global     $DOTFILES_DIR/gitignore_global
+  $HOME/.vimrc                $DOTFILES_DIR/vimrc
+  $HOME/.config/starship.toml $DOTFILES_DIR/starship.toml
 )
 
+(
+set +x
 # TODO: instead of skipping, have it make a backup and link anyways?
-echo Setting up misc
-(
-  set -x
-  # if ~/bin symlink is already set up, this will create another symlink at ~/bin/bin :(
-  if [[ -e "$HOME/bin" ]]; then
-    echo "SKIPPING symlink of HOME/bin as it already exists."
+for link_name source_file in ${(kv)files_to_link}; do
+  if [[ -e "$link_name" ]]; then
+    echo "SKIPPING $source_file -> $link_name: already exists."
   else
-    ln -sf "$DOTFILES_DIR/bin" "$HOME/bin"
+    echo "LINKING $source_file -> $link_name."
+    ln -sf "$source_file" "$link_name"
   fi
-  if [[ -e "$HOME/.gitconfig" ]]; then
-    echo "SKIPPING symlink of HOME/.gitconfig as it already exists."
-  else
-    ln -sf "$DOTFILES_DIR/gitconfig" "$HOME/.gitconfig"
-  fi
-  if [[ -e "$HOME/.gitignore_global" ]]; then
-    echo "SKIPPING symlink of HOME/.gitignore_global as it already exists."
-  else
-    ln -sf "$DOTFILES_DIR/gitignore_global" "$HOME/.gitignore_global"
-  fi
-  if [[ -e "$HOME/.vimrc" ]]; then
-    echo "SKIPPING symlink of HOME/.vimrc as it already exists."
-  else
-    ln -sf "$DOTFILES_DIR/vimrc" "$HOME/.vimrc"
-  fi
+done
 )
-
-echo Setting up starship
-mkdir -p "${HOME}/.config"
-ln -sf "$DOTFILES_DIR/starship.toml" "${HOME}/.config/starship.toml"
-
-echo Setting up ack
-mkdir -p "${HOME}/.config"
-ln -sf "$DOTFILES_DIR/ackrc" "${HOME}/.ackrc"
