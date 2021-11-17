@@ -27,6 +27,7 @@ files_to_link=(
   $HOME/.ackrc                $DOTFILES_DIR/ackrc
   $HOME/.gitconfig            $DOTFILES_DIR/gitconfig
   $HOME/.gitignore_global     $DOTFILES_DIR/gitignore_global
+  $HOME/.screenrc             $DOTFILES_DIR/screenrc
   $HOME/.vimrc                $DOTFILES_DIR/vimrc
   $HOME/.config/starship.toml $DOTFILES_DIR/starship.toml
 )
