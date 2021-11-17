@@ -11,4 +11,4 @@ export OTEL_EXPORTER_OTLP_PROTOCOL="${OTEL_EXPORTER_OTLP_PROTOCOL:-grpc}" # or: 
 export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-petclinic}"
 export OTEL_RESOURCE_ATTRIBUTES="${OTEL_RESOURCE_ATTRIBUTES:-application=`whoami`-app}"
 
-java -javaagent:opentelemetry-javaagent-all.jar  -jar target/spring-petclinic*.jar
+java -javaagent:opentelemetry-javaagent.jar  -jar target/spring-petclinic*.jar

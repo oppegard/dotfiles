@@ -32,7 +32,7 @@ brew 'git-duet'
 cask '1Password'
 cask 'bartender'
 cask 'docker'
-cask 'dropbox' unless work_machine?
+cask 'dropbox'
 cask 'firefox'
 cask 'google-chrome'
 cask 'iTerm2'
@@ -41,6 +41,7 @@ cask 'rectangle'
 cask 'slack'
 cask 'sublime-text'
 cask 'apparition47/tap/mailtrackerblocker'
+cask 'grandperspective'
 # cask 'zoomus'
 
 # QuickLook plugins:
