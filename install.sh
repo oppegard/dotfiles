@@ -25,6 +25,7 @@ files_to_link=(
   $ZDOTDIR/.zshrc             $DOTFILES_DIR/zshrc
   $HOME/bin                   $DOTFILES_DIR/bin
   $HOME/.ackrc                $DOTFILES_DIR/ackrc
+  $HOME/.digrc                $DOTFILES_DIR/digrc
   $HOME/.gitconfig            $DOTFILES_DIR/gitconfig
   $HOME/.gitignore_global     $DOTFILES_DIR/gitignore_global
   $HOME/.screenrc             $DOTFILES_DIR/screenrc
