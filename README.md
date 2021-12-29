@@ -15,21 +15,26 @@ TODO: automate where sensible 🤖
   - `brew tap homebrew/cask-fonts && brew install font-sauce-code-pro-nerd-font`
   - Assign font in iTerm and IntelliJ
 
+
 ## Make cmd-tab app switcher appear on all monitors:
 ```sh
   defaults write com.apple.Dock appswitcher-all-displays -bool true
   killall Dock
 ```
 
+
 ## Screenshots to save to ~/Desktop/Screenshots
 ```sh
 defaults write  com.apple.screencapture location ~/Desktop/Screenshots
 ```
 
+
 ## Map ⌘ + ←Delete to backward-kill-line in iTerm2 + zsh
 In iTerm2 have to ⌘ + ←Delete (⌘ + backspace) to send hex codes `0x18 0x7f`. Then ensure `bindkey ... backward-kill-line` is in `.zshrc`.
 
 Detailed S.O. replies: [1](https://stackoverflow.com/a/32340345), [2](https://stackoverflow.com/questions/6205157/how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line/29403520#29403520).
+
+
 ## Enable TouchID Auth for `sudo` commands in iTerm2 ([source](https://antkowiak.it/en/mac-os-en/enable-touchid-for-sudo-in-iterm-2/)).
   1. Add `auth sufficient pam_tid.so` to the **top** of `/etc/pam.d/sudo`
   1. Go to iTerm2 Preferences (⌘,). In Advanced(⚙) Tab, search for "Allow sessions to survive logging out and back in." and set the value to No.
@@ -46,6 +51,7 @@ done
 qlmanage -r
 ```
 
+
 ## Preferences
 
 ```sh
@@ -61,6 +67,16 @@ killall Finder
 
 ### Rectangle.app Prefs
 Launch Rectangle, open the Preferences pane, and import the prefs file (`Rectangle.json`)
+
+### Firefox
+
+Disable autoplay of YouTube Channel Trailers
+- go to `about:config`
+- `media.autoplay.default = 5`
+- `media.autoplay.blocking_policy = 2`
+
+[source](https://www.reddit.com/r/firefox/comments/hohrym/autoplay_settings_changed_blocking_seems_much/)
+
 
 ## SSH Setup
 From 1Password, copy `memex_id_ed25519` and `id_ed25519` to `~/.ssh/`.
