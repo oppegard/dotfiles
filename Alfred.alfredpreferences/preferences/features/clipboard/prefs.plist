@@ -4,6 +4,8 @@
 <dict>
 	<key>autoExpandMidString</key>
 	<true/>
+	<key>autoExpandSnippetPlaySound</key>
+	<false/>
 	<key>hotkey</key>
 	<dict>
 		<key>key</key>
@@ -15,5 +17,9 @@
 	</dict>
 	<key>limit</key>
 	<integer>2</integer>
+	<key>moveToTopOnUse</key>
+	<false/>
+	<key>snippetsAtTop</key>
+	<false/>
 </dict>
 </plist>
