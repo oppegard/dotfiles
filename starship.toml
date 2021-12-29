@@ -2,15 +2,24 @@ add_newline = false
 command_timeout = 1000
 
 [git_commit]
-commit_hash_length = 4
+commit_hash_length = 7
+tag_disabled = false
 
 [aws]
 disabled = true
+#symbol = ""
 
 [gcloud]
 disabled = true
+#symbol = ""
 
 [golang]
 disabled = true
+#symbol = ""
+
+[kotlin]
+disabled = true
+#symbol = ""
+
 
 [java]
