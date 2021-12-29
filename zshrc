@@ -2,6 +2,14 @@ alias l='ls -lFh'
 alias la='ls -lFha'
 alias ports='lsof -nP -iTCP -sTCP:LISTEN'
 
+############### BAT ################
+#  https://github.com/sharkdp/bat ##
+####################################
+alias cat='bat --paging=never'
+alias less='bat'
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+
 ############### WORK START ###############
 if [[ `hostname` == "goppegard-a01" ]]; then
 
@@ -27,15 +35,25 @@ eval "$(rbenv init -)"
 
 source $HOME/bin/z.sh
 
+############### PYTHON ###############
+BREW_PREFIX=$(brew --prefix)
+if [[ -e $BREW_PREFIX/bin/virtualenvwrapper.sh ]]; then
+    export VIRTUALENVWRAPPER_PYTHON=$BREW_PREFIX/bin/python3
+    export WORKON_HOME=$HOME/.virtualenvs
+    source $BREW_PREFIX/bin/virtualenvwrapper.sh
+fi
+
 
 ############### EDITOR CONFIGURATION ###############
 # export VISUAL="/usr/local/bin/subl --new-window --wait"
 # export VISUAL="/usr/local/bin/idea -w -e"
 # export EDITOR=$VISUAL
+alias vim='nvim'
 
 bindkey "^X\\x7f" backward-kill-line
 
 export GIT_DUET_ROTATE_AUTHOR=true
+export GIT_DUET_GLOBAL=true
 
 eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
