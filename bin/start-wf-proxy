@@ -10,7 +10,7 @@ JAR="$PROXY_MODULE/target/proxy-11.0-RC3-SNAPSHOT-uber.jar"
 lsof -i tcp:2878|awk '/LISTEN/ {print $2}'|xargs kill || true
 
 java \
-  -Dlog4j.configurationFile="$PROXY_MODULE/src/test/resources/log4j2-dev.xml" \
+  -Dlog4j.configurationFile="$HOME/.config/wf/log4j2-dev.xml" \
   -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager \
   -jar $JAR -f $HOME/.config/wf/proxy.ini \
   --otlpGrpcListenerPorts 4317 2>&1
