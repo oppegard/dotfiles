@@ -5,6 +5,9 @@ command_timeout = 1000
 commit_hash_length = 7
 tag_disabled = false
 
+[package]
+disabled = true
+
 [aws]
 disabled = true
 #symbol = ""
