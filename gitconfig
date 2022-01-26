@@ -29,6 +29,8 @@
 	editor = subl --wait --new-window
 [fetch]
 	prune = true
+[merge]
+	conflictStyle = zdiff3
 [pull]
 	rebase = true
 [push]
