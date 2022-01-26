@@ -55,11 +55,6 @@ qlmanage -r
 ## Preferences
 
 ```sh
-# Sublime Settings
-brew install coreutils # realpath
-ln -sf $(realpath Preferences.sublime-settings) \
-   ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/Preferences.sublime-settings
-
 # Finder: show all hidden files
 defaults write com.apple.Finder AppleShowAllFiles true
 killall Finder

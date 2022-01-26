@@ -49,6 +49,7 @@ fi
 # export VISUAL="/usr/local/bin/idea -w -e"
 # export EDITOR=$VISUAL
 alias vim='nvim'
+alias vi='nvim'
 
 bindkey "^X\\x7f" backward-kill-line
 

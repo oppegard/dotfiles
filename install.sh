@@ -18,6 +18,9 @@ mkdir -p "${HOME}/.config"
 ZDOTDIR="${ZDOTDIR:-$HOME}"
 echo ZDOTDIR is "$ZDOTDIR"
 
+SUBL_PREFS_DIR="${HOME}/Library/Application Support/Sublime Text 3/Packages/User"
+mkdir -p "${SUBL_PREFS_DIR}"
+
 declare -A files_to_link
 files_to_link=(
   $ZDOTDIR/.zshenv            $DOTFILES_DIR/zshenv
@@ -31,6 +34,9 @@ files_to_link=(
   $HOME/.screenrc             $DOTFILES_DIR/screenrc
   $HOME/.vimrc                $DOTFILES_DIR/vimrc
   $HOME/.config/starship.toml $DOTFILES_DIR/starship.toml
+
+  "$SUBL_PREFS_DIR/Preferences.sublime-settings" "$DOTFILES_DIR/sublime/Preferences.sublime-settings"
+  "$SUBL_PREFS_DIR/Git Commit.sublime-settings"  "$DOTFILES_DIR/sublime/Git Commit.sublime-settings"
 )
 
 (

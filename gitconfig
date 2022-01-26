@@ -26,6 +26,7 @@
 [core]
 	excludesFile = ~/.gitignore_global
 	pager = less -FXRS -x2
+	editor = subl --wait --new-window
 [fetch]
 	prune = true
 [pull]
