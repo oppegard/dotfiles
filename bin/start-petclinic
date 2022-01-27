@@ -1,14 +1,14 @@
 #!/bin/bash
 set -euxo pipefail
 
-cd $HOME/workspace/playground/spring-petclinic
+cd $HOME/workspace/spring/spring-petclinic
 
 # https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/agent-config.md
 export OTEL_TRACES_EXPORTER="${OTEL_TRACES_EXPORTER:-otlp}" # or: "logging", "none"
 export OTEL_METRICS_EXPORTER="${OTEL_METRICS_EXPORTER:-none}"
 export OTEL_EXPORTER_OTLP_ENDPOINT="${OTEL_EXPORTER_OTLP_ENDPOINT:-http://localhost:4317}"
 export OTEL_EXPORTER_OTLP_PROTOCOL="${OTEL_EXPORTER_OTLP_PROTOCOL:-grpc}" # or: "http/protobuf"
-export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-petclinic}"
-export OTEL_RESOURCE_ATTRIBUTES="${OTEL_RESOURCE_ATTRIBUTES:-application=`whoami`-app}"
+export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-petclinic-svc}"
+export OTEL_RESOURCE_ATTRIBUTES="${OTEL_RESOURCE_ATTRIBUTES:-application=petclinic-`whoami`}"
 
 java -javaagent:opentelemetry-javaagent.jar  -jar target/spring-petclinic*.jar

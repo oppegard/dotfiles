@@ -4,13 +4,19 @@ set -euxo pipefail
 PROXY_MODULE="$HOME/workspace/wf/wavefront-proxy/proxy"
 cd $PROXY_MODULE
 
-JAR="$PROXY_MODULE/target/proxy-11.0-RC3-SNAPSHOT-uber.jar"
-[[ -e $JAR ]] || mvn install -DskipTests -Djacoco.skip=true
+(
+  set +ux
+  if [[ "$1" == "c" ]]; then
+    # 'c'ompile the jar
+    set -x
+    mvn install -DskipTests -Djacoco.skip=true
+  fi
+)
 
 lsof -i tcp:2878|awk '/LISTEN/ {print $2}'|xargs kill || true
 
+JAR="$PROXY_MODULE/target/proxy-11.0-RC3-SNAPSHOT-uber.jar"
 java \
   -Dlog4j.configurationFile="$HOME/.config/wf/log4j2-dev.xml" \
   -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager \
-  -jar $JAR -f $HOME/.config/wf/proxy.ini \
-  --otlpGrpcListenerPorts 4317 2>&1
+  -jar $JAR -f $HOME/.config/wf/proxy.ini 2>&1
