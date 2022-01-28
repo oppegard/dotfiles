@@ -52,6 +52,7 @@
 	email = oppegard@gmail.com
 [rerere]
 	enabled = true
+	autoupdate = true
 [init]
 	defaultBranch = main
 [includeIf "gitdir:~/workspace/wf/"]
