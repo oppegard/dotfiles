@@ -25,6 +25,7 @@ SAVEHIST=5000
 HISTSIZE=5000
 setopt EXTENDED_HISTORY  #Save command timestamp and the duration to the history file.
 setopt APPEND_HISTORY    #Append history to the history file (no overwriting)
+setopt histignorespace   # prevent line from being saved if it beging with a space
 
 
 ############### MISCELLANEOUS ###############
