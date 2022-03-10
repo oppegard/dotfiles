@@ -2,6 +2,8 @@ alias l='ls -lFh'
 alias la='ls -lFha'
 alias ports='lsof -nP -iTCP -sTCP:LISTEN'
 
+export CLICOLOR=true # colors in `ls`
+
 ############### BAT ################
 #  https://github.com/sharkdp/bat ##
 ####################################

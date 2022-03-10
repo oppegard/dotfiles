@@ -15,7 +15,7 @@
 [apply]
 	whitespace = nowarn
 [blame]
-	ignoreRevsFile = .git-blame-ignore-revs
+	# ignoreRevsFile = .git-blame-ignore-revs
 [branch]
 	autosetupmerge = true
 	autosetuprebase = always

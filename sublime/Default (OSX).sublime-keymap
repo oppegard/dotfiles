@@ -1,0 +1,11 @@
+[
+	{ "keys": ["shift+super+up"], "command": "swap_line_up" },
+	{ "keys": ["shift+super+down"], "command": "swap_line_down" },
+	{ "keys": ["super+d"], "command": "duplicate_line" },
+	{ "keys": ["super+forward_slash"],
+        "command": "run_macro_file", "args": {"file": "res://Packages/User/comment_line.sublime-macro"},
+        "context": [{
+            "key": "selection_empty", "operator": "equal", "operand": "true", "match_all": true }
+        ]
+    }
+]

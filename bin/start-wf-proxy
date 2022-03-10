@@ -1,17 +1,26 @@
 #!/bin/bash
 set -euxo pipefail
 
+PROXY_ARGS=""
 PROXY_MODULE="$HOME/workspace/wf/wavefront-proxy/proxy"
 cd $PROXY_MODULE
 
-(
-  set +ux
-  if [[ "$1" == "c" ]]; then
-    # 'c'ompile the jar
-    set -x
-    mvn install -DskipTests -Djacoco.skip=true
-  fi
-)
+set +u
+if [[ "$1" == "c" ]]; then
+  # 'c'ompile the jar
+  rm -f "$PROXY_MODULE"/target/proxy-*.jar
+  mvn install -DskipTests -Djacoco.skip=true
+fi
+
+if [[ "$1" == "otel" || "$2" == "otel" ]]; then
+  PROXY_ARGS="$PROXY_ARGS --otlpGrpcListenerPorts 4317"
+  PROXY_ARGS="$PROXY_ARGS --otlpHttpListenerPorts 4318"
+fi
+if [[ "$1" == "custom" || "$2" == "custom" ]]; then
+  PROXY_ARGS="$PROXY_ARGS --customTracingListenerPorts 30001"
+fi
+set -u
+
 
 lsof -i tcp:2878|awk '/LISTEN/ {print $2}'|xargs kill || true
 
@@ -19,4 +28,5 @@ JAR="$PROXY_MODULE/target/proxy-11.0-RC3-SNAPSHOT-uber.jar"
 java \
   -Dlog4j.configurationFile="$HOME/.config/wf/log4j2-dev.xml" \
   -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager \
-  -jar $JAR -f $HOME/.config/wf/proxy.ini 2>&1
+  -jar $JAR -f $HOME/.config/wf/proxy.ini \
+  $PROXY_ARGS 2>&1
