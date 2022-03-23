@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# fonts : https://github.com/xero/figlet-fonts cloned at $XDG_DATA_HOME/figlet-fonts
+# figlet : brew install figlet
+# lolcat : brew install lolcat
+# ansi2html : pip3 install ansi2html - get HTML page by piping to ansi2html
+figlet -f $XDG_DATA_HOME/figlet-fonts/3d.flf "$@" | lolcat -f
