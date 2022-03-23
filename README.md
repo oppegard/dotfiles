@@ -72,6 +72,15 @@ Disable autoplay of YouTube Channel Trailers
 
 [source](https://www.reddit.com/r/firefox/comments/hohrym/autoplay_settings_changed_blocking_seems_much/)
 
+#### userChrome.css
+
+Enable in new Firefox:
+- Open about:config.
+- Set toolkit.legacyUserProfileCustomizations.stylesheets to `true`.
+- Open about:support and search for "Profile Folder". Copy the path.
+- Quit Firefox and symlink the `chrome` folder:
+  - `ln -s $HOME/workspace/dotfiles/Firefox/chrome "$HOME/Library/Application Support/Firefox/Profiles/u6rri5xi.default-release/"`
+- Start Firefox.
 
 ## SSH Setup
 From 1Password, copy `memex_id_ed25519` and `id_ed25519` to `~/.ssh/`.
