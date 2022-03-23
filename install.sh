@@ -53,3 +53,9 @@ for link_name source_file in ${(kv)files_to_link}; do
   fi
 done
 )
+
+### iTerm ###
+# Specify the preferences directory
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$HOME/workspace/dotfiles"
+# Tell iTerm2 to use the custom preferences in the directory
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
