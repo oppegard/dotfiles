@@ -38,6 +38,8 @@ eval "$(rbenv init -)"
 
 source $HOME/bin/z.sh
 
+alias tailscale=/Applications/Tailscale.app/Contents/MacOS/Tailscale
+
 ############### PYTHON ###############
 BREW_PREFIX=$(brew --prefix)
 if [[ -e $BREW_PREFIX/bin/virtualenvwrapper.sh ]]; then
