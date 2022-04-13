@@ -8,37 +8,13 @@ Another dotfiles repo.
 TODO: automate where sensible 🤖
 
 ## Install Fonts
+- Essential Pragmata Pro
 - [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans)
 - [iA Writer Mono & Quattro](https://github.com/iaolo/iA-Fonts)
 - Source Code Pro
   - *Sauce* Code variant preferred for [Starship](https://starship.rs/)
   - `brew tap homebrew/cask-fonts && brew install font-sauce-code-pro-nerd-font`
   - Assign font in iTerm and IntelliJ
-
-
-## Make cmd-tab app switcher appear on all monitors:
-```sh
-  defaults write com.apple.Dock appswitcher-all-displays -bool true
-  killall Dock
-```
-
-
-## Screenshots to save to ~/Desktop/Screenshots
-```sh
-defaults write  com.apple.screencapture location ~/Desktop/Screenshots
-```
-
-
-## Map ⌘ + ←Delete to backward-kill-line in iTerm2 + zsh
-In iTerm2 have to ⌘ + ←Delete (⌘ + backspace) to send hex codes `0x18 0x7f`. Then ensure `bindkey ... backward-kill-line` is in `.zshrc`.
-
-Detailed S.O. replies: [1](https://stackoverflow.com/a/32340345), [2](https://stackoverflow.com/questions/6205157/how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line/29403520#29403520).
-
-
-## Enable TouchID Auth for `sudo` commands in iTerm2 ([source](https://antkowiak.it/en/mac-os-en/enable-touchid-for-sudo-in-iterm-2/)).
-  1. Add `auth sufficient pam_tid.so` to the **top** of `/etc/pam.d/sudo`
-  1. Go to iTerm2 Preferences (⌘,). In Advanced(⚙) Tab, search for "Allow sessions to survive logging out and back in." and set the value to No.
-  1. Restart iTerm2 (maybe?)
 
 
 ## Enable QuickLook Plugins
@@ -51,6 +27,14 @@ done
 qlmanage -r
 ```
 
+## Install Utilities
+
+### Mac Mouse Fix
+
+- https://mousefix.org/ ([github](https://github.com/noah-nuebling/mac-mouse-fix))
+- Best for non-Apple mice, like MX Master 3.
+- Enable Smooth Scrolling
+
 
 ## Preferences
 
@@ -58,7 +42,25 @@ qlmanage -r
 # Finder: show all hidden files
 defaults write com.apple.Finder AppleShowAllFiles true
 killall Finder
+
+## Make cmd-tab app switcher appear on all monitors:
+defaults write com.apple.Dock appswitcher-all-displays -bool true
+killall Dock
+
+# Screenshots to save to ~/Desktop/Screenshots
+defaults write  com.apple.screencapture location ~/Desktop/Screenshots
 ```
+
+### Map ⌘ + ←Delete to backward-kill-line in iTerm2 + zsh
+In iTerm2 have to ⌘ + ←Delete (⌘ + backspace) to send hex codes `0x18 0x7f`. Then ensure `bindkey ... backward-kill-line` is in `.zshrc`.
+
+Detailed S.O. replies: [1](https://stackoverflow.com/a/32340345), [2](https://stackoverflow.com/questions/6205157/how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line/29403520#29403520).
+
+
+### Enable TouchID Auth for `sudo` commands in iTerm2 ([source](https://antkowiak.it/en/mac-os-en/enable-touchid-for-sudo-in-iterm-2/)).
+1. Add `auth sufficient pam_tid.so` to the **top** of `/etc/pam.d/sudo`
+1. Go to iTerm2 Preferences (⌘,). In Advanced(⚙) Tab, search for "Allow sessions to survive logging out and back in." and set the value to No.
+1. Restart iTerm2 (maybe?)
 
 ### Rectangle.app Prefs
 Launch Rectangle, open the Preferences pane, and import the prefs file (`Rectangle.json`)
