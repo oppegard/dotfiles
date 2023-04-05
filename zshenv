@@ -16,7 +16,8 @@ export XDG_BIN_HOME="${HOME}/.local/bin"
 ##### PATH #####
 # zsh is "smart" and removes dirs from PATH that don't exist
 PATH="/Library/Frameworks/Python.framework/Versions/3.9/bin:${PATH}" # Python 3.9 for...?
-PATH="${GOPATH:-$HOME/go}/bin:${PATH}" # GOBIN
+PATH="${GOPATH:-$HOME/src/go}/bin:${PATH}" # GOBIN
+PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
 
 PATH="${XDG_BIN_HOME}:${HOME}/bin:/usr/local/sbin:${PATH}"
 export PATH

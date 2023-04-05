@@ -1,3 +1,5 @@
+# zmodload zsh/zprof # Profile startup. Also uncomment `zprof` line at bottom.
+
 alias l='ls -lFh'
 alias la='ls -lFha'
 alias ports='lsof -nP -iTCP -sTCP:LISTEN'
@@ -7,7 +9,7 @@ export CLICOLOR=true # colors in `ls`
 ############### BAT ################
 #  https://github.com/sharkdp/bat ##
 ####################################
-alias cat='bat --paging=never'
+alias cat='bat --paging=never --style=plain'
 alias less='bat'
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
@@ -28,14 +30,21 @@ HISTSIZE=5000
 setopt EXTENDED_HISTORY  #Save command timestamp and the duration to the history file.
 setopt APPEND_HISTORY    #Append history to the history file (no overwriting)
 setopt histignorespace   # prevent line from being saved if it beging with a space
+setopt HIST_IGNORE_ALL_DUPS # If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
+# setopt HIST_FIND_NO_DUPS # When searching for history entries in the line editor, do not display duplicates of a line previously found, even if the duplicates are not contiguous.
 
 
 ############### MISCELLANEOUS ###############
 
 setopt interactivecomments # allow use of '#' for comments on CLI
+bindkey "^X\\x7f" backward-kill-line
 
-eval "$(rbenv init -)"
+export GIT_DUET_GLOBAL=true
+export GIT_DUET_CO_AUTHORED_BY=true
+export GIT_DUET_ROTATE_AUTHOR=true
 
+eval "$(direnv hook zsh)"
+eval "$(starship init zsh)"
 source $HOME/bin/z.sh
 
 alias tailscale=/Applications/Tailscale.app/Contents/MacOS/Tailscale
@@ -55,14 +64,6 @@ fi
 # export EDITOR=$VISUAL
 alias vim='nvim'
 alias vi='nvim'
-
-bindkey "^X\\x7f" backward-kill-line
-
-export GIT_DUET_ROTATE_AUTHOR=true
-export GIT_DUET_GLOBAL=true
-
-eval "$(direnv hook zsh)"
-eval "$(starship init zsh)"
 
 
 ############### AUTOCOMPLETE ###############
@@ -117,5 +118,29 @@ zstyle ':autocomplete:*' fzf-completion no
 zstyle ':autocomplete:*' add-space \
     executables aliases functions builtins reserved-words commands
 
+
+############### HOMEBREW & ASDF ###############
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+  source "$(brew --prefix asdf)/libexec/asdf.sh"
+  . ~/.asdf/plugins/java/set-java-home.zsh
+  export PATH="${JAVA_HOME/bin}:$PATH"
+fi
+
+source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+
+# autoload and compinit have to come after any updates to FPATH var
 autoload -Uz compinit
-compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
+export GOPATH=$HOME/src/go
+export PATH=${HOME}/.cicd/bin:${PATH}
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+alias k=kubectl
+
+# zprof # print zsh profiling time
