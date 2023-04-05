@@ -37,6 +37,7 @@
 	rebase = true
 [push]
 	default = current
+	autoSetupRemote = true
 [rebase]
 	autosquash = true
 	autostash = true
@@ -52,16 +53,17 @@
 [user]
 	name = Glenn Oppegard
 	email = oppegard@gmail.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINaEf+SYjx88RLlzz7AThugwfa07ZIS5EnxtqqpfHijb
 [rerere]
 	enabled = true
 	autoupdate = true
 [init]
 	defaultBranch = main
-[includeIf "gitdir:~/workspace/wf/"]
-    path = ~/.gitconfig-work
-[includeIf "gitdir:~/workspace/hyperlogs"]
-    path = ~/.gitconfig-work
-[includeIf "gitdir:~/workspace/otel"]
-    path = ~/.gitconfig-work
-[includeIf "gitdir:~/workspace/cf"]
-    path = ~/.gitconfig-work
+	templatedir = /Users/goppegard/.git-template
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+[commit]
+	gpgsign = true
+
