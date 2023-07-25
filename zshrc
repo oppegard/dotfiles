@@ -123,9 +123,9 @@ zstyle ':autocomplete:*' add-space \
 if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  source "$(brew --prefix asdf)/libexec/asdf.sh"
-  . ~/.asdf/plugins/java/set-java-home.zsh
-  export PATH="${JAVA_HOME/bin}:$PATH"
+#  source "$(brew --prefix asdf)/libexec/asdf.sh"
+#  . ~/.asdf/plugins/java/set-java-home.zsh
+#  export PATH="${JAVA_HOME/bin}:$PATH"
 fi
 
 source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
