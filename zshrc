@@ -137,10 +137,11 @@ for dump in ~/.zcompdump(N.mh+24); do
 done
 compinit -C
 
-export GOPATH=$HOME/src/go
-export PATH=${HOME}/.cicd/bin:${PATH}
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 alias k=kubectl
 
-# zprof # print zsh profiling time
+# zprof # print zsh profiling timesource "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+
+# Hook for local customizations or sensitive data that shouldn't be committed
+[[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local"
