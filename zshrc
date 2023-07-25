@@ -41,7 +41,7 @@ bindkey "^X\\x7f" backward-kill-line
 
 export GIT_DUET_GLOBAL=true
 export GIT_DUET_CO_AUTHORED_BY=true
-export GIT_DUET_ROTATE_AUTHOR=true
+export GIT_DUET_ROTATE_AUTHOR=false
 
 eval "$(direnv hook zsh)"
 eval "$(starship init zsh)"
