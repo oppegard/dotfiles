@@ -11,5 +11,7 @@
 	</array>
 	<key>ejectKeywordEnabled</key>
 	<true/>
+	<key>ejectType</key>
+	<integer>2</integer>
 </dict>
 </plist>
