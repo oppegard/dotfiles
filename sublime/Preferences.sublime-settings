@@ -1,6 +1,7 @@
 {
-	"font_face": "Essential PragmataPro",
-	"font_size": 14,
+	"caret_style": "blink",
+	"font_face": "PragmataPro",
+	"font_size": 16,
 	"git_diff_target": "head",
 	"ignored_packages":
 	[

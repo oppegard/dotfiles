@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euxo pipefail
 
 PROXY_ARGS=""
-PROXY_MODULE="$HOME/workspace/wf/wavefront-proxy/proxy"
+PROXY_MODULE="$HOME/src/wavefrontHQ/wavefront-proxy/proxy"
 cd $PROXY_MODULE
 
 set +u
@@ -15,6 +15,9 @@ fi
 if [[ "$1" == "otel" || "$2" == "otel" ]]; then
   PROXY_ARGS="$PROXY_ARGS --otlpGrpcListenerPorts 4317"
   PROXY_ARGS="$PROXY_ARGS --otlpHttpListenerPorts 4318"
+#   PROXY_ARGS="$PROXY_ARGS --traceJaegerGrpcListenerPorts 14250"
+#   PROXY_ARGS="$PROXY_ARGS --traceZipkinListenerPorts 9411"
+#   PROXY_ARGS="$PROXY_ARGS --traceZipkinApplicationName petclinic-jdbc"
 fi
 if [[ "$1" == "custom" || "$2" == "custom" ]]; then
   PROXY_ARGS="$PROXY_ARGS --customTracingListenerPorts 30001"
@@ -23,8 +26,11 @@ set -u
 
 
 lsof -i tcp:2878|awk '/LISTEN/ {print $2}'|xargs kill || true
+rm -f /tmp/wf-proxy-buffer.*.lck
+rm -f /tmp/wf-proxy-buffer.*spool*
 
-JAR="$PROXY_MODULE/target/proxy-11.0-RC3-SNAPSHOT-uber.jar"
+JAR="$PROXY_MODULE/target/proxy-*-spring-boot.jar"
+# JAR="$PROXY_MODULE/target/proxy-11.2-spring-boot.jar"
 java \
   -Dlog4j.configurationFile="$HOME/.config/wf/log4j2-dev.xml" \
   -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager \

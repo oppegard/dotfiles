@@ -1,6 +1,6 @@
 [alias]
 	br = branch
-	ci = duet-commit
+	ci = commit
 	co = checkout
 	df = diff
 	pl = pull
@@ -29,6 +29,7 @@
 	excludesFile = ~/.gitignore_global
 	pager = less -FXRS -x2
 	editor = subl --wait --new-window
+	hooksPath = ~/.git-template/hooks
 [fetch]
 	prune = true
 [merge]
@@ -67,3 +68,7 @@
 [commit]
 	gpgsign = true
 
+[gpg]
+	format = ssh
+[trailer]
+	ifexists = addIfDifferent # Fix duplicate Co-authored-by from git-duet

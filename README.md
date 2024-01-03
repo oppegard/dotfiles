@@ -35,6 +35,7 @@ qlmanage -r
   - Enable Smooth Scrolling
 - UninstallPKG.app to be able to remove cruft from installers using .pkg and admin privs.
 - [TimeMachineEditor](https://tclementdev.com/timemachineeditor/) to schedule TM backups overnight.
+- [GMailinator](https://github.com/wwwjfy/GMailinator) - GMail shortcuts for Mail.app (requires [Xcode](https://developer.apple.com))
 
 ## Preferences
 

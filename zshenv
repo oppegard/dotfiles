@@ -7,6 +7,7 @@
 # 5. Login shell exiting via `exit`? $ZDOTDIR/.zlogout and then /etc/zlogout
 
 export HOMEBREW_NO_ANALYTICS=1
+export GOPATH="${HOME}/src/go"
 
 ##### XDG #####
 export XDG_CONFIG_HOME="${HOME}/.config"
@@ -18,6 +19,8 @@ export XDG_BIN_HOME="${HOME}/.local/bin"
 PATH="/Library/Frameworks/Python.framework/Versions/3.9/bin:${PATH}" # Python 3.9 for...?
 PATH="${GOPATH:-$HOME/src/go}/bin:${PATH}" # GOBIN
 PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
+PATH="/Applications/IntelliJ IDEA.app/Contents/MacOS:$PATH"
+PATH="${HOME}/.cicd/bin:${PATH}"
 
 PATH="${XDG_BIN_HOME}:${HOME}/bin:/usr/local/sbin:${PATH}"
 export PATH

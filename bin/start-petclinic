@@ -1,14 +1,29 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euxo pipefail
 
-cd $HOME/workspace/spring/spring-petclinic
+# https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md#opentelemetry-sdk-autoconfigure
+export OTEL_TRACES_EXPORTER="${OTEL_TRACES_EXPORTER:-none}" # or: "logging", "none"
+export OTEL_METRICS_EXPORTER="${OTEL_METRICS_EXPORTER:-logging}" # "otlp", "logging", "none"
+# export OTEL_LOGS_EXPORTER="${OTEL_LOGS_EXPORTER:-logging}" # "otlp", "logging", "none"
+# export OTEL_EXPORTER_OTLP_PROTOCOL="${OTEL_EXPORTER_OTLP_PROTOCOL:-grpc}" #  "grpc", "http/protobuf"
 
-# https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/agent-config.md
-export OTEL_TRACES_EXPORTER="${OTEL_TRACES_EXPORTER:-otlp}" # or: "logging", "none"
-export OTEL_METRICS_EXPORTER="${OTEL_METRICS_EXPORTER:-none}"
-export OTEL_EXPORTER_OTLP_ENDPOINT="${OTEL_EXPORTER_OTLP_ENDPOINT:-http://localhost:4317}"
-export OTEL_EXPORTER_OTLP_PROTOCOL="${OTEL_EXPORTER_OTLP_PROTOCOL:-grpc}" # or: "http/protobuf"
-export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-petclinic-svc}"
-export OTEL_RESOURCE_ATTRIBUTES="${OTEL_RESOURCE_ATTRIBUTES:-application=petclinic-`whoami`}"
+# grpc defaults to http://localhost:4317. http/protobuf defaults to http://localhost:4318/v1/<signal>
+# export OTEL_EXPORTER_OTLP_ENDPOINT="${OTEL_EXPORTER_OTLP_ENDPOINT:-http://localhost:4317}"
+# export OTEL_EXPORTER_OTLP_COMPRESSION="${OTEL_EXPORTER_OTLP_COMPRESSION:-none}" # or gzip
+# export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-petclinic-svc}"
+# export  OTEL_JAVAAGENT_DEBUG=false # -Dotel.javaagent.debug=true
 
-java -javaagent:opentelemetry-javaagent.jar  -jar target/spring-petclinic*.jar
+export OTEL_RESOURCE_ATTRIBUTES="${OTEL_RESOURCE_ATTRIBUTES:-application=petclinic-`whoami`,cluster=go-cluster,shard=ap1}"
+export JAVA_AGENT=$HOME/Downloads/opentelemetry-javaagent.jar
+cd $HOME/src/spring/spring-petclinic
+java -javaagent:$HOME/Downloads/opentelemetry-javaagent.jar \
+ -Dotel.service.name=petclinic-svc \
+ -Dotel.exporter.otlp.metrics.temporality.preference=DELTA \
+ -Dotel.exporter.otlp.metrics.default.histogram.aggregation=EXPONENTIAL_BUCKET_HISTOGRAM \
+ -jar target/*.jar
+
+java -javaagent:$JAVA_AGENT -Dotel.service.name=petclinic -Dotel.resource.attributes=application=demo-petclinic -Dotel.exporter.otlp.metrics.temporality.preference=DELTA -Dotel.exporter.otlp.metrics.default.histogram.aggregation=EXPONENTIAL_BUCKET_HISTOGRAM -jar target/*.jar
+
+
+# export YK_AGENT="/Applications/YourKit-Java-Profiler-2021.3.app/Contents/Resources/bin/mac/libyjpagent.dylib"
+# -agentpath:$YK_AGENT=onexit=memory,onexit=snapshot,dir=/tmp/yourkit,tracing

@@ -128,7 +128,6 @@ then
 #  export PATH="${JAVA_HOME/bin}:$PATH"
 fi
 
-source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 
 # autoload and compinit have to come after any updates to FPATH var
 autoload -Uz compinit

@@ -1,6 +1,13 @@
 #!/bin/bash
-set -euxo pipefail
+set -exo pipefail
 
-cd $HOME/workspace/otel/opentelemetry-collector-contrib
-make otelcontribcol
-./bin/otelcontribcol_darwin_* --config ./local/otel-collector-config.yml
+PROJECT="$HOME/src/otel/opentelemetry-collector-contrib"
+CONF="$PROJECT/local/otel-collector-config.yml"
+
+if [[ -n "$1" ]]; then
+	$1 --config $CONF
+else
+	pushd $PROJECT
+	make otelcontribcol
+	./bin/otelcontribcol_darwin_$(arch) --config $CONF
+fi
