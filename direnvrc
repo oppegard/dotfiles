@@ -1,7 +1,9 @@
-# Usage: use ruby <version>
+# Usage: use ruby <ruby-install version>
+# Example: use ruby ruby-3.2.2
 #
 # Loads the specified ruby version into the environment
 #
+# See https://github.com/direnv/direnv/blob/master/docs/ruby.md
 use_ruby() {
   local ruby_dir=$HOME/.rubies/$1
   load_prefix $ruby_dir
