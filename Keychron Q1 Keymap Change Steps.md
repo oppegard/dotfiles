@@ -1,4 +1,8 @@
-Keychron Q1 Keymap Change Steps
+# Keychron Q1 Keymap Change Steps
+
+Two keyboards:
+1. Keychron Q1 v2 (2022-03-18)
+2. Keychron Q1 Pro (2023-07-13)
 
 Notes
 - making changes in the **Configure** tab of VIA writes to the keyboard's firmware immediately. There's no "test my changes first" concept.
