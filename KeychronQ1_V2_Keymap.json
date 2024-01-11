@@ -1,5 +1,5 @@
 {
-  "name": "Keychron Q1",
+  "name": "Keychron Q1V2 ANSI Knob",
   "vendorProductId": 875823367,
   "macros": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
   "layers": [
@@ -17,9 +17,9 @@
       "KC_F10",
       "KC_F11",
       "KC_F12",
-      "KC_DEL",
+      "MO(1)",
       "KC_NO",
-      "KC_F13",
+      "KC_MUTE",
       "KC_GRV",
       "KC_1",
       "KC_2",
@@ -85,8 +85,8 @@
       "KC_UP",
       "KC_NO",
       "KC_LCTL",
-      "USER02",
-      "USER04",
+      "CUSTOM(2)",
+      "CUSTOM(4)",
       "KC_NO",
       "KC_NO",
       "KC_NO",
@@ -94,8 +94,8 @@
       "KC_VOLD",
       "KC_VOLU",
       "KC_NO",
-      "USER05",
-      "MO(1)",
+      "CUSTOM(5)",
+      "CUSTOM(3)",
       "KC_RCTL",
       "KC_LEFT",
       "KC_DOWN",
@@ -105,8 +105,8 @@
       "KC_TRNS",
       "KC_BRID",
       "KC_BRIU",
-      "USER00",
-      "USER01",
+      "CUSTOM(0)",
+      "CUSTOM(1)",
       "RGB_VAD",
       "RGB_VAI",
       "KC_MPRV",
@@ -301,8 +301,8 @@
       "KC_TRNS",
       "KC_BRID",
       "KC_BRIU",
-      "USER06",
-      "USER07",
+      "CUSTOM(6)",
+      "CUSTOM(7)",
       "RGB_VAD",
       "RGB_VAI",
       "KC_MPRV",
@@ -396,5 +396,12 @@
       "KC_TRNS"
     ]
   ],
-  "encoders": []
+  "encoders": [
+    [
+      ["KC_VOLD", "KC_VOLU"],
+      ["RGB_VAD", "RGB_VAI"],
+      ["KC_VOLD", "KC_VOLU"],
+      ["RGB_VAD", "RGB_VAI"]
+    ]
+  ]
 }
