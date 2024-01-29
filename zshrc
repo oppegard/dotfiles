@@ -136,6 +136,8 @@ for dump in ~/.zcompdump(N.mh+24); do
 done
 compinit -C
 
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 alias k=kubectl
