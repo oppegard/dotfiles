@@ -86,7 +86,7 @@ Enable in new Firefox:
 - Set toolkit.legacyUserProfileCustomizations.stylesheets to `true`.
 - Open about:support and search for "Profile Folder". Copy the path.
 - Quit Firefox and symlink the `chrome` folder:
-  - `ln -s $HOME/workspace/dotfiles/Firefox/chrome "$HOME/Library/Application Support/Firefox/Profiles/u6rri5xi.default-release/"`
+  - `ln -s $HOME/src/dotfiles/Firefox/chrome "$HOME/Library/Application Support/Firefox/Profiles/u6rri5xi.default-release/"`
 - Start Firefox.
 
 ## SSH Setup

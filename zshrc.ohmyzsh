@@ -1,4 +1,4 @@
-source $HOME/workspace/dotfiles/zshrc
+source $HOME/src/dotfiles/zshrc
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/oppegard/.oh-my-zsh"
@@ -60,7 +60,7 @@ ZSH_THEME="robbyrussell"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$HOME/workspace/dotfiles/zshcustom
+ZSH_CUSTOM=$HOME/src/dotfiles/zshcustom
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/

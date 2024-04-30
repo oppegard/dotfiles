@@ -7,6 +7,7 @@ else
   exit 1
 fi
 
+# Run this script from ~/src/dotfiles/, which is a symlink to ~/Dropbox/dotfiles
 DOTFILES_DIR="$(pwd)"
 if [[ $(basename "$DOTFILES_DIR") != "dotfiles" ]]; then
   echo "ERROR: Script doesn't appear to have been invoked from the dotfiles directory."

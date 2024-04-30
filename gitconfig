@@ -1,3 +1,7 @@
+# resources:
+# - https://jvns.ca/blog/2024/02/16/popular-git-config-options/
+# - https://www.brantonboehm.com/code/conditional-git-config/
+# - 
 [alias]
 	br = branch
 	ci = commit
@@ -29,7 +33,9 @@
 	excludesFile = ~/.gitignore_global
 	pager = less -FXRS -x2
 	editor = subl --wait --new-window
-	hooksPath = ~/.git-template/hooks
+#	hooksPath = ~/.git-template/hooks
+[diff]
+	algorithm = histogram
 [fetch]
 	prune = true
 [merge]
@@ -53,7 +59,7 @@
 	allowed = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 [user]
 	name = Glenn Oppegard
-	email = oppegard@gmail.com
+	email = goppegard@vmware.com
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINaEf+SYjx88RLlzz7AThugwfa07ZIS5EnxtqqpfHijb
 [rerere]
 	enabled = true
@@ -72,3 +78,22 @@
 	format = ssh
 [trailer]
 	ifexists = addIfDifferent # Fix duplicate Co-authored-by from git-duet
+[url "ssh://git@gitlab.eng.vmware.com/"]
+	insteadOf = https://gitlab.eng.vmware.com/
+[duet "env"]
+	git-author-initials = go
+	git-author-name = Glenn Oppegard
+	git-author-email = goppegard@vmware.com
+	mtime = 1710787723
+	git-committer-initials = 
+	git-committer-name = 
+	git-committer-email = 
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[includeIf "hasconfig:remote.*.url:git@gitlab.eng.vmware.com:*/**"]
+    path = .gitconfig-work
+[includeIf "hasconfig:remote.*.url:ssh://goppegard@bellevue-ci-gerrit.eng.vmware.com:29418/**"]
+    path = .gitconfig-work
