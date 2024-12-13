@@ -146,3 +146,4 @@ alias k=kubectl
 
 # Hook for local customizations or sensitive data that shouldn't be committed
 [[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local"
+eval "$(mise activate zsh)"

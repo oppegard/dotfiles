@@ -33,9 +33,11 @@ files_to_link=(
   $HOME/.gitconfig              $DOTFILES_DIR/gitconfig
   $HOME/.gitignore_global       $DOTFILES_DIR/gitignore_global
   $HOME/.screenrc               $DOTFILES_DIR/screenrc
+  $HOME/.tmux.conf              $DOTFILES_DIR/tmux.conf
   $HOME/.vimrc                  $DOTFILES_DIR/vimrc
   $HOME/.config/starship.toml   $DOTFILES_DIR/starship.toml
   $HOME/.config/direnv/direnvrc $DOTFILES_DIR/direnvrc
+  $HOME/.asdf                   $HOME/.local/share/mise
 
   "$SUBL_PREFS_DIR/comment_line.sublime-macro"   "$DOTFILES_DIR/sublime/comment_line.sublime-macro"
   "$SUBL_PREFS_DIR/Default (OSX).sublime-keymap" "$DOTFILES_DIR/sublime/Default (OSX).sublime-keymap"

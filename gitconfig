@@ -59,7 +59,7 @@
 	allowed = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 [user]
 	name = Glenn Oppegard
-	email = goppegard@vmware.com
+	email = oppegard@gmail.com
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINaEf+SYjx88RLlzz7AThugwfa07ZIS5EnxtqqpfHijb
 [rerere]
 	enabled = true
