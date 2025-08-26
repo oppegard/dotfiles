@@ -58,9 +58,7 @@ switcher_only = true
 hidden = true
 
 [builtins.clipboard]
-hidden = false
-icon = ""
-name = "Clipboard"
+hidden = true
 
 [builtins.commands]
 hidden = true
