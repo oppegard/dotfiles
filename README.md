@@ -4,6 +4,14 @@ Another dotfiles repo.
 
 Meta: lint this file via `docker run --rm -v $PWD:/workdir ghcr.io/igorshubovych/markdownlint-cli:latest "*.md" --fix`
 
+# Browser Customization
+
+## Chrome
+
+Get rid of "Sign in with Google" on sites like StackOverflow, from https://underpassapp.com/news/2025/7/5.html:
+1. Go to  chrome://settings/content/federatedIdentityApi
+2. Select "Block sign-in prompts from identity services"
+
 # New Mac Setup
 
 TODO: automate where sensible 🤖
