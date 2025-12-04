@@ -16,6 +16,10 @@ Get rid of "Sign in with Google" on sites like StackOverflow, from https://under
 
 TODO: automate where sensible 🤖
 
+## Tahoe - Add Color to Active Window Borders
+
+https://github.com/FelixKratz/JankyBorders
+
 ## Install Fonts
 
 - Essential Pragmata Pro
