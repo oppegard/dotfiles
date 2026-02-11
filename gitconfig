@@ -32,7 +32,7 @@
 [core]
 	excludesFile = ~/.gitignore_global
 	pager = less -FXRS -x2
-	editor = subl --wait --new-window
+#	editor = subl --wait --new-window
 #	hooksPath = ~/.git-template/hooks
 [diff]
 	algorithm = histogram

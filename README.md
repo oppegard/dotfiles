@@ -45,7 +45,7 @@ qlmanage -r
 - [Mac Mouse Fix](https://mousefix.org/) ([github](https://github.com/noah-nuebling/mac-mouse-fix))
   - Best for non-Apple mice, like MX Master 3.
   - Enable Smooth Scrolling
-- UninstallPKG.app to be able to remove cruft from installers using .pkg and admin privs.
+- [AppCleaner](https://freemacsoft.net/appcleaner/) or [UninstallPKG](https://www.corecode.io/uninstallpkg/) to be able to remove cruft from installers using .pkg and admin privs.
 - [TimeMachineEditor](https://tclementdev.com/timemachineeditor/) to schedule TM backups overnight.
 - [GMailinator](https://github.com/wwwjfy/GMailinator) - GMail shortcuts for Mail.app (requires [Xcode](https://developer.apple.com))
 
@@ -62,6 +62,14 @@ killall Dock
 
 # Screenshots to save to ~/Desktop/Screenshots
 defaults write  com.apple.screencapture location ~/Desktop/Screenshots
+
+# Change spacing of menu bar items and padding (log out and back in)
+defaults -currentHost write -globalDomain NSStatusItemSpacing -int 9
+defaults -currentHost write -globalDomain NSStatusItemSelectionPadding 5
+
+# Revert manu bar spacing and padding
+defaults -currentHost delete -globalDomain NSStatusItemSpacing
+defaults -currentHost delete -globalDomain NSStatusItemSelectionPadding
 ```
 
 ### Map ⌘ + ←Delete to backward-kill-line in iTerm2 + zsh
