@@ -60,7 +60,7 @@
 [user]
 	name = Glenn Oppegard
 	email = oppegard@gmail.com
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINaEf+SYjx88RLlzz7AThugwfa07ZIS5EnxtqqpfHijb
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/QEpegNTctOFWufKj0bbDba+SvWYZ/0H1yw6nfsQ+k
 [rerere]
 	enabled = true
 	autoupdate = true
@@ -73,13 +73,8 @@
 	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 [commit]
 	gpgsign = true
-
-[gpg]
-	format = ssh
 [trailer]
 	ifexists = addIfDifferent # Fix duplicate Co-authored-by from git-duet
-[url "ssh://git@gitlab.eng.vmware.com/"]
-	insteadOf = https://gitlab.eng.vmware.com/
 [duet "env"]
 	git-author-initials = go
 	git-author-name = Glenn Oppegard
@@ -93,7 +88,3 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[includeIf "hasconfig:remote.*.url:git@gitlab.eng.vmware.com:*/**"]
-    path = .gitconfig-work
-[includeIf "hasconfig:remote.*.url:ssh://goppegard@bellevue-ci-gerrit.eng.vmware.com:29418/**"]
-    path = .gitconfig-work
