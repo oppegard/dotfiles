@@ -17,3 +17,7 @@ cursor-style-blink = false
 # Cursor styling + SSH session terminfo
 # (all shell integration options must be passed together)
 shell-integration-features = no-cursor,ssh-env
+
+# Splits
+split-divider-color=33ccff
+unfocused-split-opacity=0.7
