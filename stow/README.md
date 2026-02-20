@@ -5,7 +5,7 @@ stow 1Password
 stow uwsm
 ```
 
-To simulate before making changes, add `--simulate` (`-n`) option.
+To simulate before making changes, add `-nv`) options.
 
 
 Root-level packages:
