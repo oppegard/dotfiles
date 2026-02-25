@@ -1,5 +1,6 @@
 .DS_Store
 .envrc
+.idea/
 .tool-versions
-libfdb_c.dylib
 scratch/
+

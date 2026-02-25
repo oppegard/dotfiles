@@ -1,5 +1,0 @@
-bind ^m prev
-defscrollback 15000
-escape ^pp
-shell -$SHELL
-term xterm-256color

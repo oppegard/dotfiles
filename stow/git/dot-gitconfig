@@ -30,7 +30,7 @@
 	status = auto
 	ui = auto
 [core]
-	excludesFile = ~/.gitignore_global
+	excludesFile = ~/.config/git/ignore
 	pager = less -FXRS -x2
 #	editor = subl --wait --new-window
 #	hooksPath = ~/.git-template/hooks
@@ -48,15 +48,7 @@
 [rebase]
 	autosquash = true
 	autostash = true
-[url "git@github.com:"]
-	pushInsteadOf = https://github.com/
 [secrets]
-	providers = git secrets --aws-provider
-	patterns = [A-Z0-9]{20}
-	patterns = (\"|')?(AWS|aws|Aws)?_?(SECRET|secret|Secret)?_?(ACCESS|access|Access)?_?(KEY|key|Key)(\"|')?\\s*(:|=>|=)\\s*(\"|')?[A-Za-z0-9/\\+=]{40}(\"|')?
-	patterns = (\"|')?(AWS|aws|Aws)?_?(ACCOUNT|account|Account)_?(ID|id|Id)?(\"|')?\\s*(:|=>|=)\\s*(\"|')?[0-9]{4}\\-?[0-9]{4}\\-?[0-9]{4}(\"|')?
-	allowed = AKIAIOSFODNN7EXAMPLE
-	allowed = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 [user]
 	name = Glenn Oppegard
 	email = oppegard@gmail.com
@@ -66,23 +58,12 @@
 	autoupdate = true
 [init]
 	defaultBranch = main
-	templatedir = /Users/goppegard/.git-template
 [gpg]
 	format = ssh
 [gpg "ssh"]
 	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 [commit]
 	gpgsign = true
-[trailer]
-	ifexists = addIfDifferent # Fix duplicate Co-authored-by from git-duet
-[duet "env"]
-	git-author-initials = go
-	git-author-name = Glenn Oppegard
-	git-author-email = goppegard@vmware.com
-	mtime = 1710787723
-	git-committer-initials = 
-	git-committer-name = 
-	git-committer-email = 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

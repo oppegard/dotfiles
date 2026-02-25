@@ -29,13 +29,8 @@ files_to_link=(
   $ZDOTDIR/.zshrc               $DOTFILES_DIR/zshrc
   $HOME/bin                     $DOTFILES_DIR/bin
   $HOME/.ackrc                  $DOTFILES_DIR/ackrc
-  $HOME/.digrc                  $DOTFILES_DIR/digrc
-  $HOME/.gitconfig              $DOTFILES_DIR/gitconfig
-  $HOME/.gitignore_global       $DOTFILES_DIR/gitignore_global
-  $HOME/.screenrc               $DOTFILES_DIR/screenrc
   $HOME/.tmux.conf              $DOTFILES_DIR/tmux.conf
   $HOME/.vimrc                  $DOTFILES_DIR/vimrc
-  $HOME/.config/starship.toml   $DOTFILES_DIR/starship.toml
   $HOME/.config/direnv/direnvrc $DOTFILES_DIR/direnvrc
   $HOME/.asdf                   $HOME/.local/share/mise
 
