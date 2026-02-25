@@ -60,8 +60,8 @@ killall Finder
 defaults write com.apple.Dock appswitcher-all-displays -bool true
 killall Dock
 
-# Screenshots to save to ~/Desktop/Screenshots
-defaults write  com.apple.screencapture location ~/Desktop/Screenshots
+# Change location of saved Screenshots
+defaults write  com.apple.screencapture location ~/Downloads/Screenshots
 
 # Change spacing of menu bar items and padding (log out and back in)
 defaults -currentHost write -globalDomain NSStatusItemSpacing -int 9
