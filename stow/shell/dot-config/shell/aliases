@@ -1,0 +1,6 @@
+__os="$(uname -s)"
+if [ "$__os" = "Darwin" ]; then
+  alias notahoe='open "/Users/glenn/src/misc/stop-tahoe-update/profiles/deferral-90days.mobileconfig"; sleep 2; open "x-apple.systempreferences:com.apple.preferences.configurationprofiles"'
+fi
+
+unset __os

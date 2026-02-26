@@ -1,0 +1,210 @@
+# Transcode a video to a good-balance 1080p that's great for sharing online
+transcode-video-1080p() {
+  ffmpeg -i "$1" -vf scale=1920:1080 -c:v libx264 -preset fast -crf 23 -c:a copy "${1%.*}-1080p.mp4"
+}
+
+# Transcode a video to a good-balance 4K that's great for sharing online
+transcode-video-4K() {
+  ffmpeg -i "$1" -c:v libx265 -preset slow -crf 24 -c:a aac -b:a 192k "${1%.*}-optimized.mp4"
+}
+
+# Transcode any image to JPG image that's great for shrinking wallpapers
+img2jpg() {
+  img="$1"
+  shift
+
+  magick "$img" "$@" -quality 95 -strip "${img%.*}-converted.jpg"
+}
+
+# Transcode any image to a small JPG (max 1080px wide) that's great for sharing online
+img2jpg-small() {
+  img="$1"
+  shift
+
+  magick "$img" "$@" -resize 1080x\> -quality 95 -strip "${img%.*}-small.jpg"
+}
+
+# Transcode any image to a medium JPG (max 1800px wide) that's great for sharing online
+img2jpg-medium() {
+  img="$1"
+  shift
+
+  magick "$img" "$@" -resize 1800x\> -quality 95 -strip "${img%.*}-medium.jpg"
+}
+
+# Transcode any image to compressed-but-lossless PNG
+img2png() {
+  img="$1"
+  shift
+
+  magick "$img" "$@" -strip -define png:compression-filter=5 \
+    -define png:compression-level=9 \
+    -define png:compression-strategy=1 \
+    -define png:exclude-chunk=all \
+    "${img%.*}-optimized.png"
+}
+
+# Transcode any image to compressed-but-lossless PNG
+img2png() {
+  img="$1"
+  shift
+
+  magick "$img" $@ -strip -define png:compression-filter=5 \
+    -define png:compression-level=9 \
+    -define png:compression-strategy=1 \
+    -define png:exclude-chunk=all \
+    "${img%.*}-optimized.png"
+}
+
+# SSH Port Forwarding Functions
+fip() {
+  (( $# < 2 )) && echo "Usage: fip <host> <port1> [port2] ..." && return 1
+  local host="$1"
+  shift
+  for port in "$@"; do
+    ssh -f -N -L "$port:localhost:$port" "$host" && echo "Forwarding localhost:$port -> $host:$port"
+  done
+}
+
+dip() {
+  (( $# == 0 )) && echo "Usage: dip <port1> [port2] ..." && return 1
+  for port in "$@"; do
+    pkill -f "ssh.*-L $port:localhost:$port" && echo "Stopped forwarding port $port" || echo "No forwarding on port $port"
+  done
+}
+
+lip() {
+  pgrep -af "ssh.*-L [0-9]+:localhost:[0-9]+" || echo "No active forwards"
+}
+
+# Create a Tmux Dev Layout with editor, ai, and terminal
+# Usage: tdl <c|cx|codex|other_ai>
+tdl() {
+  [[ -z $1 ]] && { echo "Usage: tdl <c|cx|codex|other_ai>"; return 1; }
+  [[ -z $TMUX ]] && { echo "You must start tmux to use tdl."; return 1; }
+
+  local current_dir="${PWD}"
+  local editor_pane ai_pane
+  local ai="$1"
+
+  # Use TMUX_PANE for the pane we're running in (stable even if active window changes)
+  editor_pane="$TMUX_PANE"
+
+  # Name the current window after the base directory name
+  tmux rename-window -t "$editor_pane" "$(basename "$current_dir")"
+
+  # Split window vertically - top 85%, bottom 15% (target editor pane explicitly)
+  tmux split-window -v -p 15 -t "$editor_pane" -c "$current_dir"
+
+  # Split editor pane horizontally - AI on right 30% (capture new pane ID directly)
+  ai_pane=$(tmux split-window -h -p 30 -t "$editor_pane" -c "$current_dir" -P -F '#{pane_id}')
+
+  # Run ai in the right pane
+  tmux send-keys -t "$ai_pane" "$ai" C-m
+
+  # Focus the editor pane and run nvim directly (avoids send-keys timing issues)
+  tmux select-pane -t "$editor_pane"
+  $EDITOR .
+}
+
+# Create multiple tdl windows with one per subdirectory in the current directory
+# Usage: tdlm <c|cx|codex|other_ai>
+tdlm() {
+  [[ -z $1 ]] && { echo "Usage: tdlm <c|cx|codex|other_ai>"; return 1; }
+  [[ -z $TMUX ]] && { echo "You must start tmux to use tdlm."; return 1; }
+
+  local ai="$1"
+  local base_dir="$PWD"
+  local first=true
+
+  # Rename the session to the current directory name (replace dots/colons which tmux disallows)
+  tmux rename-session "$(basename "$base_dir" | tr '.:' '--')"
+
+  for dir in "$base_dir"/*/; do
+    [[ -d $dir ]] || continue
+    local dirpath="${dir%/}"
+
+    if $first; then
+      # Reuse the current window for the first project
+      tmux send-keys -t "$TMUX_PANE" "cd '$dirpath' && tdl $ai" C-m
+      first=false
+    else
+      local pane_id=$(tmux new-window -c "$dirpath" -P -F '#{pane_id}')
+      tmux send-keys -t "$pane_id" "tdl $ai" C-m
+    fi
+  done
+}
+
+# Create a multi-pane swarm layout with the same command started in each pane (great for AI)
+# Usage: tsl <pane_count> <command>
+tsl() {
+  [[ -z $1 || -z $2 ]] && { echo "Usage: tsl <pane_count> <command>"; return 1; }
+  [[ -z $TMUX ]] && { echo "You must start tmux to use tsl."; return 1; }
+
+  local count="$1"
+  local cmd="$2"
+  local current_dir="${PWD}"
+  local -a panes
+
+  tmux rename-window -t "$TMUX_PANE" "$(basename "$current_dir")"
+
+  panes+=("$TMUX_PANE")
+
+  while (( ${#panes[@]} < count )); do
+    local new_pane
+    local split_target="${panes[-1]}"
+    new_pane=$(tmux split-window -h -t "$split_target" -c "$current_dir" -P -F '#{pane_id}')
+    panes+=("$new_pane")
+    tmux select-layout -t "${panes[0]}" tiled
+  done
+
+  for pane in "${panes[@]}"; do
+    tmux send-keys -t "$pane" "$cmd" C-m
+  done
+
+  tmux select-pane -t "${panes[0]}"
+}
+
+
+if [ "$os" = "Linux" ]; then
+    xdg_desktop_list() {
+      local xdh="${XDG_DATA_HOME:-$HOME/.local/share}"
+      local xds="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+      local locale="${LC_ALL:-${LC_MESSAGES:-$LANG}}"
+      local lang_full="${locale%%[.@]*}"     # e.g. en_US
+      local lang_base="${lang_full%%_*}"     # e.g. en
+    
+      local -a roots=("$xdh/applications")
+      local IFS=:
+      for d in $xds; do roots+=("$d/applications"); done
+      unset IFS
+    
+      {
+        for root in "${roots[@]}"; do
+          [ -d "$root" ] || continue
+          find "$root" -type f -name '*.desktop' -print0 |
+          while IFS= read -r -d '' f; do
+            rel="${f#"$root/"}"; id="${rel%.desktop}"
+            printf '%s\t%s\n' "$f" "$id"
+          done
+        done
+      } | awk -F'\t' '!seen[$2]++ {print $1}' |
+        while IFS= read -r path; do
+          name="$(
+            awk -v lang1="$lang_full" -v lang2="$lang_base" '
+              BEGIN {insec=0; best=""; mid=""; def=""}
+              $0=="[Desktop Entry]" {insec=1; next}
+              /^\[/ {if (insec) insec=0}
+              insec && match($0,/^Name\[([A-Za-z]{2}(_[A-Za-z]{2})?)\]=(.*)$/,m){
+                if (m[1]==lang1 && best=="") best=m[3];
+                else if (m[1]==lang2 && mid=="") mid=m[3];
+                next
+              }
+              insec && def=="" && match($0,/^Name=(.*)$/,m){def=m[1]}
+              END{ if(best!="") print best; else if(mid!="") print mid; else print def }
+            ' "$path"
+          )"
+          printf '%s (%s)\n' "$path" "${name:-${path##*/}}"
+        done
+    }
+fi
