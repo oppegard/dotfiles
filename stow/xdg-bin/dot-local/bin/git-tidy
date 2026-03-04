@@ -1,0 +1,484 @@
+#!/usr/bin/env bash
+#
+# git-tidy: interactive local-branch cleanup with conservative safety rules.
+#
+# What this script does:
+# - Refreshes relevant remotes (unless --no-refresh) using branch-focused fetch
+#   behavior (`git fetch --prune --no-tags`), then analyzes each local branch.
+# - Classifies each branch (for example: merged, gone+merged, gone+unmerged,
+#   preserve, preserve-hard) and explains why.
+# - Runs in a per-branch loop: analyze -> prompt -> apply.
+# - Deletes only after explicit user confirmation for that specific branch.
+# - Uses GitHub PR metadata via `gh` as a best-effort signal for squash/rebase
+#   workflows where ancestry checks alone are insufficient.
+#
+# What this script intentionally does NOT do:
+# - It does not delete anything during analysis.
+# - It does not auto-delete hard-protected branches (current branch and
+#   configured protected patterns).
+# - It does not manage tags (fetch uses --no-tags to avoid tag conflict side
+#   effects during branch cleanup).
+# - It does not require `gh`; PR enrichment is optional and non-fatal.
+#
+# Why it works this way:
+# - Git's native `branch -d` safety gate is ancestry-based and can reject
+#   branches that were merged via squash/rebase.
+# - This script separates decision-making from destructive actions and presents
+#   branch-by-branch confirmation so cleanup stays predictable and reviewable.
+set -euo pipefail
+
+# Built-in protected branch patterns, always included in protection checks.
+DEFAULT_PROTECT_PATTERNS="main master develop dev trunk release/*"
+
+analyze_only=0
+refresh=1
+force_gone=0
+refresh_had_failures=0
+refresh_failed_remotes=""
+gh_available=0
+gh_warned=0
+pr_info_result=""
+analysis_record=""
+
+count_total=0
+count_promptable=0
+count_preserve_hard=0
+count_merged=0
+count_gone_merged=0
+count_gone_unmerged=0
+count_preserve=0
+
+
+usage() {
+  cat <<'USAGE'
+Usage: git-tidy [options]
+Safely analyze local branches and interactively confirm per-branch cleanup decisions.
+
+Options:
+  -n, --dry-run     Analyze only (no prompts, no deletions).
+  --no-refresh      Skip remote refresh (fetch --prune --no-tags).
+  --force-gone      Mark gone+unmerged branches as recommended for deletion.
+  -h, --help        Show help.
+
+Behavior:
+  - Default run processes each branch in a loop:
+    analyze -> prompt -> apply.
+  - No branch deletion occurs before that branch prompt.
+
+Env:
+  GIT_TIDY_REMOTE   Preferred remote (default: origin, fallback: first remote).
+  GIT_TIDY_PROTECT  Comma-separated protected patterns (e.g. "qa,hotfix/*").
+USAGE
+}
+
+if command -v gh >/dev/null 2>&1; then
+  gh_available=1
+fi
+
+warn_gh_unavailable() {
+  if [ "$gh_warned" -eq 0 ]; then
+    echo "WARNING: unable to query PR metadata via gh; continuing without PR-based hints." >&2
+    gh_warned=1
+  fi
+}
+
+while (($#)); do
+  case "$1" in
+    -n|--dry-run) analyze_only=1 ;;
+    --no-refresh) refresh=0 ;;
+    --force-gone) force_gone=1 ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+  shift
+done
+
+git rev-parse --git-dir >/dev/null 2>&1 || {
+  echo "Not inside a Git repository." >&2
+  exit 1
+}
+
+remote="${GIT_TIDY_REMOTE:-origin}"
+if ! git remote get-url "$remote" >/dev/null 2>&1; then
+  remote="$(git remote | head -n1 || true)"
+fi
+[ -n "$remote" ] || {
+  echo "No git remotes configured." >&2
+  exit 1
+}
+
+if [ "$refresh" -eq 1 ]; then
+  refresh_remotes="$remote"
+  while IFS= read -r up_remote; do
+    [ -n "$up_remote" ] || continue
+    case " $refresh_remotes " in
+      *" $up_remote "*) ;;
+      *) refresh_remotes="$refresh_remotes $up_remote" ;;
+    esac
+  done < <(git for-each-ref --format='%(upstream:remotename)' refs/heads)
+
+  echo "Refreshing refs (--prune --no-tags) for remotes: $refresh_remotes"
+  for r in $refresh_remotes; do
+    echo "Fetching $r"
+    if ! git fetch --prune --no-tags "$r"; then
+      if [ "$analyze_only" -eq 1 ]; then
+        echo "WARNING: fetch failed for remote '$r'; continuing analyze-only mode." >&2
+        refresh_had_failures=1
+        refresh_failed_remotes="${refresh_failed_remotes}${refresh_failed_remotes:+ }$r"
+      else
+        echo "ERROR: fetch failed for remote '$r'; aborting." >&2
+        exit 1
+      fi
+    fi
+  done
+fi
+
+default_ref="$(git symbolic-ref -q --short "refs/remotes/$remote/HEAD" || true)"
+default_branch=""
+if [ -n "$default_ref" ]; then
+  default_branch="${default_ref#${remote}/}"
+else
+  for c in main master trunk develop dev; do
+    if git show-ref --verify --quiet "refs/remotes/$remote/$c" ||
+       git show-ref --verify --quiet "refs/heads/$c"; then
+      default_branch="$c"
+      break
+    fi
+  done
+fi
+
+[ -n "$default_branch" ] || {
+  echo "Could not detect default branch for remote '$remote'." >&2
+  echo "Set remote HEAD: git remote set-head $remote -a" >&2
+  exit 1
+}
+
+if git show-ref --verify --quiet "refs/remotes/$remote/$default_branch"; then
+  base_ref="refs/remotes/$remote/$default_branch"
+elif git show-ref --verify --quiet "refs/heads/$default_branch"; then
+  base_ref="refs/heads/$default_branch"
+else
+  echo "Base ref for default branch '$default_branch' not found." >&2
+  exit 1
+fi
+
+current_branch="$(git symbolic-ref -q --short HEAD || true)"
+protect_patterns="$DEFAULT_PROTECT_PATTERNS $default_branch"
+if [ -n "${GIT_TIDY_PROTECT:-}" ]; then
+  protect_patterns="$protect_patterns ${GIT_TIDY_PROTECT//,/ }"
+fi
+
+is_protected() {
+  local b="$1"
+  local p
+  for p in $protect_patterns; do
+    case "$b" in
+      $p) return 0 ;;
+    esac
+  done
+  return 1
+}
+
+is_current() {
+  [ -n "$current_branch" ] && [ "$1" = "$current_branch" ]
+}
+
+is_branch_effectively_merged() {
+  local branch="$1"
+  local base="$2"
+  local unique_commits
+
+  if git merge-base --is-ancestor "$branch" "$base"; then
+    return 0
+  fi
+
+  unique_commits="$(git rev-list --right-only --cherry-pick --no-merges "$base...$branch")"
+  [ -z "$unique_commits" ]
+}
+
+pr_info_for_branch() {
+  local branch="$1"
+  local numbers
+  local num
+  local formatted=""
+
+  pr_info_result=""
+  [ "$gh_available" -eq 1 ] || return 0
+
+  if ! numbers="$(gh pr list --state merged --head "$branch" --json number,mergedAt --jq 'sort_by(.mergedAt)|reverse|map(.number)|.[]' 2>/dev/null)"; then
+    warn_gh_unavailable
+    return 0
+  fi
+
+  while IFS= read -r num; do
+    [ -n "$num" ] || continue
+    formatted="${formatted}${formatted:+,}#${num}"
+  done <<<"$numbers"
+
+  if [ -n "$formatted" ]; then
+    pr_info_result="PR $formatted"
+  fi
+  return 0
+}
+
+is_merged_via_pr_commit_coverage() {
+  local branch="$1"
+  local base_ref_local="$2"
+  local default_base="$3"
+  local unique_commits
+  local pr_numbers
+  local pr
+  local pr_commits
+  local unique_sha
+  local covered
+
+  [ "$gh_available" -eq 1 ] || return 1
+
+  unique_commits="$(git rev-list --right-only --no-merges "$base_ref_local...$branch")" || return 1
+  [ -z "$unique_commits" ] && return 0
+
+  if ! pr_numbers="$({
+    gh pr list --state merged --head "$branch" \
+      --json number,baseRefName,mergedAt \
+      --jq "sort_by(.mergedAt)|reverse|map(select(.baseRefName==\"$default_base\"))|map(.number)|.[]?"
+  } 2>/dev/null)"; then
+    warn_gh_unavailable
+    return 1
+  fi
+
+  [ -n "$pr_numbers" ] || return 1
+
+  for pr in $pr_numbers; do
+    if ! pr_commits="$(gh pr view "$pr" --json commits --jq '.commits[].oid' 2>/dev/null)"; then
+      warn_gh_unavailable
+      continue
+    fi
+
+    covered=1
+    while IFS= read -r unique_sha; do
+      [ -n "$unique_sha" ] || continue
+      if ! grep -qx "$unique_sha" <<<"$pr_commits"; then
+        covered=0
+        break
+      fi
+    done <<<"$unique_commits"
+
+    [ "$covered" -eq 1 ] && return 0
+  done
+
+  return 1
+}
+
+format_delete_cmd() {
+  local mode="$1"
+  local branch="$2"
+  if [ "$mode" = "D" ]; then
+    printf "git branch -D -- %s" "$branch"
+  else
+    printf "git branch -d -- %s" "$branch"
+  fi
+}
+
+run_delete() {
+  local mode="$1"
+  local branch="$2"
+
+  if [ "$mode" = "D" ]; then
+    git branch -D -- "$branch"
+  else
+    git branch -d -- "$branch"
+  fi
+}
+
+set_analysis_record() {
+  local branch="$1"
+  local status="$2"
+  local reason="$3"
+  local delete_mode="$4"
+  local promptable="$5"
+  local pr_info="$6"
+
+  analysis_record="$branch"$'\t'"$status"$'\t'"$reason"$'\t'"$delete_mode"$'\t'"$promptable"$'\t'"$pr_info"
+
+  count_total=$((count_total + 1))
+  [ "$promptable" = "1" ] && count_promptable=$((count_promptable + 1))
+
+  case "$status" in
+    preserve-hard) count_preserve_hard=$((count_preserve_hard + 1)) ;;
+    merged) count_merged=$((count_merged + 1)) ;;
+    gone+merged) count_gone_merged=$((count_gone_merged + 1)) ;;
+    gone+unmerged) count_gone_unmerged=$((count_gone_unmerged + 1)) ;;
+    preserve) count_preserve=$((count_preserve + 1)) ;;
+  esac
+}
+
+analyze_branch() {
+  local branch="$1"
+  local upstream="$2"
+  local status
+  local reason
+  local delete_mode
+  local promptable
+  local pr_info
+
+  pr_info_for_branch "$branch"
+  pr_info="$pr_info_result"
+
+  if is_current "$branch"; then
+    status="preserve-hard"
+    reason="current branch"
+    delete_mode=""
+    promptable="0"
+    set_analysis_record "$branch" "$status" "$reason" "$delete_mode" "$promptable" "$pr_info"
+    return
+  fi
+
+  if is_protected "$branch"; then
+    status="preserve-hard"
+    reason="protected pattern"
+    delete_mode=""
+    promptable="0"
+    set_analysis_record "$branch" "$status" "$reason" "$delete_mode" "$promptable" "$pr_info"
+    return
+  fi
+
+  if [ -n "$upstream" ] && ! git rev-parse -q --verify "$upstream^{commit}" >/dev/null 2>&1; then
+    if is_branch_effectively_merged "$branch" "$base_ref" || is_merged_via_pr_commit_coverage "$branch" "$base_ref" "$default_branch"; then
+      status="gone+merged"
+      reason="upstream $upstream missing"
+      delete_mode="D"
+      promptable="1"
+    else
+      status="gone+unmerged"
+      if [ "$force_gone" -eq 1 ]; then
+        reason="upstream $upstream missing; not merged (--force-gone enabled)"
+      else
+        reason="upstream $upstream missing; not merged"
+      fi
+      delete_mode="D"
+      promptable="1"
+    fi
+    set_analysis_record "$branch" "$status" "$reason" "$delete_mode" "$promptable" "$pr_info"
+    return
+  fi
+
+  if git merge-base --is-ancestor "$branch" "$base_ref"; then
+    status="merged"
+    reason="fully merged into $base_ref"
+    delete_mode="d"
+    promptable="1"
+  else
+    status="preserve"
+    if [ -n "$upstream" ]; then
+      reason="upstream $upstream present; not ancestry-merged into $base_ref"
+    else
+      reason="no upstream; not ancestry-merged into $base_ref"
+    fi
+    delete_mode="d"
+    promptable="1"
+  fi
+
+  set_analysis_record "$branch" "$status" "$reason" "$delete_mode" "$promptable" "$pr_info"
+}
+
+print_analysis_record() {
+  local record="$1"
+  local branch status reason delete_mode promptable pr_info pr_suffix cmd
+
+  IFS=$'\t' read -r branch status reason delete_mode promptable pr_info <<<"$record"
+  pr_suffix=""
+  [ -n "$pr_info" ] && pr_suffix=" ($pr_info)"
+
+  echo "$status: $branch$pr_suffix ($reason)"
+  if [ "$promptable" = "1" ]; then
+    cmd="$(format_delete_cmd "$delete_mode" "$branch")"
+    if [ "$status" = "preserve" ] || { [ "$status" = "gone+unmerged" ] && [ "$force_gone" -eq 0 ]; }; then
+      echo "  plan: preserve by default; override available via \`$cmd\`"
+    else
+      echo "  plan: delete via \`$cmd\`"
+    fi
+  fi
+}
+
+deleted=0
+kept=0
+failed=0
+
+prompt_and_apply_record() {
+  local record="$1"
+  local suggested
+  IFS=$'\t' read -r branch status reason delete_mode promptable pr_info <<<"$record"
+  [ "$promptable" = "1" ] || return 0
+
+  cmd="$(format_delete_cmd "$delete_mode" "$branch")"
+  if [ "$status" = "preserve" ] || { [ "$status" = "gone+unmerged" ] && [ "$force_gone" -eq 0 ]; }; then
+    suggested="n"
+  else
+    suggested="y"
+  fi
+
+  while true; do
+    printf "Delete via \`%s\` (y/n) [%s]: " "$cmd" "$suggested" > /dev/tty
+    if ! IFS= read -e -r -i "$suggested" answer < /dev/tty; then
+      echo > /dev/tty
+      answer="n"
+    fi
+    answer="$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')"
+    case "$answer" in
+      y|yes)
+        if run_delete "$delete_mode" "$branch"; then
+          echo "deleted: $branch"
+          deleted=$((deleted + 1))
+        else
+          echo "failed: $branch (command: $cmd)" >&2
+          failed=$((failed + 1))
+        fi
+        break
+        ;;
+      n|no)
+        echo "kept: $branch"
+        kept=$((kept + 1))
+        break
+        ;;
+      *)
+        echo "Please enter y or n. Suggested: $suggested."
+        ;;
+    esac
+  done
+  return 0
+}
+
+if [ "$analyze_only" -eq 0 ] && ! [ -t 0 ]; then
+  echo "Interactive confirmation requires a TTY. Re-run with -n for analyze-only output." >&2
+  exit 1
+fi
+
+if [ "$analyze_only" -eq 1 ]; then
+  echo "Analyze-only mode."
+else
+  echo "Analyze + confirm + apply loop mode."
+fi
+echo "Using base: $base_ref (remote=$remote, default=$default_branch)"
+
+while IFS=$'\t' read -r branch upstream; do
+  [ -n "$branch" ] || continue
+  analyze_branch "$branch" "$upstream"
+  print_analysis_record "$analysis_record"
+  if [ "$analyze_only" -eq 0 ]; then
+    prompt_and_apply_record "$analysis_record"
+  fi
+done < <(git for-each-ref --format='%(refname:short)%09%(upstream:short)' refs/heads)
+
+if [ "$refresh_had_failures" -eq 1 ]; then
+  echo "WARNING: refresh failed for remote(s): $refresh_failed_remotes" >&2
+  echo "WARNING: analysis may be stale." >&2
+fi
+
+echo "Analysis summary: total=$count_total promptable=$count_promptable merged=$count_merged gone+merged=$count_gone_merged gone+unmerged=$count_gone_unmerged preserve=$count_preserve preserve-hard=$count_preserve_hard"
+
+if [ "$analyze_only" -eq 1 ]; then
+  echo "Analyze-only mode: no prompts, no deletions."
+  exit 0
+fi
+
+echo "Apply summary: deleted=$deleted kept=$kept failed=$failed"

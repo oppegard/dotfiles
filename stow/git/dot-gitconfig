@@ -17,26 +17,9 @@
 	blog = log origin/main... --left-right
 	adp = add -p
     default-br = "!git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'"
-    # tidy deletes local branches that are fully merged into the repository’s default branch and
-    #  force-deletes local branches whose upstream has disappeared ([gone])
-    tidy = "!f() { \
-        set -e; \
-        default_branch=\"$(git default-br)\"; \
-        if [ -z \"$default_branch\" ]; then \
-          echo \"git tidy: can't determine default branch from origin/HEAD\" >&2; \
-          echo \"(run: git remote set-head origin -a)\" >&2; \
-          exit 1; \
-        fi; \
-        git branch --merged \"$default_branch\" \
-          | sed 's/^[*+ ]\\+//' \
-          | grep -Fvx \"$default_branch\" \
-          | while IFS= read -r b; do [ -n \"$b\" ] && git branch -d \"$b\"; done; \
-        git fetch --prune; \
-        git remote prune origin; \
-        git branch -vv \
-          | awk '/\\[gone\\]/{print $1}' \
-          | while IFS= read -r b; do [ -n \"$b\" ] && git branch -D \"$b\"; done; \
-      }; f"
+		# Safe branch cleanup command. Use `git tidy -n` for a dry-run preview.
+		# Implementation lives in ~/.local/bin/git-tidy.
+		tidy = "!git-tidy"
 
 [apply]
 	whitespace = nowarn
