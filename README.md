@@ -56,6 +56,10 @@ qlmanage -r
 defaults write com.apple.Finder AppleShowAllFiles true
 killall Finder
 
+# Finder: Put folders on top when sorting by name
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+killall Finder
+
 ## Make cmd-tab app switcher appear on all monitors:
 defaults write com.apple.Dock appswitcher-all-displays -bool true
 killall Dock
