@@ -38,6 +38,7 @@ refresh_failed_remotes=""
 gh_available=0
 gh_warned=0
 pr_info_result=""
+pr_coverage_merged=0
 analysis_record=""
 
 count_total=0
@@ -196,75 +197,62 @@ is_branch_effectively_merged() {
   [ -z "$unique_commits" ]
 }
 
-pr_info_for_branch() {
+load_pr_context_for_branch() {
   local branch="$1"
-  local numbers
+  local default_base="$2"
+  local unique_commits="$3"
+  local pr_rows
   local num
+  local base
+  local oid_list
+  local oid_lines
+  local unique_sha
+  local covered
   local formatted=""
 
   pr_info_result=""
-  [ "$gh_available" -eq 1 ] || return 0
-
-  if ! numbers="$(gh pr list --state merged --head "$branch" --json number,mergedAt --jq 'sort_by(.mergedAt)|reverse|map(.number)|.[]' 2>/dev/null)"; then
-    warn_gh_unavailable
-    return 0
-  fi
-
-  while IFS= read -r num; do
-    [ -n "$num" ] || continue
-    formatted="${formatted}${formatted:+,}#${num}"
-  done <<<"$numbers"
-
-  if [ -n "$formatted" ]; then
-    pr_info_result="PR $formatted"
-  fi
-  return 0
-}
-
-is_merged_via_pr_commit_coverage() {
-  local branch="$1"
-  local base_ref_local="$2"
-  local default_base="$3"
-  local unique_commits
-  local pr_numbers
-  local pr
-  local pr_commits
-  local unique_sha
-  local covered
+  pr_coverage_merged=0
 
   [ "$gh_available" -eq 1 ] || return 1
 
-  unique_commits="$(git rev-list --right-only --no-merges "$base_ref_local...$branch")" || return 1
-  [ -z "$unique_commits" ] && return 0
-
-  if ! pr_numbers="$({
+  if ! pr_rows="$({
     gh pr list --state merged --head "$branch" \
-      --json number,baseRefName,mergedAt \
-      --jq "sort_by(.mergedAt)|reverse|map(select(.baseRefName==\"$default_base\"))|map(.number)|.[]?"
+      --json number,baseRefName,mergedAt,commits \
+      --jq 'sort_by(.mergedAt)|reverse|map("\(.number)\t\(.baseRefName)\t\(.commits|map(.oid)|join(" "))")|.[]?'
   } 2>/dev/null)"; then
     warn_gh_unavailable
     return 1
   fi
 
-  [ -n "$pr_numbers" ] || return 1
+  [ -n "$pr_rows" ] || return 1
 
-  for pr in $pr_numbers; do
-    if ! pr_commits="$(gh pr view "$pr" --json commits --jq '.commits[].oid' 2>/dev/null)"; then
-      warn_gh_unavailable
-      continue
-    fi
+  while IFS=$'\t' read -r num base oid_list; do
+    [ -n "$num" ] || continue
+    formatted="${formatted}${formatted:+,}#${num}"
+
+    [ "$base" = "$default_base" ] || continue
+    [ -n "$unique_commits" ] || continue
+    [ "$pr_coverage_merged" -eq 0 ] || continue
 
     covered=1
+    oid_lines="$(tr ' ' '\n' <<<"$oid_list")"
     while IFS= read -r unique_sha; do
       [ -n "$unique_sha" ] || continue
-      if ! grep -qx "$unique_sha" <<<"$pr_commits"; then
+      if ! grep -qx "$unique_sha" <<<"$oid_lines"; then
         covered=0
         break
       fi
     done <<<"$unique_commits"
 
-    [ "$covered" -eq 1 ] && return 0
-  done
+    if [ "$covered" -eq 1 ]; then
+      pr_coverage_merged=1
+    fi
+  done <<<"$pr_rows"
+
+  if [ -n "$formatted" ]; then
+    pr_info_result="PR $formatted"
+    return 0
+  fi
 
   return 1
 }
@@ -320,9 +308,9 @@ analyze_branch() {
   local delete_mode
   local promptable
   local pr_info
+  local unique_commits
 
-  pr_info_for_branch "$branch"
-  pr_info="$pr_info_result"
+  pr_info=""
 
   if is_current "$branch"; then
     status="preserve-hard"
@@ -343,21 +331,36 @@ analyze_branch() {
   fi
 
   if [ -n "$upstream" ] && ! git rev-parse -q --verify "$upstream^{commit}" >/dev/null 2>&1; then
-    if is_branch_effectively_merged "$branch" "$base_ref" || is_merged_via_pr_commit_coverage "$branch" "$base_ref" "$default_branch"; then
+    if is_branch_effectively_merged "$branch" "$base_ref"; then
       status="gone+merged"
       reason="upstream $upstream missing"
       delete_mode="D"
       promptable="1"
     else
-      status="gone+unmerged"
-      if [ "$force_gone" -eq 1 ]; then
-        reason="upstream $upstream missing; not merged (--force-gone enabled)"
+      unique_commits="$(git rev-list --right-only --no-merges "$base_ref...$branch" || true)"
+      load_pr_context_for_branch "$branch" "$default_branch" "$unique_commits" || true
+      pr_info="$pr_info_result"
+
+      if [ "$pr_coverage_merged" -eq 1 ]; then
+        status="gone+merged"
+        reason="upstream $upstream missing"
+        delete_mode="D"
+        promptable="1"
       else
-        reason="upstream $upstream missing; not merged"
+        status="gone+unmerged"
+        if [ "$force_gone" -eq 1 ]; then
+          reason="upstream $upstream missing; not merged (--force-gone enabled)"
+        else
+          reason="upstream $upstream missing; not merged"
+        fi
+        delete_mode="D"
+        promptable="1"
       fi
-      delete_mode="D"
-      promptable="1"
+      set_analysis_record "$branch" "$status" "$reason" "$delete_mode" "$promptable" "$pr_info"
+      return
     fi
+    load_pr_context_for_branch "$branch" "$default_branch" "" || true
+    pr_info="$pr_info_result"
     set_analysis_record "$branch" "$status" "$reason" "$delete_mode" "$promptable" "$pr_info"
     return
   fi
