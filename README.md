@@ -15,10 +15,19 @@ Get rid of "Sign in with Google" on sites like StackOverflow, from https://under
 # New Mac Setup
 
 TODO: automate where sensible 🤖
+Consider:
+- https://github.com/omacom-io/omamac
 
-## Tahoe - Add Color to Active Window Borders
+## Make Active/Key Window More Pominent
 
-https://github.com/FelixKratz/JankyBorders
+Darken non-key window:
+- https://hazeover.com
+- 10% haze
+- Animation: ease in & out at 0.1 sec
+
+Add Color to Active Window Borders:
+- https://github.com/FelixKratz/JankyBorders
+- prefs are in `stow/`
 
 ## Install Fonts
 
