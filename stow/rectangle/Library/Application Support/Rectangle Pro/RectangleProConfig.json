@@ -155,7 +155,7 @@
       "double" : 8
     },
     "gestures" : {
-      "string" : "[1,{\"flags\":0,\"trail\":4},35,{\"flags\":0,\"trail\":0},0,{\"flags\":0,\"trail\":3},11,{\"flags\":0,\"trail\":1},10,{\"flags\":0,\"trail\":2},2,{\"flags\":0,\"trail\":1},19,{\"flags\":0,\"trail\":2}]"
+      "string" : "[19,{\"flags\":0,\"trail\":2},10,{\"flags\":0,\"trail\":2},2,{\"flags\":0,\"trail\":1},11,{\"flags\":0,\"trail\":1},35,{\"flags\":0,\"trail\":0},0,{\"flags\":0,\"trail\":3},1,{\"flags\":0,\"trail\":4}]"
     },
     "hapticFeedbackOnSnap" : {
       "int" : 0
@@ -164,7 +164,7 @@
       "int" : 1
     },
     "hideMenubarIcon" : {
-      "bool" : false
+      "bool" : true
     },
     "hideReticleRectangles" : {
       "bool" : false
@@ -188,7 +188,7 @@
       "int" : 0
     },
     "landscapeSnapAreas" : {
-      "string" : "[4,{\"compound\":-2},2,{\"action\":2},3,{\"action\":16},6,{\"action\":13},8,{\"action\":14},5,{\"compound\":-3},7,{\"compound\":-9},1,{\"action\":15}]"
+      "string" : "[4,{\"compound\":-2},1,{\"action\":15},3,{\"action\":16},8,{\"action\":14},5,{\"compound\":-3},6,{\"action\":13},7,{\"compound\":-9},2,{\"action\":2}]"
     },
     "launchOnLogin" : {
       "bool" : true
@@ -296,7 +296,7 @@
       "double" : 1
     },
     "quickActions" : {
-      "int" : 0
+      "int" : 2
     },
     "relaunchOpensMenu" : {
       "bool" : false
@@ -323,7 +323,7 @@
       "int" : 2
     },
     "reticleColor" : {
-      "string" : "{\"red\":0.8,\"blue\":0.2,\"alpha\":0.5,\"green\":0.3}"
+      "string" : "{\"red\":0.8,\"alpha\":0.5,\"blue\":0.2,\"green\":0.3}"
     },
     "reticleDisplayMinDist" : {
       "float" : 0
@@ -536,7 +536,7 @@
       "double" : 0.5
     },
     "windowSnapping" : {
-      "int" : 2
+      "int" : 1
     },
     "windowStopVelocity" : {
       "float" : 3
@@ -606,6 +606,6 @@
       "modifierFlags" : 1966080
     }
   },
-  "timestamp" : 794938795.650168,
+  "timestamp" : 794939878.993425,
   "version" : "218"
 }
