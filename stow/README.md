@@ -1,14 +1,23 @@
-From this directory:
+## HOME-level packages:
+From **this** directory (`.stowrc` present):
 
 ```
 stow 1Password
 stow uwsm
 ```
 
-To simulate before making changes, add `-nv`) options.
+To simulate before making changes, add `-n` option.
+
+### Special Snowflakes:
+
+Rectangle Pro:
+
+https://github.com/rxhanson/RectanglePro-Community/discussions/674#discussioncomment-12308761
+
+When making prefs changes, need to export `RectangleProConfig.json` from app back to this repo. Also, after running `stow rectangle` and relaunching Rectangle Pro, it will rename the symlink (per the GH comment above), so that it's only read once.
 
 
-Root-level packages:
+## Root-level packages
 
 ```
 cd @root
