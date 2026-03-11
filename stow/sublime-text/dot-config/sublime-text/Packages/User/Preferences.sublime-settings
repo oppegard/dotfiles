@@ -5,8 +5,8 @@
 	"git_diff_target": "head",
 	"ignored_packages":
 	[
-		"Vintage",
+		"Vintage"
 	],
-	"save_on_focus_lost": true,
 	"index_files": true,
+	"save_on_focus_lost": true
 }

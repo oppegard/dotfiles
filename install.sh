@@ -19,9 +19,6 @@ mkdir -p "${HOME}/.config"
 ZDOTDIR="${ZDOTDIR:-$HOME}"
 echo ZDOTDIR is "$ZDOTDIR"
 
-SUBL_PREFS_DIR="${HOME}/Library/Application Support/Sublime Text/Packages/User"
-mkdir -p "${SUBL_PREFS_DIR}"
-
 declare -A files_to_link
 files_to_link=(
   $ZDOTDIR/.zshenv              $DOTFILES_DIR/zshenv
@@ -33,11 +30,6 @@ files_to_link=(
   $HOME/.vimrc                  $DOTFILES_DIR/vimrc
   $HOME/.config/direnv/direnvrc $DOTFILES_DIR/direnvrc
   $HOME/.asdf                   $HOME/.local/share/mise
-
-  "$SUBL_PREFS_DIR/comment_line.sublime-macro"   "$DOTFILES_DIR/sublime/comment_line.sublime-macro"
-  "$SUBL_PREFS_DIR/Default (OSX).sublime-keymap" "$DOTFILES_DIR/sublime/Default (OSX).sublime-keymap"
-  "$SUBL_PREFS_DIR/Preferences.sublime-settings" "$DOTFILES_DIR/sublime/Preferences.sublime-settings"
-  "$SUBL_PREFS_DIR/Git Commit.sublime-settings"  "$DOTFILES_DIR/sublime/Git Commit.sublime-settings"
 )
 
 (
