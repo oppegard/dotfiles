@@ -155,7 +155,7 @@
       "double" : 8
     },
     "gestures" : {
-      "string" : "[19,{\"flags\":0,\"trail\":2},10,{\"flags\":0,\"trail\":2},2,{\"flags\":0,\"trail\":1},11,{\"flags\":0,\"trail\":1},35,{\"flags\":0,\"trail\":0},0,{\"flags\":0,\"trail\":3},1,{\"flags\":0,\"trail\":4}]"
+      "string" : "[35,{\"flags\":0,\"trail\":0},1,{\"flags\":0,\"trail\":4},10,{\"flags\":0,\"trail\":2},2,{\"flags\":0,\"trail\":1},11,{\"flags\":0,\"trail\":1},19,{\"flags\":0,\"trail\":2},0,{\"flags\":0,\"trail\":3}]"
     },
     "hapticFeedbackOnSnap" : {
       "int" : 0
@@ -323,7 +323,7 @@
       "int" : 2
     },
     "reticleColor" : {
-      "string" : "{\"red\":0.8,\"alpha\":0.5,\"blue\":0.2,\"green\":0.3}"
+      "string" : "{\"alpha\":0.5,\"red\":0.8,\"blue\":0.2,\"green\":0.3}"
     },
     "reticleDisplayMinDist" : {
       "float" : 0
@@ -407,7 +407,7 @@
       "int" : 0
     },
     "snapPanelActions" : {
-      "string" : "[{\"windowAction\":2},{\"windowAction\":0},{\"windowAction\":1},{\"windowAction\":21},{\"windowAction\":20},{\"windowAction\":22},{\"windowAction\":24},{\"windowAction\":23},{\"windowAction\":15},{\"windowAction\":16},{\"windowAction\":13},{\"windowAction\":14}]"
+      "string" : "[{\"windowAction\":21},{\"windowAction\":20},{\"windowAction\":22},{\"windowAction\":24},{\"windowAction\":23},{\"windowAction\":15},{\"windowAction\":16},{\"windowAction\":13},{\"windowAction\":14}]"
     },
     "specifiedHeight" : {
       "float" : 1050
@@ -606,6 +606,6 @@
       "modifierFlags" : 1966080
     }
   },
-  "timestamp" : 794939878.993425,
+  "timestamp" : 795371133.094172,
   "version" : "218"
 }
