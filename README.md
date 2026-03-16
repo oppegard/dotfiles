@@ -77,7 +77,7 @@ killall Dock
 defaults write  com.apple.screencapture location ~/Downloads/Screenshots
 
 # Change spacing of menu bar items and padding (log out and back in)
-defaults -currentHost write -globalDomain NSStatusItemSpacing -int 9
+defaults -currentHost write -globalDomain NSStatusItemSpacing -int 10
 defaults -currentHost write -globalDomain NSStatusItemSelectionPadding 5
 
 # Revert manu bar spacing and padding
