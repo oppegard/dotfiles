@@ -19,7 +19,8 @@
     default-br = "!git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'"
 		# Safe branch cleanup command. Use `git tidy -n` for a dry-run preview.
 		# Implementation lives in ~/.local/bin/git-tidy.
-		tidy = "!git-tidy"
+    tidy = "!git-tidy"
+    drop = restore --source=HEAD --staged --worktree --
 
 [apply]
 	whitespace = nowarn
