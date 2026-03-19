@@ -16,8 +16,8 @@ gitleaks_enabled="$(git config --bool --get hooks.gitleaks 2>/dev/null || true)"
 
 if [[ "$gitleaks_enabled" != "false" ]]; then
   if command -v gitleaks >/dev/null 2>&1; then
-    if ! gitleaks git --pre-commit --redact --staged --verbose; then
-      echo "pre-commit: gitleaks detected potential secrets; aborting commit." >&2
+    if ! gitleaks git --pre-commit --redact --staged --verbose --log-level warn --no-banner; then
+      printf 'pre-commit: \033[31mgitleaks\033[0m detected potential secrets; aborting commit.\n' >&2
       exit 1
     fi
   else
