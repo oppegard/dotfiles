@@ -17,16 +17,11 @@ gitleaks_enabled="$(git config --bool --get hooks.gitleaks 2>/dev/null || true)"
 if [[ "$gitleaks_enabled" != "false" ]]; then
   if command -v gitleaks >/dev/null 2>&1; then
     if ! gitleaks git --pre-commit --redact --staged --verbose --log-level warn --no-banner; then
-      printf 'pre-commit: \033[31mgitleaks\033[0m detected potential secrets; aborting commit.\n' >&2
+      printf '[pre-commit] aborting commit: \033[31mdetected potential secrets\033[0m.\n' >&2
       exit 1
     fi
   else
-    cat >&2 <<'EOF'
-pre-commit: gitleaks not found; skipping secret scan.
-Install gitleaks to enable scanning:
-  macOS: brew install gitleaks
-  Linux: install gitleaks with your distro package manager
-EOF
+    printf '[pre-commit] \033[31mskipping secret scan:\033[0m https://github.com/gitleaks/gitleaks not found.\n' >&2
   fi
 fi
 

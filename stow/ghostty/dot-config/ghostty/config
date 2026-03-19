@@ -21,3 +21,4 @@ shell-integration-features = no-cursor,ssh-env
 # Splits
 split-divider-color=33ccff
 unfocused-split-opacity=0.7
+link-previews=osc8
