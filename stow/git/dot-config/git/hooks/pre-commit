@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+run_repo_pre_commit() {
+  local repo_hook
+
+  repo_hook="$(git rev-parse --git-dir)/hooks/pre-commit"
+
+  if [[ -x "$repo_hook" && "$repo_hook" != "$0" ]]; then
+    "$repo_hook" "$@"
+  fi
+}
+
+gitleaks_enabled="$(git config --bool --get hooks.gitleaks 2>/dev/null || true)"
+
+if [[ "$gitleaks_enabled" != "false" ]]; then
+  if command -v gitleaks >/dev/null 2>&1; then
+    if ! gitleaks git --pre-commit --redact --staged --verbose; then
+      echo "pre-commit: gitleaks detected potential secrets; aborting commit." >&2
+      exit 1
+    fi
+  else
+    cat >&2 <<'EOF'
+pre-commit: gitleaks not found; skipping secret scan.
+Install gitleaks to enable scanning:
+  macOS: brew install gitleaks
+  Linux: install gitleaks with your distro package manager
+EOF
+  fi
+fi
+
+run_repo_pre_commit "$@"

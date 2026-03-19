@@ -38,7 +38,7 @@
 	excludesFile = ~/.config/git/ignore
 	pager = less -FXRS -x2
 #	editor = subl --wait --new-window
-#	hooksPath = ~/.git-template/hooks
+	hooksPath = ~/.config/git/hooks
 [diff]
 	algorithm = histogram
 [fetch]
