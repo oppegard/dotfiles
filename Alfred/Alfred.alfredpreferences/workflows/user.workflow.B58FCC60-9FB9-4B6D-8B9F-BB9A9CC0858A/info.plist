@@ -59,7 +59,7 @@ end alfred_script</string>
 				<key>keyword</key>
 				<string>{var:keyword}</string>
 				<key>subtext</key>
-				<string>"{query}"</string>
+				<string>"title #tag1 #tag2 [project name/area name] ::note &gt;duedate"</string>
 				<key>text</key>
 				<string>New To-Do</string>
 				<key>withspace</key>
