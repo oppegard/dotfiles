@@ -122,7 +122,7 @@
       "int" : 0
     },
     "dropPaneLocation" : {
-      "int" : 8
+      "int" : 0
     },
     "dropPaneModifier" : {
       "int" : 0
@@ -323,7 +323,7 @@
       "int" : 2
     },
     "reticleColor" : {
-      "string" : "{\"alpha\":0.5,\"red\":0.8,\"blue\":0.2,\"green\":0.3}"
+      "string" : "{\"alpha\":0.5,\"green\":0.3,\"red\":0.8,\"blue\":0.2}"
     },
     "reticleDisplayMinDist" : {
       "float" : 0
@@ -606,6 +606,6 @@
       "modifierFlags" : 1966080
     }
   },
-  "timestamp" : 795371133.094172,
+  "timestamp" : 795458396.471178,
   "version" : "218"
 }
