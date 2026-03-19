@@ -5,6 +5,8 @@ set -euo pipefail
 mkdir -p "$HOME/.config" \
   "$HOME/.config/sublime-text/Packages" \
   "$HOME/.local/bin" \
+  "$HOME/.claude" \
+  "$HOME/.codex" \
   "$HOME/.ssh"
 chmod 700 $HOME/.ssh
   
@@ -25,7 +27,7 @@ if [ "$__os" = "Darwin" ]; then
 
 fi
 
-stow_pkgs=(bash btop codex dig ghostty git rectangle screen shell ssh starship sublime-text tmux xdg-bin)
+stow_pkgs=(bash btop claude-code codex dig ghostty git rectangle screen shell ssh starship sublime-text tmux xdg-bin)
 for stow_pkg in "${stow_pkgs[@]}"; do
     echo "stowing $stow_pkg"
     stow "$stow_pkg"
