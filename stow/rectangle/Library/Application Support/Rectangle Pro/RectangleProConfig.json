@@ -164,13 +164,13 @@
       "int" : 1
     },
     "hideMenubarIcon" : {
-      "bool" : true
+      "bool" : false
     },
     "hideReticleRectangles" : {
       "bool" : false
     },
     "hookshotStatusIcon" : {
-      "int" : 2
+      "int" : 3
     },
     "iCloudSync" : {
       "int" : 1
@@ -323,7 +323,7 @@
       "int" : 2
     },
     "reticleColor" : {
-      "string" : "{\"alpha\":0.5,\"green\":0.3,\"red\":0.8,\"blue\":0.2}"
+      "string" : "{\"green\":0.3,\"blue\":0.2,\"alpha\":0.5,\"red\":0.8}"
     },
     "reticleDisplayMinDist" : {
       "float" : 0
@@ -485,7 +485,7 @@
       "int" : 1
     },
     "todo" : {
-      "int" : 0
+      "int" : 1
     },
     "todoApplication" : {
 
@@ -606,6 +606,6 @@
       "modifierFlags" : 1966080
     }
   },
-  "timestamp" : 795458396.471178,
+  "timestamp" : 795802695.542145,
   "version" : "218"
 }
