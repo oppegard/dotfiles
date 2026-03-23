@@ -83,6 +83,10 @@ defaults -currentHost write -globalDomain NSStatusItemSelectionPadding 5
 # Revert manu bar spacing and padding
 defaults -currentHost delete -globalDomain NSStatusItemSpacing
 defaults -currentHost delete -globalDomain NSStatusItemSelectionPadding
+
+# Hide macOS Tahoe’s Menu Icons
+# https://512pixels.net/2026/03/hide-macos-tahoes-menu-icons-with-this-one-simple-trick/
+defaults write -g NSMenuEnableActionImages -bool NO
 ```
 
 ### Map ⌘ + ←Delete to backward-kill-line in iTerm2 + zsh
