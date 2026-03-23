@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+set -e
+
+if [ "$(uname -s)" = "Darwin" ]; then
+    IDEA="/Applications/IntelliJ IDEA.app/Contents/MacOS/idea"
+else
+    IDEA="/usr/local/bin/idea"
+fi
+
+[ -x "$IDEA" ] || {
+    echo "idea not found at $IDEA" >&2
+    exit 1
+}
+
+exec "$IDEA" "$@"
