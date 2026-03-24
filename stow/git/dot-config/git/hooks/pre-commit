@@ -23,6 +23,8 @@ if [[ "$gitleaks_enabled" != "false" ]]; then
   else
     printf '[pre-commit] \033[31mskipping secret scan:\033[0m https://github.com/gitleaks/gitleaks not found.\n' >&2
   fi
+else
+  printf '[pre-commit] \033[31mskipping secret scan:\033[0m gitleaks disabled.\n' >&2
 fi
 
 run_repo_pre_commit "$@"
