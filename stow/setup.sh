@@ -19,7 +19,7 @@ if [ "$__os" = "Darwin" ]; then
   
   mkdir -p "$APP_SUPPORT/Rectangle Pro"
 
-  brew_pkgs=(1password-cli bash btop cleanshot codex ghostty git gitleaks hazeover mise rectangle-pro screen starship tmux)
+  brew_pkgs=(1password-cli bash btop cleanshot codex ghostty git gitleaks hazeover forklift mise rectangle-pro screen starship tmux)
   for brew_pkg in "${brew_pkgs[@]}"; do
       echo "brewing $brew_pkg"
       brew install "$brew_pkg" || true
