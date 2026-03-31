@@ -36,4 +36,9 @@ if command -v fzf &>/dev/null; then
   fi
 fi
 
+# 1Password
+if [ -f "$HOME/.config/op/plugins.sh" ]; then
+  source "$HOME/.config/op/plugins.sh"
+fi
+
 unset _shell_name

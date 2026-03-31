@@ -155,7 +155,7 @@
       "double" : 8
     },
     "gestures" : {
-      "string" : "[35,{\"flags\":0,\"trail\":0},1,{\"flags\":0,\"trail\":4},10,{\"flags\":0,\"trail\":2},2,{\"flags\":0,\"trail\":1},11,{\"flags\":0,\"trail\":1},19,{\"flags\":0,\"trail\":2},0,{\"flags\":0,\"trail\":3}]"
+      "string" : "[1,{\"trail\":4,\"flags\":0},10,{\"trail\":2,\"flags\":0},19,{\"trail\":2,\"flags\":0},11,{\"trail\":1,\"flags\":0},35,{\"trail\":0,\"flags\":0},0,{\"trail\":3,\"flags\":0},2,{\"trail\":1,\"flags\":0}]"
     },
     "hapticFeedbackOnSnap" : {
       "int" : 0
@@ -188,7 +188,7 @@
       "int" : 0
     },
     "landscapeSnapAreas" : {
-      "string" : "[4,{\"compound\":-2},1,{\"action\":15},3,{\"action\":16},8,{\"action\":14},5,{\"compound\":-3},6,{\"action\":13},7,{\"compound\":-9},2,{\"action\":2}]"
+      "string" : "[8,{\"action\":14},7,{\"compound\":-9},1,{\"action\":15},4,{\"compound\":-2},3,{\"action\":16},6,{\"action\":13},5,{\"compound\":-3}]"
     },
     "launchOnLogin" : {
       "bool" : true
@@ -323,7 +323,7 @@
       "int" : 2
     },
     "reticleColor" : {
-      "string" : "{\"green\":0.3,\"blue\":0.2,\"alpha\":0.5,\"red\":0.8}"
+      "string" : "{\"blue\":0.2,\"green\":0.3,\"alpha\":0.5,\"red\":0.8}"
     },
     "reticleDisplayMinDist" : {
       "float" : 0
@@ -606,6 +606,6 @@
       "modifierFlags" : 1966080
     }
   },
-  "timestamp" : 795802695.542145,
+  "timestamp" : 796592082.853397,
   "version" : "218"
 }
