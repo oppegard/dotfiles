@@ -27,7 +27,7 @@ if [ "$__os" = "Darwin" ]; then
 
 fi
 
-stow_pkgs=(bash btop claude-code codex dig ghostty git rectangle screen shell ssh starship sublime-text tmux xdg-bin)
+stow_pkgs=(bash btop bun claude-code codex dig ghostty git npm rectangle screen shell ssh starship sublime-text tmux uv xdg-bin)
 for stow_pkg in "${stow_pkgs[@]}"; do
     echo "stowing $stow_pkg"
     stow "$stow_pkg"
