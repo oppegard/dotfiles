@@ -3,3 +3,4 @@ Alfred/Alfred.alfredpreferences/remote/
 .DS_Store
 zshrc.local
 .zshrc.local
+stow/git/dot-config/git/local

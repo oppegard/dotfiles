@@ -44,6 +44,8 @@
 	algorithm = histogram
 [fetch]
 	prune = true
+[include]
+	path = ~/.config/git/local
 [merge]
 	conflictStyle = zdiff3
 [pull]
@@ -57,7 +59,7 @@
 [secrets]
 [user]
 	name = Glenn Oppegard
-	email = oppegard@gmail.com
+	useConfigOnly = true
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/QEpegNTctOFWufKj0bbDba+SvWYZ/0H1yw6nfsQ+k
 [rerere]
 	enabled = true
