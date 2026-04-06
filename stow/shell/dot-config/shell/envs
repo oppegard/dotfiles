@@ -1,4 +1,3 @@
 export EDITOR="nvim"
-export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
 export PATH="$PATH:$HOME/.local/bin"
 export HISTCONTROL=ignorespace
