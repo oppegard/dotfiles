@@ -13,6 +13,8 @@
 		<key>string</key>
 		<string>V</string>
 	</dict>
+	<key>persistForImages</key>
+	<integer>1</integer>
 	<key>snippetsAtTop</key>
 	<false/>
 </dict>
