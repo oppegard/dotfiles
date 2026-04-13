@@ -22,7 +22,7 @@ if [ "$__os" = "Darwin" ]; then
   brew_pkgs=(1password-cli bash btop cleanshot codex ghostty git gitleaks hazeover forklift mise rectangle-pro screen starship tmux)
   for brew_pkg in "${brew_pkgs[@]}"; do
       echo "brewing $brew_pkg"
-      brew install "$brew_pkg" || true
+      brew install "$brew_pkg" 2>/dev/null || true
   done
 
 fi
