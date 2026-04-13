@@ -25,11 +25,12 @@ if [ "$__os" = "Darwin" ]; then
     btop
     cleanshot
     codex
+    forklift
     ghostty
     git
     gitleaks
     hazeover
-    forklift
+    libreoffice-still # for https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md
     mise
     poppler # pdf tools for codex
     rectangle-pro
