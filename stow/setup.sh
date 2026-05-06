@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+cd "$(dirname "$0")"
+
 mkdir -p "$HOME/.config" \
   "$HOME/.config/sublime-text/Packages" \
   "$HOME/.local/bin" \
@@ -32,6 +34,8 @@ if [ "$__os" = "Darwin" ]; then
     hazeover
     libreoffice-still # for https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md
     mise
+    opencode
+    opencode-desktop
     poppler # pdf tools for codex
     rectangle-pro
     screen
