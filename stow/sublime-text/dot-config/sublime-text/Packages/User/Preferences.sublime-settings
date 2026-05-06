@@ -1,12 +1,12 @@
 {
 	"caret_style": "blink",
 	"font_face": "PragmataPro",
-	"font_size": 16,
+	"font_size": 18,
 	"git_diff_target": "head",
 	"ignored_packages":
 	[
-		"Vintage"
+		"Vintage",
 	],
 	"index_files": true,
-	"save_on_focus_lost": true
+	"save_on_focus_lost": true,
 }
