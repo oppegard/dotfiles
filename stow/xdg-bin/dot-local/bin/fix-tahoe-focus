@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Hover state not working on Notifications
+# https://discussions.apple.com/thread/256225380
+killall NotificationCenter UserNotificationCenter ControlCenter
