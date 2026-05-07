@@ -28,6 +28,7 @@ if [ "$__os" = "Darwin" ]; then
     cleanshot
     codex
     forklift
+    gh
     ghostty
     git
     gitleaks
