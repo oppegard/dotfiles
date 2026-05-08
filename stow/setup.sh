@@ -44,6 +44,7 @@ if [ "$__os" = "Darwin" ]; then
     sublime-text
     starship
     tmux
+    zoxide
   )
   brew update
   for brew_pkg in "${brew_pkgs[@]}"; do
