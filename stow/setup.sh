@@ -34,6 +34,7 @@ if [ "$__os" = "Darwin" ]; then
     gitleaks
     hazeover
     libreoffice-still # for https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md
+    linearmouse
     mise
     opencode
     opencode-desktop
@@ -52,7 +53,27 @@ if [ "$__os" = "Darwin" ]; then
 
 fi
 
-stow_pkgs=(bash btop bun claude-code codex dig ghostty git npm rectangle screen shell ssh starship sublime-text tmux uv xdg-bin)
+stow_pkgs=(
+  bash
+  btop
+  bun
+  claude-code
+  codex
+  dig
+  ghostty
+  git
+  linearmouse
+  npm
+  rectangle
+  screen
+  shell
+  ssh
+  starship
+  sublime-text
+  tmux
+  uv
+  xdg-bin
+)
 for stow_pkg in "${stow_pkgs[@]}"; do
     echo "stowing $stow_pkg"
     stow "$stow_pkg"
