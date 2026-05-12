@@ -28,6 +28,7 @@ if [ "$__os" = "Darwin" ]; then
     cleanshot
     codex
     forklift
+    fzf
     gh
     ghostty
     git
@@ -41,6 +42,7 @@ if [ "$__os" = "Darwin" ]; then
     poppler # pdf tools for codex
     rectangle-pro
     screen
+    soundsource
     sublime-text
     starship
     tmux
