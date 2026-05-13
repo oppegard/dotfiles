@@ -422,10 +422,11 @@ prompt_and_apply_record() {
 
   while true; do
     printf "Delete via \`%s\` (y/n) [%s]: " "$cmd" "$suggested" > /dev/tty
-    if ! IFS= read -e -r -i "$suggested" answer < /dev/tty; then
+    if ! IFS= read -r answer < /dev/tty; then
       echo > /dev/tty
       answer="n"
     fi
+    [ -n "$answer" ] || answer="$suggested"
     answer="$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')"
     case "$answer" in
       y|yes)
