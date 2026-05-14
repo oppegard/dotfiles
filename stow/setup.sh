@@ -27,7 +27,6 @@ if [ "$__os" = "Darwin" ]; then
     btop
     cleanshot
     codex
-    curl
     forklift
     fzf
     gh
