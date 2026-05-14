@@ -27,6 +27,7 @@ if [ "$__os" = "Darwin" ]; then
     btop
     cleanshot
     codex
+    curl
     forklift
     fzf
     gh
@@ -62,6 +63,7 @@ stow_pkgs=(
   bun
   claude-code
   codex
+  curl
   dig
   ghostty
   git
