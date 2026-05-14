@@ -14,11 +14,6 @@ if command -v mise &>/dev/null; then
 fi
 
 if command -v starship &>/dev/null; then
-  if [[ "$__shell_name" == "bash" ]]; then
-    # clear stale readline state before rendering prompt (prevents artifacts in prompt after abnormal exits like SIGQUIT)
-    __sanitize_prompt() { printf '\r\033[K'; }
-    PROMPT_COMMAND="__sanitize_prompt${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
-  fi
   eval "$(starship init "$__shell_name")"
 fi
 
