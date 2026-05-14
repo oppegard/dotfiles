@@ -1,5 +1,5 @@
 {
-  "$schema" : "https:\/\/schema.linearmouse.app\/0.11.1",
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.11.2",
   "schemes" : [
     {
       "buttons" : {
@@ -28,7 +28,7 @@
             "inertia" : 0.74,
             "preset" : "easeInOut",
             "response" : 0.68,
-            "speed" : 1.02
+            "speed" : 1
           }
         },
         "speed" : {
