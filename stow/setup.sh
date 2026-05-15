@@ -42,9 +42,11 @@ if [ "$__os" = "Darwin" ]; then
     poppler # pdf tools for codex
     rectangle-pro
     screen
+    shellcheck
     soundsource
     sublime-text
     starship
+    thaw
     tmux
     zoxide
   )
