@@ -24,6 +24,7 @@ if [ "$__os" = "Darwin" ]; then
   brew_pkgs=(
     1password-cli
     bash
+    bat
     btop
     cleanshot
     codex
@@ -51,11 +52,7 @@ if [ "$__os" = "Darwin" ]; then
     zoxide
   )
   brew update
-  for brew_pkg in "${brew_pkgs[@]}"; do
-      echo "brewing $brew_pkg"
-      brew install "$brew_pkg" 2>/dev/null || true
-  done
-
+  brew install --quiet "${brew_pkgs[@]}"
 fi
 
 stow_pkgs=(

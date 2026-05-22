@@ -1,6 +1,9 @@
 [settings]
 idiomatic_version_file_enable_tools = ["java"]
 
+[settings.ruby]
+compile = false
+
 [tools]
 go = "latest"
 node = "24"
