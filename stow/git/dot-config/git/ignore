@@ -3,6 +3,7 @@
 .idea/
 .tool-versions
 scratch/
+tmp/
 
 
 **/.claude/settings.local.json

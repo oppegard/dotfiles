@@ -13,6 +13,12 @@
           "vendorID" : "0x45e"
         }
       },
+      "pointer" : {
+        "acceleration" : "unset",
+        "disableAcceleration" : false,
+        "redirectsToScroll" : false,
+        "speed" : "unset"
+      },
       "scrolling" : {
         "acceleration" : {
           "vertical" : 1
@@ -28,12 +34,31 @@
             "inertia" : 0.74,
             "preset" : "easeInOut",
             "response" : 0.68,
-            "speed" : 1
+            "speed" : 1.02
           }
         },
         "speed" : {
           "vertical" : 0
         }
+      }
+    },
+    {
+      "if" : {
+        "app" : "com.bambulab.bambu-studio",
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0x82a",
+          "productName" : "Microsoft Pro Intellimouse",
+          "vendorID" : "0x45e"
+        }
+      },
+      "scrolling" : {
+        "acceleration" : 0.35,
+        "distance" : "auto",
+        "smoothed" : {
+          "enabled" : false
+        },
+        "speed" : 0.4
       }
     }
   ]
