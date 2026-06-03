@@ -79,7 +79,6 @@ stow_pkgs=(
   bash
   btop
   bun
-  claude-code
   codex
   curl
   dig
