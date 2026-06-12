@@ -1,3 +1,4 @@
 export EDITOR="nvim"
 export PATH="$PATH:$HOME/.local/bin"
 export HISTCONTROL="ignorespace:ignoredups"
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"

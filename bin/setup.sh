@@ -55,6 +55,7 @@ if [ "$__os" = "Darwin" ]; then
     opencode-desktop
     poppler # pdf tools for codex
     rectangle-pro
+    ripgrep
     screen
     shellcheck
     soundsource
@@ -87,6 +88,7 @@ stow_pkgs=(
   linearmouse
   npm
   rectangle
+  ripgrep
   screen
   shell
   ssh
