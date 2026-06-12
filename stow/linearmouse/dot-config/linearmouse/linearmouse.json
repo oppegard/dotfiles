@@ -26,9 +26,16 @@
         "distance" : {
           "vertical" : "auto"
         },
+        "modifiers" : {
+          "vertical" : {
+            "shift" : {
+              "type" : "alterOrientation"
+            }
+          }
+        },
         "smoothed" : {
           "vertical" : {
-            "acceleration" : 1.1,
+            "acceleration" : 1,
             "bouncing" : true,
             "enabled" : true,
             "inertia" : 0.74,
@@ -55,6 +62,11 @@
       "scrolling" : {
         "acceleration" : 0.35,
         "distance" : "auto",
+        "modifiers" : {
+          "shift" : {
+            "type" : "alterOrientation"
+          }
+        },
         "smoothed" : {
           "enabled" : false
         },
