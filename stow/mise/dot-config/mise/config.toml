@@ -1,8 +1,15 @@
 [settings]
+experimental = true
 idiomatic_version_file_enable_tools = ["java"]
 
 [settings.ruby]
 compile = false
+
+[bootstrap.packages]
+"brew:bash" = "latest"
+
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/bash"
 
 [tools]
 bun = "latest"

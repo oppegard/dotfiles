@@ -23,7 +23,7 @@ mkdir -p \
   "$HOME/.claude" \
   "$HOME/.codex" \
   "$HOME/.ssh"
-chmod 700 $HOME/.ssh
+chmod 700 "$HOME/.ssh"
   
 __os="$(uname -s)"
 ### Mac Setup ###
@@ -36,7 +36,6 @@ if [ "$__os" = "Darwin" ]; then
 
   brew_pkgs=(
     1password-cli
-    bash
     bat
     btop
     cleanshot
@@ -86,6 +85,7 @@ stow_pkgs=(
   ghostty
   git
   linearmouse
+  mise
   npm
   rectangle
   ripgrep
@@ -102,6 +102,11 @@ for stow_pkg in "${stow_pkgs[@]}"; do
     echo "stowing $stow_pkg"
     stow "$stow_pkg"
 done
+
+MISE_EXPERIMENTAL=true \
+  MISE_OVERRIDE_CONFIG_FILENAMES="$DOTFILES_DIR/stow/mise/dot-config/mise/config.toml" \
+  MISE_TRUSTED_CONFIG_PATHS="$DOTFILES_DIR/stow/mise/dot-config/mise/config.toml" \
+  mise bootstrap
 
 DOTFILES_WORK_DIR="${DOTFILES_DIR}-work"
 if [ -d "$DOTFILES_WORK_DIR" ]; then
