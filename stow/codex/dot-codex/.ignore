@@ -1,2 +1,5 @@
 sessions/
 archived_sessions/
+!.tmp/
+!.tmp/**
+.git/
