@@ -85,7 +85,6 @@ stow_pkgs=(
   ghostty
   git
   linearmouse
-  mise
   npm
   rectangle
   ripgrep
@@ -103,10 +102,8 @@ for stow_pkg in "${stow_pkgs[@]}"; do
     stow "$stow_pkg"
 done
 
-MISE_EXPERIMENTAL=true \
-  MISE_OVERRIDE_CONFIG_FILENAMES="$DOTFILES_DIR/stow/mise/dot-config/mise/config.toml" \
-  MISE_TRUSTED_CONFIG_PATHS="$DOTFILES_DIR/stow/mise/dot-config/mise/config.toml" \
-  mise bootstrap
+cd "$DOTFILES_DIR/mise"
+mise bootstrap
 
 DOTFILES_WORK_DIR="${DOTFILES_DIR}-work"
 if [ -d "$DOTFILES_WORK_DIR" ]; then

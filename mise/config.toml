@@ -1,6 +1,8 @@
 [settings]
 experimental = true
 idiomatic_version_file_enable_tools = ["java"]
+dotfiles.root = "~/src/dotfiles"
+dotfiles.default_mode = "symlink"
 
 [settings.ruby]
 compile = false
@@ -10,6 +12,10 @@ compile = false
 
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/bash"
+
+[dotfiles]
+"~/.config/mise/config.toml" = "config.toml"
+"~/.dotfiles" = "~/src/dotfiles"
 
 [tools]
 bun = "latest"
