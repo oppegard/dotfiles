@@ -34,38 +34,11 @@ if [ "$__os" = "Darwin" ]; then
   
   mkdir -p "$APP_SUPPORT/Rectangle Pro"
 
-  brew_pkgs=(
-    1password-cli
-    bat
-    btop
-    cleanshot
-    codex
-    forklift
-    fzf
-    gh
-    ghostty
-    git
-    gitleaks
-    hazeover
-    libreoffice-still # for https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md
-    linearmouse
-    mise
-    opencode
-    opencode-desktop
-    poppler # pdf tools for codex
-    rectangle-pro
-    ripgrep
-    screen
-    shellcheck
-    soundsource
-    sublime-text
-    starship
-    thaw
-    tmux
-    zoxide
-  )
-  brew update
-  brew install --quiet "${brew_pkgs[@]}"
+  BREWFILE="$DOTFILES_DIR/Brewfile"
+  brew bundle check --file="$BREWFILE" || brew bundle install --file="$BREWFILE"
+
+  # Running below will remove mise-brewed items, manual brews, etc
+  # brew bundle cleanup --file="$BREWFILE"
 fi
 
 STOW_DIR="$DOTFILES_DIR/stow"
