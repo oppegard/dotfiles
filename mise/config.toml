@@ -1,6 +1,6 @@
 [settings]
 experimental = true
-idiomatic_version_file_enable_tools = ["java"]
+idiomatic_version_file_enable_tools = ["java", "node"]
 dotfiles.root = "~/src/dotfiles"
 dotfiles.default_mode = "symlink"
 
