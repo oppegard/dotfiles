@@ -40,10 +40,10 @@ fi
 
 # Misc Completions
 if [ "$__os" = "Darwin" ]; then
-  source /opt/homebrew/etc/bash_completion.d/aws_bash_completer
-  source /opt/homebrew/etc/bash_completion.d/gh
-  source /opt/homebrew/etc/bash_completion.d/git-completion.bash
-  source /opt/homebrew/etc/bash_completion.d/mise
+  [[ -r /opt/homebrew/share/bash-completion/bash_completion ]] && . /opt/homebrew/share/bash-completion/bash_completion
+  # Try getting rid of below.. it was added for `docker pull <tab>` errors
+  [[ -r /opt/homebrew/opt/bash-completion@2/etc/bash_completion.d/000_bash_completion_compat.bash ]] && . /opt/homebrew/opt/bash-completion@2/etc/bash_completion.d/000_bash_completion_compat.bash
+
 fi
 
 unset __shell_name

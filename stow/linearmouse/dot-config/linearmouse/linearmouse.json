@@ -35,7 +35,7 @@
         },
         "smoothed" : {
           "vertical" : {
-            "acceleration" : 1,
+            "acceleration" : 0.86,
             "bouncing" : true,
             "enabled" : true,
             "inertia" : 0.74,
