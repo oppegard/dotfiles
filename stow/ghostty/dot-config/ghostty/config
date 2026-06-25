@@ -1,8 +1,8 @@
 font-family = "PragmataPro Mono"
 font-size = 16
 theme = "tokyonight"
-# 10MB Scrollback in bytes
-scrollback-limit = 10_485_760
+# 128MB scrollback in bytes (per-terminal)
+scrollback-limit = 134217728
 
 # Window
 window-theme = ghostty
