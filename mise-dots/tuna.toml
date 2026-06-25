@@ -1,0 +1,123 @@
+schemaVersion = 1
+
+[[catalogs.globalScopes]]
+catalogIdentifier = 'Tuna.EffectsCatalog'
+mode = 'none'
+selectedItemKeys = []
+
+[[catalogs.globalScopes]]
+catalogIdentifier = 'TunaEmoji.EmojiCatalog'
+mode = 'none'
+selectedItemKeys = []
+
+[[catalogs.sortOrders]]
+catalogIdentifier = 'Tuna.Internal.ClipboardProxyCatalog'
+sortOrder = 'capturedAt.desc'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Ghostty.app'
+key = 't'
+label = 'Terminal'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Ghostty/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Google Chrome.app'
+key = 'b'
+label = 'Primary Browser'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Google%20Chrome/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+key = 'B'
+label = 'Secondary Browser'
+url = 'tuna://run/path.%252FApplications%252FSafari.app/Open'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Mimestream.app'
+key = 'e'
+label = 'Email'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Mimestream/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+iconPath = 'document.on.clipboard'
+key = 'v'
+url = 'tuna://run/Tuna.Internal.ClipboardProxyCatalog.Clipboard%20History/TunaCore.CommonActionsCatalog.Browse'
+
+[[comboMode.bindings]]
+iconPath = 'bookmark'
+key = 'f'
+label = 'Finder...'
+
+    [[comboMode.bindings.children]]
+    iconPath = '/System/Library/CoreServices/Finder.app'
+    key = 'f'
+    label = 'Finder'
+    url = 'tuna://run/TunaCore.ApplicationsCatalog.Finder/TunaCore.CommonActionsCatalog.Open'
+
+    [[comboMode.bindings.children]]
+    iconPath = 'apps.ipad.landscape'
+    key = 'a'
+    label = 'Applications'
+    url = 'tuna://run/path.%252FApplications/Open'
+
+    [[comboMode.bindings.children]]
+    iconPath = 'square.and.arrow.down.fill'
+    key = 'd'
+    label = 'Downloads'
+    url = 'tuna://run/path.%252FUsers%252Fglenn%252FDownloads/Open'
+
+    [[comboMode.bindings.children]]
+    iconPath = 'house.fill'
+    key = 'h'
+    label = 'Home'
+    url = 'tuna://run/path.%252FUsers%252Fglenn/Open'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Fantastical.app'
+key = 'c'
+label = 'Calendar'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Fantastical/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+iconPath = 'bubble.fill'
+key = 'm'
+
+    [[comboMode.bindings.children]]
+    iconPath = '/Applications/Slack.app'
+    key = 's'
+    url = 'tuna://run/TunaCore.ApplicationsCatalog.Slack/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+iconPath = 'sparkles'
+key = 'a'
+label = 'AI'
+
+    [[comboMode.bindings.children]]
+    iconPath = '/Applications/ChatGPT.app'
+    key = 'a'
+    url = 'tuna://run/TunaCore.ApplicationsCatalog.ChatGPT/TunaCore.CommonActionsCatalog.Open'
+
+    [[comboMode.bindings.children]]
+    iconPath = '/Applications/Codex.app'
+    key = 'c'
+    url = 'tuna://run/TunaCore.ApplicationsCatalog.Codex/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/IntelliJ IDEA.app'
+key = 'i'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.IntelliJ%20IDEA/TunaCore.CommonActionsCatalog.Open'
+
+[hotkeys]
+custom = []
+
+    [hotkeys.app.activate]
+    carbonKeyCode = 111
+    carbonModifiers = 0
+
+[settings]
+comboModeCheatsheetDelayMS = 1200
+comboModeCheatsheetExpandGroups = true
+comboModeCheatsheetShowDetails = false
+comboModeDoublePressTrigger = 'rightCommand'
+comboModeModifierTrigger = 'rightCommand'
+comboModeTriggerType = 'doublePress'
+themeIdentifier = 'com.brnbw.tuna.themes.default'

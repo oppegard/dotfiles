@@ -1,7 +1,7 @@
 [settings]
 experimental = true
 idiomatic_version_file_enable_tools = ["java", "node"]
-dotfiles.root = "~/src/dotfiles"
+dotfiles.root = "~/.dotfiles"
 dotfiles.default_mode = "symlink"
 
 [settings.ruby]
@@ -15,8 +15,12 @@ compile = false
 login_shell = "/opt/homebrew/bin/bash"
 
 [dotfiles]
-"~/.config/mise/config.toml" = "config.toml"
+### Bootstraps needs to refer to real path of ~/src/dotfiles
 "~/.dotfiles" = "~/src/dotfiles"
+"~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"
+### End bootstraps
+
+"~/Library/Application Support/Tuna/config.toml" = "~/.dotfiles/mise-dots/tuna.toml"
 
 [tools]
 bun = "latest"
