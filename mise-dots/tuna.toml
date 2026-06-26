@@ -106,13 +106,6 @@ iconPath = '/Applications/IntelliJ IDEA.app'
 key = 'i'
 url = 'tuna://run/TunaCore.ApplicationsCatalog.IntelliJ%20IDEA/TunaCore.CommonActionsCatalog.Open'
 
-[hotkeys]
-custom = []
-
-    [hotkeys.app.activate]
-    carbonKeyCode = 111
-    carbonModifiers = 0
-
 [settings]
 comboModeCheatsheetDelayMS = 1200
 comboModeCheatsheetExpandGroups = true
