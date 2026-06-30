@@ -13,10 +13,6 @@ if command -v mise &>/dev/null; then
   eval "$(mise activate "$__shell_name")"
 fi
 
-if command -v starship &>/dev/null; then
-  eval "$(starship init "$__shell_name")"
-fi
-
 if command -v zoxide &>/dev/null; then
   eval "$(zoxide init "$__shell_name")"
 fi
@@ -44,6 +40,10 @@ if [ "$__os" = "Darwin" ]; then
   # Try getting rid of below.. it was added for `docker pull <tab>` errors
   [[ -r /opt/homebrew/opt/bash-completion@2/etc/bash_completion.d/000_bash_completion_compat.bash ]] && . /opt/homebrew/opt/bash-completion@2/etc/bash_completion.d/000_bash_completion_compat.bash
 
+fi
+
+if command -v starship &>/dev/null; then
+  eval "$(starship init "$__shell_name")"
 fi
 
 unset __shell_name
