@@ -13,10 +13,6 @@ if command -v mise &>/dev/null; then
   eval "$(mise activate "$__shell_name")"
 fi
 
-if command -v zoxide &>/dev/null; then
-  eval "$(zoxide init "$__shell_name")"
-fi
-
 if command -v try &>/dev/null; then
   eval "$(try init ~/src/tries)"
 fi
@@ -44,6 +40,11 @@ fi
 
 if command -v starship &>/dev/null; then
   eval "$(starship init "$__shell_name")"
+fi
+
+# Keep zoxide last so later prompt setup does not drop its hook.
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init "$__shell_name")"
 fi
 
 unset __shell_name
