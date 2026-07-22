@@ -7,21 +7,35 @@ dotfiles.default_mode = "symlink"
 [settings.ruby]
 compile = false
 
-[bootstrap.packages]
-"brew:bash" = "latest"
-"brew:bash-completion@2" = "latest"
-
-[bootstrap.user]
-login_shell = "/opt/homebrew/bin/bash"
-
 [dotfiles]
 ### Bootstraps needs to refer to real path of ~/src/dotfiles
 "~/.dotfiles" = "~/src/dotfiles"
 "~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"
+"~/.config/mise/config.linux.toml" = "~/src/dotfiles/mise/config.linux.toml"
+"~/.config/mise/config.macos.toml" = "~/src/dotfiles/mise/config.macos.toml"
+"~/.config/mise/miserc.toml" = "~/src/dotfiles/mise/.miserc.toml"
 ### End bootstraps
 
+"~/.bash_profile" = "~/.dotfiles/mise-dots/bash_profile"
+"~/.bashrc" = "~/.dotfiles/mise-dots/bashrc"
+"~/.bunfig.toml" = "~/.dotfiles/mise-dots/bunfig.toml"
+"~/.config/btop" = "~/.dotfiles/mise-dots/config/btop"
+"~/.config/curlrc" = "~/.dotfiles/mise-dots/config/curlrc"
+"~/.config/ghostty" = "~/.dotfiles/mise-dots/config/ghostty"
+"~/.config/git" = "~/.dotfiles/mise-dots/config/git"
+"~/.config/ripgreprc" = "~/.dotfiles/mise-dots/config/ripgreprc"
+"~/.config/shell" = "~/.dotfiles/mise-dots/config/shell"
+"~/.config/starship.toml" = "~/.dotfiles/mise-dots/config/starship.toml"
+"~/.config/sublime-text/Packages/User" = "~/.dotfiles/mise-dots/config/sublime-text/Packages/User"
+"~/.config/tmux" = "~/.dotfiles/mise-dots/config/tmux"
+"~/.config/uv" = "~/.dotfiles/mise-dots/config/uv"
+"~/.digrc" = "~/.dotfiles/mise-dots/digrc"
+"~/.gitconfig" = "~/.dotfiles/mise-dots/gitconfig"
+"~/.inputrc" = "~/.dotfiles/mise-dots/inputrc"
 "~/.local/bin" = { source = "~/.dotfiles/mise-dots/bin", mode = "symlink-each" }
-"~/Library/Application Support/Tuna/config.toml" = "~/.dotfiles/mise-dots/tuna.toml"
+"~/.npmrc" = "~/.dotfiles/mise-dots/npmrc"
+"~/.screenrc" = "~/.dotfiles/mise-dots/screenrc"
+"~/.ssh/config" = "~/.dotfiles/mise-dots/ssh/config"
 
 [tools]
 bun = "latest"

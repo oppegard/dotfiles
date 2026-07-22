@@ -103,7 +103,30 @@ Detailed S.O. replies: [1](https://stackoverflow.com/a/32340345), [2](https://st
 
 ### Rectangle.app Prefs
 
-Launch Rectangle, open the Preferences pane, and import the prefs file (`Rectangle.json`)
+Mise copies `mise-dots/macos/rectangle/RectangleProConfig.json` into Rectangle
+Pro's application support directory during bootstrap. Rectangle may rename the
+copy after importing it.
+
+After changing preferences, export them from Rectangle Pro and replace the
+source file in this repository.
+
+### Git Hooks
+
+The mise-managed global `pre-commit` hook runs `gitleaks` against staged
+changes before a commit. The hook warns and allows the commit if `gitleaks` is
+missing.
+
+On macOS, the Brewfile installs `gitleaks`. On Linux, install it with the
+distro package manager.
+
+To disable only the global Gitleaks check for one repository:
+
+```sh
+git config hooks.gitleaks false
+```
+
+Repository-local `.git/hooks/pre-commit` scripts still run after the global
+hook.
 
 ### Firefox
 

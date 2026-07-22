@@ -49,25 +49,7 @@ fi
 
 cd "$STOW_DIR"
 stow_pkgs=(
-  bash
-  btop
-  bun
   codex
-  curl
-  dig
-  ghostty
-  git
-  linearmouse
-  npm
-  rectangle
-  ripgrep
-  screen
-  shell
-  ssh
-  starship
-  sublime-text
-  tmux
-  uv
 )
 for stow_pkg in "${stow_pkgs[@]}"; do
     echo "stowing $stow_pkg"

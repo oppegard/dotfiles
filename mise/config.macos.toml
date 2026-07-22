@@ -1,0 +1,11 @@
+[bootstrap.packages]
+"brew:bash" = "latest"
+"brew:bash-completion@2" = "latest"
+
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/bash"
+
+[dotfiles]
+"~/.config/linearmouse/linearmouse.json" = "~/.dotfiles/mise-dots/macos/linearmouse.json"
+"~/Library/Application Support/Rectangle Pro/RectangleProConfig.json" = { source = "~/.dotfiles/mise-dots/macos/RectangleProConfig.json", mode = "copy" }
+"~/Library/Application Support/Tuna/config.toml" = "~/.dotfiles/mise-dots/macos/tuna.toml"

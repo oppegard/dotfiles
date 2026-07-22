@@ -1,44 +1,28 @@
-## HOME-level packages:
-From **this** directory (`.stowrc` present):
+# Retained Stow Packages
 
-```
-stow 1Password
-stow uwsm
-```
+The normal setup script still applies `codex` with Stow. This allows the
+personal and optional `~/src/dotfiles-work` repositories to contribute
+different files beneath `~/.codex`.
 
-To simulate before making changes, add `-n` option.
+The following packages remain manual and are deferred from the mise migration:
 
-### Git Hooks
+- `borders`
+- `hyprland`
+- `keyd-application-mapper`
+- `omarchy`
+- `uwsm`
+- `walker`
+- `waybar`
 
-The `git` stow package installs a global `pre-commit` hook via Git's
-`core.hooksPath` setting. That hook runs `gitleaks` against staged changes
-before a commit.
-
-On macOS, `stow/setup.sh` already installs `gitleaks` with Homebrew. On Linux,
-install `gitleaks` with your distro package manager before relying on the hook.
-
-The hook will warn and allow the commit if `gitleaks` is missing.
-
-To disable only the global Gitleaks check for a single repo:
-
-```
-git config hooks.gitleaks false
-```
-
-Repo-local `.git/hooks/pre-commit` scripts still run after the global hook.
-
-### Special Snowflakes:
-
-Rectangle Pro:
-
-https://github.com/rxhanson/RectanglePro-Community/discussions/674#discussioncomment-12308761
-
-When making prefs changes, need to export `RectangleProConfig.json` from app back to this repo. Also, after running `stow rectangle` and relaunching Rectangle Pro, it will rename the symlink (per the GH comment above), so that it's only read once.
-
+Run home-level packages from this directory, where `.stowrc` is present. Add
+`-n` to simulate a Stow operation before changing anything.
 
 ## Root-level packages
 
-```
+The root-owned `keyd` package is also deferred. Manage it separately from the
+normal user bootstrap:
+
+```sh
 cd @root
 sudo stow keyd
 ```
