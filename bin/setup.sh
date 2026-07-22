@@ -68,7 +68,6 @@ stow_pkgs=(
   sublime-text
   tmux
   uv
-  xdg-bin
 )
 for stow_pkg in "${stow_pkgs[@]}"; do
     echo "stowing $stow_pkg"
