@@ -32,7 +32,10 @@ compile = false
 "~/.digrc" = "~/.dotfiles/mise-dots/digrc"
 "~/.gitconfig" = "~/.dotfiles/mise-dots/gitconfig"
 "~/.inputrc" = "~/.dotfiles/mise-dots/inputrc"
-"~/.local/bin" = { source = "~/.dotfiles/mise-dots/bin", mode = "symlink-each" }
+"~/.local/bin" = {
+    source = "~/.dotfiles/mise-dots/xdg-bin",
+    mode = "symlink-each",
+}
 "~/.npmrc" = "~/.dotfiles/mise-dots/npmrc"
 "~/.screenrc" = "~/.dotfiles/mise-dots/screenrc"
 "~/.ssh/config" = "~/.dotfiles/mise-dots/ssh/config"

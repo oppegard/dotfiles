@@ -5,4 +5,5 @@
 "~/.config/uwsm" = "~/.dotfiles/mise-dots/linux/uwsm"
 "~/.config/walker" = "~/.dotfiles/mise-dots/linux/walker"
 "~/.config/waybar" = "~/.dotfiles/mise-dots/linux/waybar"
-"~/.local/bin/screen-5.0.1" = "~/.dotfiles/mise-dots/linux/bin/screen-5.0.1"
+"~/.local/bin/screen" = "~/.dotfiles/mise-dots/linux/xdg-bin/screen-5.0.1"
+"~/.local/bin/try" = "~/.dotfiles/mise-dots/linux/xdg-bin/try-linux-x86_64"
