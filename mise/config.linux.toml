@@ -1,2 +1,8 @@
 [dotfiles]
+"~/.config/hypr" = "~/.dotfiles/mise-dots/linux/hypr"
+"~/.config/keyd" = "~/.dotfiles/mise-dots/linux/keyd"
+"~/.config/omarchy" = "~/.dotfiles/mise-dots/linux/omarchy"
+"~/.config/uwsm" = "~/.dotfiles/mise-dots/linux/uwsm"
+"~/.config/walker" = "~/.dotfiles/mise-dots/linux/walker"
+"~/.config/waybar" = "~/.dotfiles/mise-dots/linux/waybar"
 "~/.local/bin/screen-5.0.1" = "~/.dotfiles/mise-dots/linux/bin/screen-5.0.1"

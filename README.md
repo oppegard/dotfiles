@@ -27,7 +27,7 @@ Darken non-key window:
 
 Add Color to Active Window Borders:
 - https://github.com/FelixKratz/JankyBorders
-- prefs are in `stow/`
+- prefs are in `mise-dots/macos/bordersrc`
 
 ## Install Fonts
 

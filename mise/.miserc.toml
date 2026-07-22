@@ -1,1 +1,2 @@
+# automatically use config.{linux,macos}.toml
 auto_env = true

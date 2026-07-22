@@ -6,6 +6,7 @@
 login_shell = "/opt/homebrew/bin/bash"
 
 [dotfiles]
+"~/.config/borders/bordersrc" = "~/.dotfiles/mise-dots/macos/bordersrc"
 "~/.config/linearmouse/linearmouse.json" = "~/.dotfiles/mise-dots/macos/linearmouse.json"
 "~/Library/Application Support/Rectangle Pro/RectangleProConfig.json" = { source = "~/.dotfiles/mise-dots/macos/RectangleProConfig.json", mode = "copy" }
 "~/Library/Application Support/Tuna/config.toml" = "~/.dotfiles/mise-dots/macos/tuna.toml"
