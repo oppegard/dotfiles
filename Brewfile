@@ -1,5 +1,3 @@
-brew "homebrew/brew-vulns/brew-vulns"
-
 brew "awscli"
 brew "bat"
 brew "btop"
