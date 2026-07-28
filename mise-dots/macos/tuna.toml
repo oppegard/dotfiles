@@ -43,35 +43,6 @@ key = 'v'
 url = 'tuna://run/Tuna.Internal.ClipboardProxyCatalog.Clipboard%20History/TunaCore.CommonActionsCatalog.Browse'
 
 [[comboMode.bindings]]
-iconPath = 'bookmark'
-key = 'f'
-label = 'Finder...'
-
-    [[comboMode.bindings.children]]
-    iconPath = '/System/Library/CoreServices/Finder.app'
-    key = 'f'
-    label = 'Finder'
-    url = 'tuna://run/TunaCore.ApplicationsCatalog.Finder/TunaCore.CommonActionsCatalog.Open'
-
-    [[comboMode.bindings.children]]
-    iconPath = 'apps.ipad.landscape'
-    key = 'a'
-    label = 'Applications'
-    url = 'tuna://run/path.%252FApplications/Open'
-
-    [[comboMode.bindings.children]]
-    iconPath = 'square.and.arrow.down.fill'
-    key = 'd'
-    label = 'Downloads'
-    url = 'tuna://run/path.%252FUsers%252Fglenn%252FDownloads/Open'
-
-    [[comboMode.bindings.children]]
-    iconPath = 'house.fill'
-    key = 'h'
-    label = 'Home'
-    url = 'tuna://run/path.%252FUsers%252Fglenn/Open'
-
-[[comboMode.bindings]]
 iconPath = '/Applications/Fantastical.app'
 key = 'c'
 label = 'Calendar'
@@ -87,30 +58,25 @@ key = 'm'
     url = 'tuna://run/TunaCore.ApplicationsCatalog.Slack/TunaCore.CommonActionsCatalog.Open'
 
 [[comboMode.bindings]]
-iconPath = 'sparkles'
-key = 'a'
-label = 'AI'
-
-    [[comboMode.bindings.children]]
-    iconPath = '/Applications/ChatGPT.app'
-    key = 'a'
-    url = 'tuna://run/TunaCore.ApplicationsCatalog.ChatGPT/TunaCore.CommonActionsCatalog.Open'
-
-    [[comboMode.bindings.children]]
-    iconPath = '/Applications/Codex.app'
-    key = 'c'
-    url = 'tuna://run/TunaCore.ApplicationsCatalog.Codex/TunaCore.CommonActionsCatalog.Open'
-
-[[comboMode.bindings]]
 iconPath = '/Applications/IntelliJ IDEA.app'
 key = 'i'
 url = 'tuna://run/TunaCore.ApplicationsCatalog.IntelliJ%20IDEA/TunaCore.CommonActionsCatalog.Open'
 
+[[comboMode.bindings]]
+iconPath = '/Applications/Codex.app'
+key = 'a'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.ChatGPT/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+iconPath = '/System/Library/CoreServices/Finder.app'
+key = 'f'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Finder/TunaCore.CommonActionsCatalog.Open'
+
 [settings]
-comboModeCheatsheetDelayMS = 1200
+comboModeCheatsheetDelayMS = 500
 comboModeCheatsheetExpandGroups = true
 comboModeCheatsheetShowDetails = false
 comboModeDoublePressTrigger = 'rightCommand'
 comboModeModifierTrigger = 'rightCommand'
-comboModeTriggerType = 'doublePress'
+comboModeTriggerType = 'modifier'
 themeIdentifier = 'com.brnbw.tuna.themes.default'
