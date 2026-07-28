@@ -3,3 +3,4 @@ export PATH="$PATH:$HOME/.local/bin"
 export HISTCONTROL="ignorespace:ignoredups"
 export HOMEBREW_NO_ENV_HINTS=1
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
+export SHELL_START_TIME=$(date)
