@@ -29,6 +29,7 @@ cask "docker-desktop"
 cask "forklift"
 cask "ghostty"
 cask "hazeover"
+cask "hopper-disassembler"
 cask "libreoffice-still" # for https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md
 cask "linearmouse"
 cask "opencode-desktop"
