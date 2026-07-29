@@ -18,7 +18,6 @@ export DOTFILES_DIR
 
 mkdir -p \
   "$HOME/.config" \
-  "$HOME/.config/sublime-text/Packages" \
   "$HOME/.local/bin" \
   "$HOME/.claude" \
   "$HOME/.codex" \
@@ -28,10 +27,6 @@ chmod 700 "$HOME/.ssh"
 __os="$(uname -s)"
 ### Mac Setup ###
 if [ "$__os" = "Darwin" ]; then
-  APP_SUPPORT="$HOME/Library/Application Support"
-  mkdir -p "$APP_SUPPORT/Sublime Text 3/Packages"
-  ln -sf "$HOME/.config/sublime-text/Packages/User" "$APP_SUPPORT/Sublime Text 3/Packages/"
-  
   BREWFILE="$DOTFILES_DIR/Brewfile"
   brew bundle install --file="$BREWFILE"
 
