@@ -23,6 +23,7 @@ brew "uv"
 brew "zoxide"
 
 cask "1password-cli"
+cask "bartender"
 cask "cleanshot"
 cask "codex"
 cask "docker-desktop"
