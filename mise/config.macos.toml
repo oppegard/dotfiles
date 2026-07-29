@@ -1,7 +1,3 @@
-[bootstrap.packages]
-"brew:bash" = "latest"
-"brew:bash-completion@2" = "latest"
-
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/bash"
 

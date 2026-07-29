@@ -32,13 +32,11 @@ if [ "$__os" = "Darwin" ]; then
   mkdir -p "$APP_SUPPORT/Sublime Text 3/Packages"
   ln -sf "$HOME/.config/sublime-text/Packages/User" "$APP_SUPPORT/Sublime Text 3/Packages/"
   
-  mkdir -p "$APP_SUPPORT/Rectangle Pro"
-
   BREWFILE="$DOTFILES_DIR/Brewfile"
-  brew bundle check --file="$BREWFILE" || brew bundle install --file="$BREWFILE"
+  brew bundle install --file="$BREWFILE"
 
-  # Running below will remove mise-brewed items, manual brews, etc
-  # brew bundle cleanup --file="$BREWFILE"
+   brew bundle cleanup --file="$BREWFILE"
+   # If lots of warnings, run `brew upgrade`
 fi
 
 STOW_DIR="$DOTFILES_DIR/stow"
