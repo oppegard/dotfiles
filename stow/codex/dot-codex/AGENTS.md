@@ -9,6 +9,7 @@
 - Use `shellcheck`.
 - Do NOT under ANY circumstances destroy or mutate infrastructucture by invoking tools or APIs (e.g. `aws rds delete-db-instance`, `terraform apply`, `npx wrangler delete`, `curl -X DELETE`).  Make full use of tools/MCPs/APIs to query in a read-only manner (e.g. `terraform show`, `aws ec2 describe-instances`); be mindful of rate-limiting.
 - When asked to create a handoff, save it to `/tmp/handoffs/YYYYMMDD-<kebab-case-topic>.md` using the local date; create the directory if needed and never overwrite an existing file.
+- If asked to create a worktree, do it under `/tmp/worktrees/<git-repo-name>/YYYMMDD-kebab-case-topic>`.
 
 ## Instruction Discovery
 
