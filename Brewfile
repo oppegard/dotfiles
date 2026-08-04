@@ -48,6 +48,7 @@ cask "rectangle-pro"
 cask "soundsource"
 cask "sublime-text"
 cask "thaw"
+cask "tuna"
 
 # work
 brew "hashicorp/tap/terraform", trusted: true
