@@ -181,6 +181,9 @@
     "ignoreBehavior" : {
       "int" : 0
     },
+    "ignoreDock" : {
+      "int" : 0
+    },
     "ignoredSnapAreas" : {
       "int" : 0
     },
@@ -323,7 +326,7 @@
       "int" : 2
     },
     "reticleColor" : {
-      "string" : "{\"blue\":0.2,\"green\":0.3,\"alpha\":0.5,\"red\":0.8}"
+      "string" : "{\"alpha\":0.5,\"blue\":0.2,\"green\":0.3,\"red\":0.8}"
     },
     "reticleDisplayMinDist" : {
       "float" : 0
@@ -536,7 +539,7 @@
       "double" : 0.5
     },
     "windowSnapping" : {
-      "int" : 1
+      "int" : 2
     },
     "windowStopVelocity" : {
       "float" : 3
@@ -606,6 +609,6 @@
       "modifierFlags" : 1966080
     }
   },
-  "timestamp" : 796592082.853397,
-  "version" : "218"
+  "timestamp" : 807635183.116443,
+  "version" : "227"
 }
