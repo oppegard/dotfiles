@@ -2,6 +2,7 @@
 "~/.config/hypr" = "~/.dotfiles/mise-dots/linux/hypr"
 "~/.config/keyd" = "~/.dotfiles/mise-dots/linux/keyd"
 "~/.config/omarchy" = "~/.dotfiles/mise-dots/linux/omarchy"
+"~/.config/sublime-text/Packages/User" = "~/.dotfiles/mise-dots/config/sublime-text/Packages/User"
 "~/.config/uwsm" = "~/.dotfiles/mise-dots/linux/uwsm"
 "~/.config/walker" = "~/.dotfiles/mise-dots/linux/walker"
 "~/.config/waybar" = "~/.dotfiles/mise-dots/linux/waybar"

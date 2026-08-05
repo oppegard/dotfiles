@@ -26,7 +26,6 @@ compile = false
 "~/.config/ripgreprc" = "~/.dotfiles/mise-dots/config/ripgreprc"
 "~/.config/shell" = "~/.dotfiles/mise-dots/config/shell"
 "~/.config/starship.toml" = "~/.dotfiles/mise-dots/config/starship.toml"
-"~/.config/sublime-text/Packages/User" = "~/.dotfiles/mise-dots/config/sublime-text/Packages/User"
 "~/.config/tmux" = "~/.dotfiles/mise-dots/config/tmux"
 "~/.config/uv" = "~/.dotfiles/mise-dots/config/uv"
 "~/.digrc" = "~/.dotfiles/mise-dots/digrc"
