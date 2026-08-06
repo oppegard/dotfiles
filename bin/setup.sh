@@ -30,7 +30,7 @@ if [ "$__os" = "Darwin" ]; then
   BREWFILE="$DOTFILES_DIR/Brewfile"
   brew bundle install --file="$BREWFILE"
 
-   brew bundle cleanup --file="$BREWFILE"
+   brew cleanup
    # If lots of warnings, run `brew upgrade`
 fi
 
