@@ -43,6 +43,7 @@ cask "iina"
 cask "istat-menus"
 cask "libreoffice-still" # for https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md
 cask "linearmouse"
+cask "obsidian"
 cask "opencode-desktop"
 cask "rectangle-pro"
 cask "soundsource"
