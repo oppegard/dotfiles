@@ -16,7 +16,6 @@ sortOrders = []
 
 [[comboMode.bindings]]
 iconPath = '/Applications/Ghostty.app'
-id = '621C3BE3-89BB-49A3-92EB-554550DEECC1'
 key = 't'
 label = 'Terminal'
 
@@ -32,7 +31,6 @@ label = 'Terminal'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/Google Chrome.app'
-id = '3977707B-DCFF-484D-BAF6-410D8C2F415E'
 key = 'b'
 label = 'Primary Browser'
 
@@ -48,7 +46,6 @@ label = 'Primary Browser'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/Mimestream.app'
-id = '8FC236E1-66C7-4160-9E71-A7614FD1DE1B'
 key = 'e'
 label = 'Email'
 
@@ -64,7 +61,6 @@ label = 'Email'
 
 [[comboMode.bindings]]
 iconPath = 'document.on.clipboard'
-id = 'DA48D9B7-FE53-44C8-A1C4-F365AAE7567E'
 key = 'v'
 
     [comboMode.bindings.destination]
@@ -79,7 +75,6 @@ key = 'v'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/Fantastical.app'
-id = '85BC6158-7EBE-490D-9D32-FA0CB0276BEF'
 key = 'c'
 label = 'Calendar'
 
@@ -95,7 +90,6 @@ label = 'Calendar'
 
 [[comboMode.bindings]]
 iconPath = 'bubble.fill'
-id = 'EB4553B5-BE06-4871-8C16-4CCEC5157517'
 key = 'm'
 
     [comboMode.bindings.destination]
@@ -103,7 +97,6 @@ key = 'm'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Slack.app'
-        id = 'CD266091-99DB-462F-A442-65D9AE43E887'
         key = 's'
 
             [comboMode.bindings.destination.bindings.destination]
@@ -118,7 +111,6 @@ key = 'm'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/IntelliJ IDEA.app'
-id = '5C67BEF1-CFE4-4D06-9262-0DDC8814982D'
 key = 'i'
 
     [comboMode.bindings.destination]
@@ -133,7 +125,6 @@ key = 'i'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/Codex.app'
-id = '9298394D-A655-45E5-8553-6F84C58AFB0C'
 key = 'a'
 
     [comboMode.bindings.destination]
@@ -148,7 +139,6 @@ key = 'a'
 
 [[comboMode.bindings]]
 iconPath = '/System/Library/CoreServices/Finder.app'
-id = '5F160854-C00E-4B72-873B-6DC300A3DCF0'
 key = 'f'
 
     [comboMode.bindings.destination]
@@ -162,7 +152,6 @@ key = 'f'
         type = 'savedCommand'
 
 [[comboMode.bindings]]
-id = '8BED3D7E-CB36-4863-9BDD-4808935A2B04'
 key = 'B'
 label = 'Secondary Browser'
 
@@ -186,49 +175,42 @@ comboModeTriggerType = 'modifier'
 
 [[smartLinks.entries]]
 enabled = true
-id = '2AABC742-0AF8-4E5A-9A22-AE8DAFE098D3'
 name = 'Bing'
 requiresInput = true
 template = 'https://www.bing.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = '86E62AA5-018C-40DC-ABF4-DB460674A640'
 name = 'DuckDuckGo'
 requiresInput = true
 template = 'https://duckduckgo.com/?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = 'F16C034B-1BFC-499B-9C0C-D20446599456'
 name = 'GitHub'
 requiresInput = true
 template = 'https://github.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = 'B51D6A4E-5BEC-45D2-99C2-2290048C92B4'
 name = 'Google'
 requiresInput = true
 template = 'https://www.google.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = 'DCA87200-68E4-4632-8775-FF94377F80BA'
 name = 'Stack Overflow'
 requiresInput = true
 template = 'https://stackoverflow.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = 'EFA00036-595B-4EDB-8F98-9C7D38519D03'
 name = 'Wikipedia'
 requiresInput = true
 template = 'https://en.wikipedia.org/wiki/Special:Search?search={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = '5EE3F84F-6274-49EB-8D67-33286A977898'
 name = 'YouTube'
 requiresInput = true
 template = 'https://www.youtube.com/results?search_query={{input}}'
