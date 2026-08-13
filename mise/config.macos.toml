@@ -63,6 +63,18 @@ tap_to_click = true
 # Show the full website address. Relaunch Safari: killall Safari.
 "ShowFullURLInSmartSearchField" = true
 
+[bootstrap.macos.defaults."com.apple.WindowManager"]
+# Do not move windows aside when clicking the desktop wallpaper.
+"EnableStandardClickToShowDesktop" = false
+# Do not leave margins around tiled windows.
+"EnableTiledWindowMargins" = false
+# Do not tile a window by dragging it to a screen edge.
+"EnableTilingByEdgeDrag" = false
+# Do not use Option-drag to tile a window.
+"EnableTilingOptionAccelerator" = false
+# Do not tile or fill a window by dragging it to the menu bar.
+"EnableTopTilingByEdgeDrag" = false
+
 [bootstrap.macos.defaults."com.apple.universalaccess"]
 # Replace transparent macOS backgrounds with solid backgrounds.
 "reduceTransparency" = true
