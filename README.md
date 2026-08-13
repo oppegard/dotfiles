@@ -121,13 +121,14 @@ source file in this repository.
 
 ### BetterDisplay Prefs
 
-On macOS, `bin/setup.sh` runs `mise run betterdisplay:export` to export
-BetterDisplay's current preferences to `mise-dots/macos/BetterDisplay.plist`.
-Use `mise run betterdisplay:check` to inspect drift, or
-`mise run betterdisplay:import` to restore the snapshot. Import asks for
-confirmation, saves the current preferences to `/tmp`, and restarts
-BetterDisplay. This is a backup and change-tracking snapshot; display-specific
-identifiers can prevent it from applying unchanged on another Mac.
+On macOS, `bin/setup.sh` runs `mise run betterdisplay:export` to update the
+portable synchronization profile at `mise-dots/macos/BetterDisplay.plist`.
+The profile enables BetterDisplay's all-display `mostAppropriateBrightness`
+synchronization without tracking machine-specific display identities or current
+brightness values. Use `mise run betterdisplay:check` to inspect profile drift,
+or `mise run betterdisplay:import` to apply it. Import asks for confirmation,
+saves the current full preferences to `/tmp`, preserves local display-specific
+preferences, and restarts BetterDisplay.
 
 ### Git Hooks
 

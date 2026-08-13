@@ -17,6 +17,13 @@ DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
 PREFERENCES_DOMAIN="pro.betterdisplay.BetterDisplay"
 PREFERENCES_PATH="$DOTFILES_DIR/mise-dots/macos/BetterDisplay.plist"
 APPLICATION_PATH="/Applications/BetterDisplay.app"
+MANAGED_KEYS=(
+  "allowExternallyInduced@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001"
+  "delta@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001"
+  "enabled@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001"
+  "syncConfigurationControlTargets@DisplayGroup:-1001"
+  "syncEnabled@DisplayGroup:-1001"
+)
 
 usage() {
   echo "Usage: $(basename "$0") <check|export|import>" >&2
@@ -32,7 +39,7 @@ require_application() {
 
 require_snapshot() {
   if [ ! -f "$PREFERENCES_PATH" ]; then
-    echo "ERROR: BetterDisplay snapshot not found: $PREFERENCES_PATH" >&2
+    echo "ERROR: BetterDisplay sync profile not found: $PREFERENCES_PATH" >&2
     exit 1
   fi
 }
@@ -44,37 +51,69 @@ export_preferences() {
   plutil -convert xml1 "$destination"
 }
 
+copy_preference_key() {
+  local destination="$1" source="$2" key="$3" value_path
+  value_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-preference-value.XXXXXX")"
+
+  if ! plutil -extract "$key" xml1 -o "$value_path" "$source"; then
+    rm -f "$value_path"
+    echo "ERROR: BetterDisplay preference key is missing: $key" >&2
+    return 1
+  fi
+
+  if plutil -type "$key" "$destination" >/dev/null 2>&1; then
+    plutil -replace "$key" -xml "$(<"$value_path")" "$destination"
+  else
+    plutil -insert "$key" -xml "$(<"$value_path")" "$destination"
+  fi
+
+  rm -f "$value_path"
+}
+
+create_sync_profile() {
+  local destination="$1" source="$2" key
+
+  plutil -create xml1 "$destination"
+  for key in "${MANAGED_KEYS[@]}"; do
+    copy_preference_key "$destination" "$source" "$key"
+  done
+}
+
 check_preferences() {
-  local temporary_path
-  temporary_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-preferences.XXXXXX")"
-  trap 'rm -f "$temporary_path"' RETURN
+  local preferences_path profile_path
+  preferences_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-preferences.XXXXXX")"
+  profile_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-sync-profile.XXXXXX")"
+  trap 'rm -f "$preferences_path" "$profile_path"' RETURN
 
-  export_preferences "$temporary_path"
+  export_preferences "$preferences_path"
+  create_sync_profile "$profile_path" "$preferences_path"
 
-  if cmp -s "$temporary_path" "$PREFERENCES_PATH"; then
-    echo "BetterDisplay preferences match the dotfiles snapshot."
+  if cmp -s "$profile_path" "$PREFERENCES_PATH"; then
+    echo "BetterDisplay synchronization profile matches dotfiles."
     return 0
   fi
 
-  echo "BetterDisplay preferences differ from the dotfiles snapshot:" >&2
-  diff -u "$PREFERENCES_PATH" "$temporary_path" || true
+  echo "BetterDisplay synchronization profile differs from dotfiles:" >&2
+  diff -u "$PREFERENCES_PATH" "$profile_path" || true
   return 1
 }
 
-export_snapshot() {
-  local temporary_path
-  temporary_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-preferences.XXXXXX")"
-  trap 'rm -f "$temporary_path"' RETURN
+export_sync_profile() {
+  local preferences_path profile_path
+  preferences_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-preferences.XXXXXX")"
+  profile_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-sync-profile.XXXXXX")"
+  trap 'rm -f "$preferences_path" "$profile_path"' RETURN
 
-  export_preferences "$temporary_path"
+  export_preferences "$preferences_path"
+  create_sync_profile "$profile_path" "$preferences_path"
 
-  if [ -f "$PREFERENCES_PATH" ] && cmp -s "$temporary_path" "$PREFERENCES_PATH"; then
-    echo "BetterDisplay preferences already match the dotfiles snapshot."
+  if [ -f "$PREFERENCES_PATH" ] && cmp -s "$profile_path" "$PREFERENCES_PATH"; then
+    echo "BetterDisplay synchronization profile already matches dotfiles."
     return 0
   fi
 
-  mv "$temporary_path" "$PREFERENCES_PATH"
-  echo "BetterDisplay preferences exported; commit mise-dots/macos/BetterDisplay.plist."
+  mv "$profile_path" "$PREFERENCES_PATH"
+  echo "BetterDisplay synchronization profile exported; commit mise-dots/macos/BetterDisplay.plist."
 }
 
 quit_betterdisplay() {
@@ -95,19 +134,25 @@ quit_betterdisplay() {
   exit 1
 }
 
-import_snapshot() {
-  local backup_path temporary_path
+import_sync_profile() {
+  local backup_path preferences_path temporary_path
   temporary_path="$(mktemp "${TMPDIR:-/tmp}/BetterDisplay.before-import.XXXXXX")"
   backup_path="${temporary_path}.plist"
   mv "$temporary_path" "$backup_path"
+  preferences_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-preferences.XXXXXX")"
+  trap 'rm -f "$preferences_path"' RETURN
 
   defaults export "$PREFERENCES_DOMAIN" "$backup_path"
-  echo "Backed up current BetterDisplay preferences to $backup_path"
+  echo "Backed up current BetterDisplay preferences to $backup_path."
 
   quit_betterdisplay
-  defaults import "$PREFERENCES_DOMAIN" "$PREFERENCES_PATH"
-  open -a BetterDisplay
-  echo "Imported BetterDisplay preferences from the dotfiles snapshot."
+  export_preferences "$preferences_path"
+  for key in "${MANAGED_KEYS[@]}"; do
+    copy_preference_key "$preferences_path" "$PREFERENCES_PATH" "$key"
+  done
+  defaults import "$PREFERENCES_DOMAIN" "$preferences_path"
+  open "$APPLICATION_PATH"
+  echo "Imported BetterDisplay synchronization profile from dotfiles."
 }
 
 case "${1:-}" in
@@ -118,12 +163,12 @@ case "${1:-}" in
     ;;
   export)
     require_application
-    export_snapshot
+    export_sync_profile
     ;;
   import)
     require_application
     require_snapshot
-    import_snapshot
+    import_sync_profile
     ;;
   *) usage ;;
 esac
