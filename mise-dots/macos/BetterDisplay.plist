@@ -11,7 +11,7 @@
 	<key>NSWindow Frame SUUpdateAlert2</key>
 	<string>-1218 566 987 719 -1512 395 1512 948 </string>
 	<key>NSWindow Frame Settings</key>
-	<string>1445 472 1200 901 0 0 3072 1697 </string>
+	<string>502 616 1200 901 0 0 3072 1697 </string>
 	<key>Paddle-BetterDisplay-762421-SD</key>
 	<string>da7d73a6f7a14a4ac70882999b44648af382f4429a866c41fec6c20b46984913</string>
 	<key>SUAutomaticallyUpdate</key>
@@ -394,6 +394,10 @@
 	<real>390.14399414062501</real>
 	<key>identificationMethod@Display:14</key>
 	<string>vendorModelSerial</string>
+	<key>identificationMethod@Display:2</key>
+	<string>vendorModelSerial</string>
+	<key>identificationMethod@Display:8</key>
+	<string>vendorModelSerial</string>
 	<key>integrationHTTP</key>
 	<true/>
 	<key>integrationURL</key>
@@ -617,13 +621,17 @@
 	<key>settingsDisplayGroupPaneSelectedTagID</key>
 	<integer>-1001</integer>
 	<key>settingsDisplayPaneSelectedTagID</key>
-	<integer>0</integer>
+	<integer>2</integer>
 	<key>settingsPaneId</key>
-	<string>ApplicationPane</string>
+	<string>DisplaysPane</string>
 	<key>sheetSizeSaveEntries</key>
 	<string>[{"width":660,"height":560,"id":"DisplayInformationSheetView"},{"width":660,"height":560,"id":"DDCInputConfigurationSheet"},{"width":620,"height":560,"id":"IntegrationConfigurationSheet"},{"width":760,"height":560,"id":"CustomControlsSheetView"},{"width":660,"height":560,"id":"DDCConfigurationSheet"}]</string>
+	<key>showAdditionalSettings@Display:2</key>
+	<true/>
 	<key>showAdditionalSettings@Display:8</key>
-	<false/>
+	<true/>
+	<key>showAdvancedControlSettings@Display:2</key>
+	<true/>
 	<key>showAdvancedDisplaysSettings</key>
 	<false/>
 	<key>showAdvancedVirtualScreensSettings</key>
