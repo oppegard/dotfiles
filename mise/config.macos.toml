@@ -8,9 +8,18 @@ tap_to_click = true
 
 # macOS defaults (https://macos-defaults.com)
 [bootstrap.macos.defaults."NSGlobalDomain"]
-# https://macos-defaults.com/keyboard/applekeyboarduimode.html
 # Enable keyboard navigation with Tab and Shift-Tab.
 "AppleKeyboardUIMode" = 2
+# Always show scroll bars.
+"AppleShowScrollBars" = "Always"
+# Do not capitalize words automatically.
+"NSAutomaticCapitalizationEnabled" = false
+# Do not replace double hyphens with smart dashes automatically.
+"NSAutomaticDashSubstitutionEnabled" = false
+# Do not replace straight quotes with smart quotes automatically.
+"NSAutomaticQuoteSubstitutionEnabled" = false
+# Do not correct spelling automatically.
+"NSAutomaticSpellingCorrectionEnabled" = false
 
 [bootstrap.macos.defaults."com.apple.Music"]
 # https://macos-defaults.com/misc/userwantsplaybacknotifications.html
