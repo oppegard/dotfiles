@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SOURCE_PATH="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE_PATH" ]; do
+  SOURCE_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
+  SOURCE_PATH="$(readlink "$SOURCE_PATH")"
+  case "$SOURCE_PATH" in
+    /*) ;;
+    *) SOURCE_PATH="$SOURCE_DIR/$SOURCE_PATH" ;;
+  esac
+done
+
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
+DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
+PREFERENCES_DOMAIN="pro.betterdisplay.BetterDisplay"
+PREFERENCES_PATH="$DOTFILES_DIR/mise-dots/macos/BetterDisplay.plist"
+APPLICATION_PATH="/Applications/BetterDisplay.app"
+
+usage() {
+  echo "Usage: $(basename "$0") <check|export|import>" >&2
+  exit 64
+}
+
+require_application() {
+  if [ ! -d "$APPLICATION_PATH" ]; then
+    echo "ERROR: BetterDisplay is not installed at $APPLICATION_PATH" >&2
+    exit 1
+  fi
+}
+
+require_snapshot() {
+  if [ ! -f "$PREFERENCES_PATH" ]; then
+    echo "ERROR: BetterDisplay snapshot not found: $PREFERENCES_PATH" >&2
+    exit 1
+  fi
+}
+
+export_preferences() {
+  local destination="$1"
+
+  defaults export "$PREFERENCES_DOMAIN" "$destination"
+  plutil -convert xml1 "$destination"
+}
+
+check_preferences() {
+  local temporary_path
+  temporary_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-preferences.XXXXXX")"
+  trap 'rm -f "$temporary_path"' RETURN
+
+  export_preferences "$temporary_path"
+
+  if cmp -s "$temporary_path" "$PREFERENCES_PATH"; then
+    echo "BetterDisplay preferences match the dotfiles snapshot."
+    return 0
+  fi
+
+  echo "BetterDisplay preferences differ from the dotfiles snapshot:" >&2
+  diff -u "$PREFERENCES_PATH" "$temporary_path" || true
+  return 1
+}
+
+export_snapshot() {
+  local temporary_path
+  temporary_path="$(mktemp "${TMPDIR:-/tmp}/betterdisplay-preferences.XXXXXX")"
+  trap 'rm -f "$temporary_path"' RETURN
+
+  export_preferences "$temporary_path"
+
+  if [ -f "$PREFERENCES_PATH" ] && cmp -s "$temporary_path" "$PREFERENCES_PATH"; then
+    echo "BetterDisplay preferences already match the dotfiles snapshot."
+    return 0
+  fi
+
+  mv "$temporary_path" "$PREFERENCES_PATH"
+  echo "BetterDisplay preferences exported; commit mise-dots/macos/BetterDisplay.plist."
+}
+
+quit_betterdisplay() {
+  if ! pgrep -x BetterDisplay >/dev/null 2>&1; then
+    return 0
+  fi
+
+  osascript -e 'tell application id "pro.betterdisplay.BetterDisplay" to quit'
+
+  for _ in {1..50}; do
+    if ! pgrep -x BetterDisplay >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 0.1
+  done
+
+  echo "ERROR: BetterDisplay did not quit within 5 seconds." >&2
+  exit 1
+}
+
+import_snapshot() {
+  local backup_path temporary_path
+  temporary_path="$(mktemp "${TMPDIR:-/tmp}/BetterDisplay.before-import.XXXXXX")"
+  backup_path="${temporary_path}.plist"
+  mv "$temporary_path" "$backup_path"
+
+  defaults export "$PREFERENCES_DOMAIN" "$backup_path"
+  echo "Backed up current BetterDisplay preferences to $backup_path"
+
+  quit_betterdisplay
+  defaults import "$PREFERENCES_DOMAIN" "$PREFERENCES_PATH"
+  open -a BetterDisplay
+  echo "Imported BetterDisplay preferences from the dotfiles snapshot."
+}
+
+case "${1:-}" in
+  check)
+    require_application
+    require_snapshot
+    check_preferences
+    ;;
+  export)
+    require_application
+    export_snapshot
+    ;;
+  import)
+    require_application
+    require_snapshot
+    import_snapshot
+    ;;
+  *) usage ;;
+esac

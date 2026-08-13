@@ -1,6 +1,22 @@
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/bash"
 
+[tasks."betterdisplay:check"]
+description = "Check BetterDisplay preferences against dotfiles"
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" check'
+
+[tasks."betterdisplay:export"]
+description = "Export current BetterDisplay preferences to dotfiles"
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" export'
+
+[tasks."betterdisplay:import"]
+description = "Import BetterDisplay preferences from dotfiles"
+confirm = { message = "Replace current BetterDisplay preferences with the dotfiles snapshot?", default = "no" }
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" import'
+
 [dotfiles]
 "~/.config/borders/bordersrc" = "~/.dotfiles/mise-dots/macos/bordersrc"
 "~/.config/linearmouse/linearmouse.json" = "~/.dotfiles/mise-dots/macos/linearmouse.json"

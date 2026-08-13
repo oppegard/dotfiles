@@ -112,11 +112,13 @@ source file in this repository.
 
 ### BetterDisplay Prefs
 
-On macOS, `bin/setup.sh` exports BetterDisplay's current preferences to
-`mise-dots/macos/BetterDisplay.plist`. When the XML snapshot differs, setup
-prints an info message so the change can be reviewed and committed. This is a
-backup and change-tracking snapshot; display-specific identifiers can prevent
-it from applying unchanged on another Mac.
+On macOS, `bin/setup.sh` runs `mise run betterdisplay:export` to export
+BetterDisplay's current preferences to `mise-dots/macos/BetterDisplay.plist`.
+Use `mise run betterdisplay:check` to inspect drift, or
+`mise run betterdisplay:import` to restore the snapshot. Import asks for
+confirmation, saves the current preferences to `/tmp`, and restarts
+BetterDisplay. This is a backup and change-tracking snapshot; display-specific
+identifiers can prevent it from applying unchanged on another Mac.
 
 ### Git Hooks
 
