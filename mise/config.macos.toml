@@ -52,6 +52,10 @@ tap_to_click = true
 "FXPreferredViewStyle" = "Nlsv"
 # Keep folders on top when sorting by name.
 "_FXSortFoldersFirst" = true
+# Open new Finder windows to the Home folder.
+"NewWindowTarget" = "PfHm"
+# Hide Recent Tags in the Finder sidebar.
+"ShowRecentTags" = false
 
 [bootstrap.macos.defaults."com.apple.screencapture"]
 # https://macos-defaults.com/screenshots/
