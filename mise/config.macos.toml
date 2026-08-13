@@ -2,6 +2,8 @@
 login_shell = "/opt/homebrew/bin/bash"
 
 [bootstrap.macos.trackpad]
+# Source: https://support.apple.com/en-au/guide/mac-help/mchlp1226/mac
+# Tap the trackpad with one finger to click.
 tap_to_click = true
 
 # macOS defaults (https://macos-defaults.com)
@@ -45,8 +47,34 @@ tap_to_click = true
 "showWindowTitlebarIcons" = true
 
 [bootstrap.macos.defaults."com.apple.AppleMultitouchTrackpad"]
+# Source: https://support.apple.com/en-au/guide/mac-help/mchlp1226/mac
 # Disable Force Click and haptic feedback.
 "ForceSuppressed" = true
+# Keep the accompanying haptic-detent state disabled.
+"ActuateDetents" = 0
+# Disable the five-finger pinch gesture.
+"TrackpadFiveFingerPinchGesture" = 0
+# Disable the four-finger pinch gesture.
+"TrackpadFourFingerPinchGesture" = 0
+# Disable the four-finger vertical swipe gesture.
+"TrackpadFourFingerVertSwipeGesture" = 0
+# Disable the three-finger vertical swipe gesture.
+"TrackpadThreeFingerVertSwipeGesture" = 0
+# Disable the two-finger swipe from the right edge.
+"TrackpadTwoFingerFromRightEdgeSwipeGesture" = 0
+
+[bootstrap.macos.defaults."com.apple.driver.AppleBluetoothMultitouch.trackpad"]
+# Source: https://support.apple.com/en-au/guide/mac-help/mchlp1226/mac
+# Disable the five-finger pinch gesture on an Apple Bluetooth trackpad.
+"TrackpadFiveFingerPinchGesture" = 0
+# Disable the four-finger pinch gesture on an Apple Bluetooth trackpad.
+"TrackpadFourFingerPinchGesture" = 0
+# Disable the four-finger vertical swipe gesture on an Apple Bluetooth trackpad.
+"TrackpadFourFingerVertSwipeGesture" = 0
+# Disable the three-finger vertical swipe gesture on an Apple Bluetooth trackpad.
+"TrackpadThreeFingerVertSwipeGesture" = 0
+# Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
+"TrackpadTwoFingerFromRightEdgeSwipeGesture" = 0
 
 [tasks."macos-defaults:record"]
 description = "Record one interactive macOS defaults change"
