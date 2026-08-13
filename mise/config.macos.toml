@@ -51,8 +51,11 @@ tap_to_click = true
 "ShowFullURLInSmartSearchField" = true
 
 [bootstrap.macos.defaults."com.apple.universalaccess"]
+# Replace transparent macOS backgrounds with solid backgrounds.
+"reduceTransparency" = true
+# Show a subtle border around toolbar buttons to indicate their click target.
+"showToolbarButtonShapes" = true
 # Show the folder icon before the Finder window title. Relaunch Finder: killall Finder.
-# Source: https://macos-defaults.com/finder/showwindowtitlebaricons.html
 "showWindowTitlebarIcons" = true
 
 [bootstrap.macos.defaults."com.apple.AppleMultitouchTrackpad"]
