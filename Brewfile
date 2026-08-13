@@ -50,6 +50,7 @@ cask "soundsource"
 cask "sublime-text"
 cask "thaw"
 cask "tuna"
+cask "visual-studio-code"
 
 # work
 brew "hashicorp/tap/terraform", trusted: true

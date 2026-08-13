@@ -1,6 +1,13 @@
+__os="$(uname -s)"
 export EDITOR="nvim"
 export PATH="$PATH:$HOME/.local/bin"
 export HISTCONTROL="ignorespace:ignoredups"
 export HOMEBREW_NO_ENV_HINTS=1
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 export SHELL_START_TIME=$(date)
+
+if [ "$__os" = "Darwin" ]; then
+  export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+fi
+
+unset __os
