@@ -1,6 +1,15 @@
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/bash"
 
+# Populate this section only with reviewed scalar entries from a live
+# macOS-defaults audit. mise cannot manage host-scoped or complex plist values.
+[bootstrap.macos.defaults]
+
+[tasks."macos-defaults:unsupported:check"]
+description = "Verify reviewed host-scoped and complex macOS defaults"
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/macos-defaults-audit" verify --manifest "{{ env.HOME }}/.dotfiles/mise-dots/macos/unsupported-defaults.json"'
+
 [tasks."betterdisplay:check"]
 description = "Check BetterDisplay preferences against dotfiles"
 shell = "bash -c"

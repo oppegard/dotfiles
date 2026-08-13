@@ -60,34 +60,43 @@ qlmanage -r
 
 ## Preferences
 
+Managed macOS defaults live in `mise/config.macos.toml`. To discover changes,
+compare live snapshots from a fresh temporary local macOS user and the intended
+user; the audit never reads this README or repository history:
+
 ```sh
-# Finder: show all hidden files
-defaults write com.apple.Finder AppleShowAllFiles true
-killall Finder
-
-# Finder: Put folders on top when sorting by name
-defaults write com.apple.finder _FXSortFoldersFirst -bool true
-killall Finder
-
-## Make cmd-tab app switcher appear on all monitors:
-defaults write com.apple.Dock appswitcher-all-displays -bool true
-killall Dock
-
-# Change location of saved Screenshots
-defaults write  com.apple.screencapture location ~/Downloads/Screenshots
-
-# Change spacing of menu bar items and padding (log out and back in)
-defaults -currentHost write -globalDomain NSStatusItemSpacing -int 10
-defaults -currentHost write -globalDomain NSStatusItemSelectionPadding 5
-
-# Revert manu bar spacing and padding
-defaults -currentHost delete -globalDomain NSStatusItemSpacing
-defaults -currentHost delete -globalDomain NSStatusItemSelectionPadding
-
-# Hide macOS Tahoe’s Menu Icons
-# https://512pixels.net/2026/03/hide-macos-tahoes-menu-icons-with-this-one-simple-trick/
-defaults write -g NSMenuEnableActionImages -bool NO
+audit_dir="$(mktemp -d /tmp/macos-defaults-audit.XXXXXX)"
+bin/macos-defaults-audit snapshot --output "$audit_dir/new-user-defaults.json"
+bin/macos-defaults-audit snapshot --output "$audit_dir/current-user-defaults.json"
+bin/macos-defaults-audit compare \
+  --baseline "$audit_dir/new-user-defaults.json" \
+  --current "$audit_dir/current-user-defaults.json" \
+  --output "$audit_dir/report"
 ```
+
+Run each snapshot while logged in as its named account; transfer the new-user
+snapshot into the intended user's private `audit_dir` before comparison. Review
+`$audit_dir/report/defaults-diff.md`. Copy only intentional
+scalar, non-host entries from `$audit_dir/report/mise-candidates.toml` into
+`[bootstrap.macos.defaults]`; do not automatically manage host-scoped or
+complex values. Record reviewed host-scoped or complex values in
+`mise-dots/macos/unsupported-defaults.json` and verify them without writing:
+
+```sh
+mise -C mise run macos-defaults:unsupported:check
+```
+
+Check native desired-state drift with
+`mise -C mise bootstrap macos defaults status`, inspect writes with `--dry-run`,
+then explicitly apply them:
+
+```sh
+mise -C mise bootstrap macos defaults apply --dry-run
+mise -C mise bootstrap macos defaults apply
+```
+
+Relaunch affected applications manually after applying defaults, for example
+`Dock`, `Finder`, or `SystemUIServer`.
 
 ### Map ⌘ + ←Delete to backward-kill-line in iTerm2 + zsh
 

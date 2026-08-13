@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "metadata": { "product_version": "15.7.3", "build_version": "24G419", "architecture": "arm64" },
+  "domains": {
+    "com.apple.example": {
+      "ChangedType": { "type": "integer", "value": 1 },
+      "RemovedScalar": { "type": "boolean", "value": true },
+      "Complex": { "type": "array", "value": [] }
+    }
+  },
+  "host_domains": {
+    "NSGlobalDomain": {
+      "HostOnly": { "type": "integer", "value": 1 }
+    }
+  }
+}

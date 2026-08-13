@@ -54,6 +54,10 @@ done
 cd "$DOTFILES_DIR/mise"
 mise bootstrap
 
+if [ "$__os" = "Darwin" ]; then
+  mise bootstrap macos defaults status
+fi
+
 DOTFILES_WORK_DIR="${DOTFILES_DIR}-work"
 if [ -d "$DOTFILES_WORK_DIR" ]; then
   echo

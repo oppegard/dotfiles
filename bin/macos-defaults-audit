@@ -1,0 +1,338 @@
+#!/usr/bin/ruby
+# frozen_string_literal: true
+
+require "json"
+require "open3"
+require "optparse"
+require "rexml/document"
+require "set"
+require "tempfile"
+
+class MacosDefaultsAudit
+  VERSION = 1
+  SCALAR_TYPES = %w[boolean integer float string].freeze
+
+  def initialize(argv)
+    @command = argv.shift
+    @options = {}
+    parse_options(argv)
+  end
+
+  def run
+    case @command
+    when "snapshot" then snapshot
+    when "compare" then compare
+    when "verify" then verify
+    else abort usage
+    end
+  end
+
+  private
+
+  def parse_options(argv)
+    parser = OptionParser.new do |opts|
+      opts.banner = usage
+      opts.on("--output PATH") { |value| @options[:output] = value }
+      opts.on("--baseline PATH") { |value| @options[:baseline] = value }
+      opts.on("--current PATH") { |value| @options[:current] = value }
+      opts.on("--manifest PATH") { |value| @options[:manifest] = value }
+      opts.on("--preferences-dir PATH") { |value| @options[:preferences_dir] = value }
+    end
+    parser.parse!(argv)
+    abort usage unless argv.empty?
+  rescue OptionParser::ParseError => e
+    abort "#{e.message}\n#{usage}"
+  end
+
+  def usage
+    <<~USAGE
+      Usage:
+        #{File.basename($PROGRAM_NAME)} snapshot --output PATH [--preferences-dir PATH]
+        #{File.basename($PROGRAM_NAME)} compare --baseline PATH --current PATH --output DIRECTORY
+        #{File.basename($PROGRAM_NAME)} verify --manifest PATH [--preferences-dir PATH]
+    USAGE
+  end
+
+  def snapshot
+    output = required!(:output)
+    preferences_dir = @options.fetch(:preferences_dir, File.join(Dir.home, "Library", "Preferences"))
+    write_json(output, snapshot_data(preferences_dir))
+  end
+
+  def verify
+    manifest = read_json(required!(:manifest))
+    abort "ERROR: unsupported defaults manifest version is invalid" unless manifest["version"] == VERSION
+    if manifest.fetch("domains", {}).empty? && manifest.fetch("host_domains", {}).empty?
+      puts "Unsupported macOS defaults manifest has no reviewed entries."
+      return
+    end
+
+    preferences_dir = @options.fetch(:preferences_dir, File.join(Dir.home, "Library", "Preferences"))
+    current = snapshot_data(preferences_dir)
+    differences = expected_differences(manifest, current)
+    if differences.empty?
+      puts "Unsupported macOS defaults match the reviewed manifest."
+      return
+    end
+
+    warn "Unsupported macOS defaults differ from the reviewed manifest:"
+    differences.each do |entry|
+      warn "#{entry.fetch('scope')} #{entry.fetch('domain')} #{entry.fetch('key')}: expected #{display(entry['baseline'])}, current #{display(entry['current'])}"
+    end
+    exit 1
+  end
+
+  def snapshot_data(preferences_dir)
+    {
+      "version" => VERSION,
+      "metadata" => metadata,
+      "domains" => regular_domains(preferences_dir),
+      "host_domains" => host_domains(preferences_dir)
+    }
+  end
+
+  def compare
+    baseline = read_json(required!(:baseline))
+    current = read_json(required!(:current))
+    output = required!(:output)
+    Dir.mkdir(output, 0o700) unless Dir.exist?(output)
+    abort "ERROR: output is not a directory: #{output}" unless File.directory?(output)
+
+    differences = differences_between(baseline, current)
+    report = {
+      "version" => VERSION,
+      "baseline_metadata" => baseline["metadata"],
+      "current_metadata" => current["metadata"],
+      "differences" => differences
+    }
+    write_json(File.join(output, "defaults-diff.json"), report)
+    write_text(File.join(output, "defaults-diff.md"), markdown_report(report))
+    write_text(File.join(output, "mise-candidates.toml"), toml_candidates(differences))
+  end
+
+  def required!(name)
+    @options.fetch(name) { abort "ERROR: --#{name.to_s.tr('_', '-')} is required\n#{usage}" }
+  end
+
+  def metadata
+    {
+      "product_version" => command_output("sw_vers", "-productVersion").strip,
+      "build_version" => command_output("sw_vers", "-buildVersion").strip,
+      "architecture" => command_output("uname", "-m").strip
+    }
+  end
+
+  def regular_domains(preferences_dir)
+    domains = command_output("defaults", "domains").split(",").map(&:strip)
+    plist_domains = Dir.glob(File.join(preferences_dir, "*.plist")).map do |path|
+      File.basename(path, ".plist")
+    end
+    (domains + plist_domains + ["NSGlobalDomain"])
+      .select { |domain| domain == "NSGlobalDomain" || domain.start_with?("com.apple.") }
+      .uniq.sort.each_with_object({}) do |domain, result|
+        entries = export_domain(domain)
+        result[domain] = entries unless entries.empty?
+      end
+  end
+
+  def host_domains(preferences_dir)
+    by_host = File.join(preferences_dir, "ByHost")
+    return {} unless Dir.exist?(by_host)
+
+    Dir.glob(File.join(by_host, "*.plist")).sort.each_with_object({}) do |path, result|
+      name = canonical_host_domain(File.basename(path, ".plist"))
+      next unless name == "NSGlobalDomain" || name.start_with?("com.apple.")
+
+      entries = parse_plist(path)
+      next if entries.empty?
+
+      result[name] ||= {}
+      result[name].merge!(entries)
+    end
+  end
+
+  def canonical_host_domain(name)
+    canonical = name.sub(/\.[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\z/, "")
+    canonical == ".GlobalPreferences" ? "NSGlobalDomain" : canonical
+  end
+
+  def export_domain(domain)
+    Tempfile.create(["macos-defaults-audit", ".plist"]) do |file|
+      file.close
+      _stdout, stderr, status = Open3.capture3("defaults", "export", domain, file.path)
+      return {} unless status.success?
+
+      parse_plist(file.path)
+    rescue REXML::ParseException => e
+      warn "WARNING: could not parse #{domain}: #{e.message}"
+      {}
+    ensure
+      warn "WARNING: could not export #{domain}: #{stderr.strip}" unless status&.success? || stderr.to_s.empty?
+    end
+  end
+
+  def parse_plist(path)
+    xml, stderr, status = Open3.capture3("plutil", "-convert", "xml1", "-o", "-", path)
+    raise "plutil failed for #{path}: #{stderr.strip}" unless status.success?
+
+    document = REXML::Document.new(xml)
+    root = document.elements["plist/*"]
+    return {} unless root&.name == "dict"
+
+    parse_dict(root)
+  rescue REXML::ParseException => e
+    warn "WARNING: could not parse #{path}: #{e.message}"
+    {}
+  end
+
+  def parse_dict(node)
+    node.elements.to_a.each_slice(2).each_with_object({}) do |(key, value), result|
+      next unless key&.name == "key" && value
+
+      result[key.text.to_s] = parse_value(value)
+    end
+  end
+
+  def parse_value(node)
+    case node.name
+    when "true", "false" then { "type" => "boolean", "value" => node.name == "true" }
+    when "integer" then { "type" => "integer", "value" => node.text.to_i }
+    when "real" then { "type" => "float", "value" => node.text.to_f }
+    when "string" then { "type" => "string", "value" => node.text.to_s }
+    when "date", "data" then { "type" => node.name, "value" => node.text.to_s.strip }
+    when "array" then { "type" => "array", "value" => node.elements.to_a.map { |child| parse_value(child) } }
+    when "dict" then { "type" => "dict", "value" => parse_dict(node) }
+    else { "type" => node.name, "value" => node.text.to_s }
+    end
+  end
+
+  def differences_between(baseline, current)
+    ["domains", "host_domains"].flat_map do |scope|
+      baseline_domains = baseline.fetch(scope, {})
+      current_domains = current.fetch(scope, {})
+      (baseline_domains.keys | current_domains.keys).sort.flat_map do |domain|
+        baseline_entries = baseline_domains.fetch(domain, {})
+        current_entries = current_domains.fetch(domain, {})
+        (baseline_entries.keys | current_entries.keys).sort.map do |key|
+          before = baseline_entries[key]
+          after = current_entries[key]
+          next if before == after
+
+          {
+            "scope" => scope == "host_domains" ? "host" : "user",
+            "domain" => domain,
+            "key" => key,
+            "baseline" => before,
+            "current" => after,
+            "classification" => classification(scope, after)
+          }
+        end.compact
+      end
+    end
+  end
+
+  def expected_differences(expected, current)
+    ["domains", "host_domains"].flat_map do |scope|
+      expected.fetch(scope, {}).sort.flat_map do |domain, expected_entries|
+        actual_entries = current.fetch(scope, {}).fetch(domain, {})
+        expected_entries.sort.map do |key, before|
+          after = actual_entries[key]
+          next if before == after
+
+          {
+            "scope" => scope == "host_domains" ? "host" : "user",
+            "domain" => domain,
+            "key" => key,
+            "baseline" => before,
+            "current" => after,
+            "classification" => classification(scope, after)
+          }
+        end.compact
+      end
+    end
+  end
+
+  def classification(scope, current)
+    return "unsupported_host_scoped" if scope == "host_domains"
+    return "unmanaged_absent" if current.nil?
+    return "mise_candidate" if SCALAR_TYPES.include?(current["type"])
+
+    "unsupported_complex_value"
+  end
+
+  def markdown_report(report)
+    differences = report.fetch("differences")
+    counts = differences.group_by { |entry| entry["classification"] }.transform_values(&:count)
+    lines = [
+      "# macOS defaults audit",
+      "",
+      "This report compares live preference snapshots only. It does not read `README.md` or git history.",
+      "",
+      "- Baseline: macOS #{report.dig("baseline_metadata", "product_version")} (#{report.dig("baseline_metadata", "build_version")})",
+      "- Current: macOS #{report.dig("current_metadata", "product_version")} (#{report.dig("current_metadata", "build_version")})",
+      "- Differences: #{differences.length}",
+      ""
+    ]
+    counts.sort.each { |name, count| lines << "- #{name}: #{count}" }
+    lines.concat(["", "## Differences", "", "| Scope | Domain | Key | Classification | Baseline | Current |", "| --- | --- | --- | --- | --- | --- |"])
+    differences.each do |entry|
+      lines << [entry["scope"], entry["domain"], entry["key"], entry["classification"], display(entry["baseline"]), display(entry["current"])].map { |value| "| #{escape_markdown(value)} " }.join + "|"
+    end
+    lines.join("\n") + "\n"
+  end
+
+  def toml_candidates(differences)
+    candidates = differences.select { |entry| entry["classification"] == "mise_candidate" }
+    lines = ["# Review each entry before copying it to mise/config.macos.toml.", "# Generated from live preference snapshots; this file is not managed state.", ""]
+    candidates.group_by { |entry| entry["domain"] }.sort.each do |domain, entries|
+      lines << "[bootstrap.macos.defaults.\"#{domain.gsub('"', '\\\\"')}\"]"
+      entries.sort_by { |entry| entry["key"] }.each do |entry|
+        lines << "\"#{entry["key"].gsub('"', '\\\\"')}\" = #{toml_value(entry.fetch("current").fetch("value"))}"
+      end
+      lines << ""
+    end
+    lines.join("\n")
+  end
+
+  def toml_value(value)
+    case value
+    when String then value.to_json
+    when TrueClass, FalseClass, Integer, Float then value.to_s
+    else raise "unsupported TOML candidate value: #{value.inspect}"
+    end
+  end
+
+  def display(value)
+    value.nil? ? "(absent)" : JSON.generate(value)
+  end
+
+  def escape_markdown(value)
+    value.to_s.gsub("|", "\\|").gsub("\n", "<br>")
+  end
+
+  def command_output(*command)
+    stdout, stderr, status = Open3.capture3(*command)
+    raise "#{command.join(' ')} failed: #{stderr.strip}" unless status.success?
+
+    stdout
+  end
+
+  def read_json(path)
+    JSON.parse(File.read(path))
+  rescue Errno::ENOENT
+    abort "ERROR: file not found: #{path}"
+  rescue JSON::ParserError => e
+    abort "ERROR: invalid JSON in #{path}: #{e.message}"
+  end
+
+  def write_json(path, value)
+    write_text(path, JSON.pretty_generate(value) + "\n")
+  end
+
+  def write_text(path, value)
+    File.write(path, value)
+    File.chmod(0o600, path)
+  end
+end
+
+MacosDefaultsAudit.new(ARGV).run
