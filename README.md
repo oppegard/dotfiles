@@ -60,43 +60,45 @@ qlmanage -r
 
 ## Preferences
 
-Managed macOS defaults live in `mise/config.macos.toml`. To discover changes,
-compare live snapshots from a fresh temporary local macOS user and the intended
-user; the audit never reads this README or repository history:
+Managed macOS defaults live in `mise/config.macos.toml`. This repository tracks
+only intentional scalar, per-user preferences that are documented by
+[macos-defaults](https://github.com/yannbertrand/macos-defaults). It does not
+manage host-scoped, system-wide, complex, third-party, device-specific, or
+undocumented settings.
+
+To add one preference after changing it in System Settings:
 
 ```sh
-audit_dir="$(mktemp -d /tmp/macos-defaults-audit.XXXXXX)"
-bin/macos-defaults-audit snapshot --output "$audit_dir/new-user-defaults.json"
-bin/macos-defaults-audit snapshot --output "$audit_dir/current-user-defaults.json"
-bin/macos-defaults-audit compare \
-  --baseline "$audit_dir/new-user-defaults.json" \
-  --current "$audit_dir/current-user-defaults.json" \
-  --output "$audit_dir/report"
+mise -C mise run macos-defaults:record
 ```
 
-Run each snapshot while logged in as its named account; transfer the new-user
-snapshot into the intended user's private `audit_dir` before comparison. Review
-`$audit_dir/report/defaults-diff.md`. Copy only intentional
-scalar, non-host entries from `$audit_dir/report/mise-candidates.toml` into
-`[bootstrap.macos.defaults]`; do not automatically manage host-scoped or
-complex values. Record reviewed host-scoped or complex values in
-`mise-dots/macos/unsupported-defaults.json` and verify them without writing:
+The interactive, vendored script captures a before/after diff in
+`vendor/macos-defaults/diffs/<name>` (ignored by Git). Change **only one**
+preference while it waits. Match the reported domain and key to the upstream
+catalog; then add the typed value to `mise/config.macos.toml`, along with the
+upstream-derived description and any documented activation action. Do not add a
+preference merely because it appears in an audit or a diff.
+
+The earlier fresh-user audit remains useful for investigating which live values
+differ from a clean Sequoia account, but it is not an import source. Its scalar
+candidates include ordinary application/account state as well as preferences.
+
+Check only the catalog-backed mise desired state without writing:
 
 ```sh
-mise -C mise run macos-defaults:unsupported:check
+mise -C mise run macos-defaults:status
 ```
 
-Check native desired-state drift with
-`mise -C mise bootstrap macos defaults status`, inspect writes with `--dry-run`,
-then explicitly apply them:
+`macos-defaults:status` exits non-zero when a managed value is missing or
+different. Inspect writes with `--dry-run`, then explicitly apply them:
 
 ```sh
 mise -C mise bootstrap macos defaults apply --dry-run
 mise -C mise bootstrap macos defaults apply
 ```
 
-Relaunch affected applications manually after applying defaults, for example
-`Dock`, `Finder`, or `SystemUIServer`.
+Mise never restarts applications. Follow the activation action recorded beside
+the changed preference, if any.
 
 ### Map ⌘ + ←Delete to backward-kill-line in iTerm2 + zsh
 

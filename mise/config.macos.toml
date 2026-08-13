@@ -1,9 +1,62 @@
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/bash"
 
-# Populate this section only with reviewed scalar entries from a live
-# macOS-defaults audit. mise cannot manage host-scoped or complex plist values.
-[bootstrap.macos.defaults]
+[bootstrap.macos.trackpad]
+tap_to_click = true
+
+# macOS defaults (https://macos-defaults.com)
+[bootstrap.macos.defaults."NSGlobalDomain"]
+# https://macos-defaults.com/keyboard/applekeyboarduimode.html
+# Enable keyboard navigation with Tab and Shift-Tab.
+"AppleKeyboardUIMode" = 2
+
+[bootstrap.macos.defaults."com.apple.Music"]
+# https://macos-defaults.com/misc/userwantsplaybacknotifications.html
+# Do not show a notification when a new song starts.
+# `killall Music`
+"userWantsPlaybackNotifications" = false
+
+[bootstrap.macos.defaults."com.apple.dock"]
+# Source: https://macos-defaults.com/dock/
+"orientation" = "left"
+"show-recents" = false
+
+[bootstrap.macos.defaults."com.apple.finder"]
+# https://macos-defaults.com/finder/
+# `killall Finder`
+# Use List view for folders without a custom view. 
+"FXPreferredViewStyle" = "Nlsv"
+# Keep folders on top when sorting by name.
+"_FXSortFoldersFirst" = true
+
+[bootstrap.macos.defaults."com.apple.screencapture"]
+# https://macos-defaults.com/screenshots/
+# `killall SystemUIServer`
+"location" = "~/Downloads/Screenshots"
+
+[bootstrap.macos.defaults."com.apple.Safari"]
+# https://macos-defaults.com/safari/showfullurlinsmartsearchfield.html
+# Show the full website address. Relaunch Safari: killall Safari.
+"ShowFullURLInSmartSearchField" = true
+
+[bootstrap.macos.defaults."com.apple.universalaccess"]
+# Show the folder icon before the Finder window title. Relaunch Finder: killall Finder.
+# Source: https://macos-defaults.com/finder/showwindowtitlebaricons.html
+"showWindowTitlebarIcons" = true
+
+[bootstrap.macos.defaults."com.apple.AppleMultitouchTrackpad"]
+# Disable Force Click and haptic feedback.
+"ForceSuppressed" = true
+
+[tasks."macos-defaults:record"]
+description = "Record one interactive macOS defaults change"
+shell = "bash -c"
+run = 'cd "{{ env.HOME }}/.dotfiles/vendor/macos-defaults" && bash ./diff.sh'
+
+[tasks."macos-defaults:status"]
+description = "Show managed macOS defaults drift; fail when reconciliation is needed"
+shell = "bash -c"
+run = 'mise -C "{{ env.HOME }}/.dotfiles/mise" bootstrap macos defaults status --missing'
 
 [tasks."macos-defaults:unsupported:check"]
 description = "Verify reviewed host-scoped and complex macOS defaults"

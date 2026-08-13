@@ -4,3 +4,4 @@ Alfred/Alfred.alfredpreferences/remote/
 zshrc.local
 .zshrc.local
 mise-dots/config/git/local
+vendor/macos-defaults/diffs/
