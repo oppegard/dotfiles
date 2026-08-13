@@ -51,115 +51,115 @@ tap_to_click = true
 # macOS defaults (https://macos-defaults.com)
 [bootstrap.macos.defaults."NSGlobalDomain"]
 # Enable keyboard navigation with Tab and Shift-Tab.
-"AppleKeyboardUIMode" = 2
+AppleKeyboardUIMode = 2
 # Always show scroll bars.
-"AppleShowScrollBars" = "Always"
+AppleShowScrollBars = "Always"
 # Do not capitalize words automatically.
-"NSAutomaticCapitalizationEnabled" = false
+NSAutomaticCapitalizationEnabled = false
 # Do not replace double hyphens with smart dashes automatically.
-"NSAutomaticDashSubstitutionEnabled" = false
+NSAutomaticDashSubstitutionEnabled = false
 # Do not replace straight quotes with smart quotes automatically.
-"NSAutomaticQuoteSubstitutionEnabled" = false
+NSAutomaticQuoteSubstitutionEnabled = false
 # Do not correct spelling automatically.
-"NSAutomaticSpellingCorrectionEnabled" = false
+NSAutomaticSpellingCorrectionEnabled = false
 
 [bootstrap.macos.defaults."com.apple.Music"]
 # https://macos-defaults.com/misc/userwantsplaybacknotifications.html
 # Do not show a notification when a new song starts.
 # `killall Music`
-"userWantsPlaybackNotifications" = false
+userWantsPlaybackNotifications = false
 
 [bootstrap.macos.defaults."com.apple.dock"]
 # Source: https://macos-defaults.com/dock/
 # Relaunch Dock after applying: killall Dock.
-"orientation" = "left"
-"show-recents" = false
+orientation = "left"
+show-recents = false
 # Show an indicator below each open application in the Dock.
-"show-process-indicators" = true
+show-process-indicators = true
 # Switch to the Space containing an application's open windows when switching apps.
-"appswitcher-all-displays" = true
+appswitcher-all-displays = true
 # Start the screen saver from the bottom-left Hot Corner.
-"wvous-bl-corner" = 5
+wvous-bl-corner = 5
 # Do not require a modifier key for the bottom-left Hot Corner.
-"wvous-bl-modifier" = 0
+wvous-bl-modifier = 0
 # Disable the bottom-right Hot Corner.
-"wvous-br-corner" = 1
+wvous-br-corner = 1
 # Do not require a modifier key for the bottom-right Hot Corner.
-"wvous-br-modifier" = 0
+wvous-br-modifier = 0
 
 [bootstrap.macos.defaults."com.apple.finder"]
 # https://macos-defaults.com/finder/
 # `killall Finder`
 # Use List view for folders without a custom view.
-"FXPreferredViewStyle" = "Nlsv"
+FXPreferredViewStyle = "Nlsv"
 # Keep folders on top when sorting by name.
-"_FXSortFoldersFirst" = true
+_FXSortFoldersFirst = true
 # Open new Finder windows to the Home folder.
-"NewWindowTarget" = "PfHm"
+NewWindowTarget = "PfHm"
 # Hide Recent Tags in the Finder sidebar.
-"ShowRecentTags" = false
+ShowRecentTags = false
 
 [bootstrap.macos.defaults."com.apple.screencapture"]
 # https://macos-defaults.com/screenshots/
 # `killall SystemUIServer`
-"location" = "~/Downloads/Screenshots"
+location = "~/Downloads/Screenshots"
 
 [bootstrap.macos.defaults."com.apple.Safari"]
 # https://macos-defaults.com/safari/showfullurlinsmartsearchfield.html
 # Show the full website address. Relaunch Safari: killall Safari.
-"ShowFullURLInSmartSearchField" = true
+ShowFullURLInSmartSearchField = true
 
 [bootstrap.macos.defaults."com.apple.menuextra.clock"]
 # Relaunch SystemUIServer after applying: killall SystemUIServer.
 # Do not show the date in the menu bar clock.
-"ShowDate" = 2
+ShowDate = 2
 # Do not show the day of the week in the menu bar clock.
-"ShowDayOfWeek" = false
+ShowDayOfWeek = false
 
 [bootstrap.macos.defaults."com.apple.WindowManager"]
 # Do not move windows aside when clicking the desktop wallpaper.
-"EnableStandardClickToShowDesktop" = false
+EnableStandardClickToShowDesktop = false
 # Do not leave margins around tiled windows.
-"EnableTiledWindowMargins" = false
+EnableTiledWindowMargins = false
 # Do not tile a window by dragging it to a screen edge.
-"EnableTilingByEdgeDrag" = false
+EnableTilingByEdgeDrag = false
 # Do not use Option-drag to tile a window.
-"EnableTilingOptionAccelerator" = false
+EnableTilingOptionAccelerator = false
 # Do not tile or fill a window by dragging it to the menu bar.
-"EnableTopTilingByEdgeDrag" = false
+EnableTopTilingByEdgeDrag = false
 
 [bootstrap.macos.defaults."com.apple.universalaccess"]
 # Replace transparent macOS backgrounds with solid backgrounds.
-"reduceTransparency" = true
+reduceTransparency = true
 # Show a subtle border around toolbar buttons to indicate their click target.
-"showToolbarButtonShapes" = true
+showToolbarButtonShapes = true
 # Show the folder icon before the Finder window title. Relaunch Finder: killall Finder.
-"showWindowTitlebarIcons" = true
+showWindowTitlebarIcons = true
 
 [bootstrap.macos.defaults."com.apple.AppleMultitouchTrackpad"]
 # Disable Force Click and haptic feedback.
-"ForceSuppressed" = true
+ForceSuppressed = true
 # Keep the accompanying haptic-detent state disabled.
-"ActuateDetents" = 0
+ActuateDetents = 0
 # Disable the five-finger pinch gesture.
-"TrackpadFiveFingerPinchGesture" = 0
+TrackpadFiveFingerPinchGesture = 0
 # Disable the four-finger pinch gesture.
-"TrackpadFourFingerPinchGesture" = 0
+TrackpadFourFingerPinchGesture = 0
 # Disable the four-finger vertical swipe gesture.
-"TrackpadFourFingerVertSwipeGesture" = 0
+TrackpadFourFingerVertSwipeGesture = 0
 # Disable the three-finger vertical swipe gesture.
-"TrackpadThreeFingerVertSwipeGesture" = 0
+TrackpadThreeFingerVertSwipeGesture = 0
 # Disable the two-finger swipe from the right edge.
-"TrackpadTwoFingerFromRightEdgeSwipeGesture" = 0
+TrackpadTwoFingerFromRightEdgeSwipeGesture = 0
 
 [bootstrap.macos.defaults."com.apple.driver.AppleBluetoothMultitouch.trackpad"]
 # Disable the five-finger pinch gesture on an Apple Bluetooth trackpad.
-"TrackpadFiveFingerPinchGesture" = 0
+TrackpadFiveFingerPinchGesture = 0
 # Disable the four-finger pinch gesture on an Apple Bluetooth trackpad.
-"TrackpadFourFingerPinchGesture" = 0
+TrackpadFourFingerPinchGesture = 0
 # Disable the four-finger vertical swipe gesture on an Apple Bluetooth trackpad.
-"TrackpadFourFingerVertSwipeGesture" = 0
+TrackpadFourFingerVertSwipeGesture = 0
 # Disable the three-finger vertical swipe gesture on an Apple Bluetooth trackpad.
-"TrackpadThreeFingerVertSwipeGesture" = 0
+TrackpadThreeFingerVertSwipeGesture = 0
 # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
-"TrackpadTwoFingerFromRightEdgeSwipeGesture" = 0
+TrackpadTwoFingerFromRightEdgeSwipeGesture = 0
