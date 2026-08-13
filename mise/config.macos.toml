@@ -1,3 +1,45 @@
+[dotfiles]
+"~/.config/borders/bordersrc" = "~/.dotfiles/mise-dots/macos/bordersrc"
+"~/.config/linearmouse/linearmouse.json" = "~/.dotfiles/mise-dots/macos/linearmouse.json"
+"~/.homebrew/Brewfile" = "~/.dotfiles/Brewfile"
+"~/.local/bin/fix-tahoe-focus" = "~/.dotfiles/mise-dots/macos/xdg-bin/fix-tahoe-focus"
+"~/.local/bin/restart-soundsource" = "~/.dotfiles/mise-dots/macos/xdg-bin/restart-soundsource"
+"~/.local/bin/try" = "~/.dotfiles/mise-dots/macos/xdg-bin/try-darwin-aarch64"
+"~/Library/Application Support/Sublime Text 3/Packages/User" = "~/.dotfiles/mise-dots/config/sublime-text/Packages/User"
+"~/Library/Application Support/Rectangle Pro/RectangleProConfig.json" = { source = "~/.dotfiles/mise-dots/macos/RectangleProConfig.json", mode = "copy" }
+"~/Library/Application Support/Tuna/config.toml" = "~/.dotfiles/mise-dots/macos/tuna.toml"
+
+[tasks."macos-defaults:record"]
+description = "Record one interactive macOS defaults change"
+shell = "bash -c"
+run = 'cd "{{ env.HOME }}/.dotfiles/vendor/macos-defaults" && bash ./diff.sh'
+
+[tasks."macos-defaults:status"]
+description = "Show managed macOS defaults drift; fail when reconciliation is needed"
+shell = "bash -c"
+run = 'mise -C "{{ env.HOME }}/.dotfiles/mise" bootstrap macos defaults status --missing'
+
+[tasks."macos-defaults:unsupported:check"]
+description = "Verify reviewed host-scoped and complex macOS defaults"
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/macos-defaults-audit" verify --manifest "{{ env.HOME }}/.dotfiles/mise-dots/macos/unsupported-defaults.json"'
+
+[tasks."betterdisplay:check"]
+description = "Check BetterDisplay sync profile against dotfiles"
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" check'
+
+[tasks."betterdisplay:export"]
+description = "Export BetterDisplay sync profile to dotfiles"
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" export'
+
+[tasks."betterdisplay:import"]
+description = "Import BetterDisplay sync profile from dotfiles"
+confirm = { message = "Apply the dotfiles BetterDisplay sync profile?", default = "no" }
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" import'
+
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/bash"
 
@@ -121,45 +163,3 @@ tap_to_click = true
 "TrackpadThreeFingerVertSwipeGesture" = 0
 # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
 "TrackpadTwoFingerFromRightEdgeSwipeGesture" = 0
-
-[tasks."macos-defaults:record"]
-description = "Record one interactive macOS defaults change"
-shell = "bash -c"
-run = 'cd "{{ env.HOME }}/.dotfiles/vendor/macos-defaults" && bash ./diff.sh'
-
-[tasks."macos-defaults:status"]
-description = "Show managed macOS defaults drift; fail when reconciliation is needed"
-shell = "bash -c"
-run = 'mise -C "{{ env.HOME }}/.dotfiles/mise" bootstrap macos defaults status --missing'
-
-[tasks."macos-defaults:unsupported:check"]
-description = "Verify reviewed host-scoped and complex macOS defaults"
-shell = "bash -c"
-run = '"{{ env.HOME }}/.dotfiles/bin/macos-defaults-audit" verify --manifest "{{ env.HOME }}/.dotfiles/mise-dots/macos/unsupported-defaults.json"'
-
-[tasks."betterdisplay:check"]
-description = "Check BetterDisplay sync profile against dotfiles"
-shell = "bash -c"
-run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" check'
-
-[tasks."betterdisplay:export"]
-description = "Export BetterDisplay sync profile to dotfiles"
-shell = "bash -c"
-run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" export'
-
-[tasks."betterdisplay:import"]
-description = "Import BetterDisplay sync profile from dotfiles"
-confirm = { message = "Apply the dotfiles BetterDisplay sync profile?", default = "no" }
-shell = "bash -c"
-run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" import'
-
-[dotfiles]
-"~/.config/borders/bordersrc" = "~/.dotfiles/mise-dots/macos/bordersrc"
-"~/.config/linearmouse/linearmouse.json" = "~/.dotfiles/mise-dots/macos/linearmouse.json"
-"~/.homebrew/Brewfile" = "~/.dotfiles/Brewfile"
-"~/.local/bin/fix-tahoe-focus" = "~/.dotfiles/mise-dots/macos/xdg-bin/fix-tahoe-focus"
-"~/.local/bin/restart-soundsource" = "~/.dotfiles/mise-dots/macos/xdg-bin/restart-soundsource"
-"~/.local/bin/try" = "~/.dotfiles/mise-dots/macos/xdg-bin/try-darwin-aarch64"
-"~/Library/Application Support/Sublime Text 3/Packages/User" = "~/.dotfiles/mise-dots/config/sublime-text/Packages/User"
-"~/Library/Application Support/Rectangle Pro/RectangleProConfig.json" = { source = "~/.dotfiles/mise-dots/macos/RectangleProConfig.json", mode = "copy" }
-"~/Library/Application Support/Tuna/config.toml" = "~/.dotfiles/mise-dots/macos/tuna.toml"
