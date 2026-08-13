@@ -11,7 +11,7 @@
 	<key>NSWindow Frame SUUpdateAlert2</key>
 	<string>-1218 566 987 719 -1512 395 1512 948 </string>
 	<key>NSWindow Frame Settings</key>
-	<string>502 616 1200 901 0 0 3072 1697 </string>
+	<string>1172 746 1200 901 0 0 3072 1697 </string>
 	<key>Paddle-BetterDisplay-762421-SD</key>
 	<string>da7d73a6f7a14a4ac70882999b44648af382f4429a866c41fec6c20b46984913</string>
 	<key>SUAutomaticallyUpdate</key>
@@ -283,7 +283,7 @@
 	<key>delta@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001</key>
 	<false/>
 	<key>displayConfigurationId</key>
-	<integer>1209</integer>
+	<integer>1212</integer>
 	<key>displayConfigurationId@Display:13</key>
 	<integer>812</integer>
 	<key>displayConfigurationId@Display:14</key>
@@ -291,11 +291,11 @@
 	<key>displayConfigurationId@Display:15</key>
 	<integer>1003</integer>
 	<key>displayConfigurationId@Display:2</key>
-	<integer>1209</integer>
+	<integer>1212</integer>
 	<key>displayConfigurationId@Display:3</key>
 	<integer>1138</integer>
 	<key>displayConfigurationId@Display:8</key>
-	<integer>1209</integer>
+	<integer>1212</integer>
 	<key>displayTagIDs</key>
 	<string>[2,3,8,13,14,15]</string>
 	<key>enabled@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001</key>
@@ -433,11 +433,11 @@
 	<key>lastConnected@Display:15</key>
 	<real>805838511.410339</real>
 	<key>lastConnected@Display:2</key>
-	<real>808323099.61102903</real>
+	<real>808328486.64456904</real>
 	<key>lastConnected@Display:3</key>
 	<real>807488482.36190104</real>
 	<key>lastConnected@Display:8</key>
-	<real>808323099.63312697</real>
+	<real>808328486.68203199</real>
 	<key>lastUnseen@Display:13</key>
 	<real>803395698.91822398</real>
 	<key>lastUnseen@Display:14</key>
@@ -449,7 +449,7 @@
 	<key>lastUnseen@Display:3</key>
 	<real>807540564.59113896</real>
 	<key>lastUnseen@Display:8</key>
-	<real>808323076.38948703</real>
+	<real>808325965.77027404</real>
 	<key>menuLevelBlueLight</key>
 	<string>less</string>
 	<key>menuLevelBrightness</key>
@@ -663,11 +663,11 @@
 	<key>storedIdentifiers@Display:15</key>
 	<string>[{"productName":"The Perch","modelNumber":1634300528,"vendorNumber":1633775724,"serial":3686070332,"yearOfManufacture":0,"infoDictionarySerial":3686070332,"infoDictionaryModelNumber":1634300528,"weekOfManufacture":0,"infoDictionaryVendorNumber":1633775724,"systemUUID":"C2877C60-A001-431E-89E1-19B490E01F06"}]</string>
 	<key>storedIdentifiers@Display:2</key>
-	<string>[{"productName":"Color LCD","systemUUID":"37D8832A-2D66-02CA-B9F7-8F30A301B230","edidProductName":"Color LCD","serial":4251086178,"vendorNumber":1552,"ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleSoCIO\/disp0@74000000\/IOMobileFramebufferShim","infoDictionaryVendorNumber":1552,"infoDictionaryModelNumber":41057,"modelNumber":41057,"infoDictionarySerial":4251086178}]</string>
+	<string>[{"infoDictionarySerial":4251086178,"systemUUID":"37D8832A-2D66-02CA-B9F7-8F30A301B230","ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleSoCIO\/disp0@74000000\/IOMobileFramebufferShim","modelNumber":41057,"edidProductName":"Color LCD","infoDictionaryVendorNumber":1552,"serial":4251086178,"vendorNumber":1552,"productName":"Color LCD","infoDictionaryModelNumber":41057}]</string>
 	<key>storedIdentifiers@Display:3</key>
 	<string>[{"infoDictionaryModelNumber":44578,"systemUUID":"BF677545-E061-4ED1-863E-69E089DAEFEF","portID":182493200,"vendorNumber":1552,"yearOfManufacture":2019,"edidData":"AP\/\/\/\/\/\/\/wAGECKuCwUTEgEdAQTFRid4AA+RrlJDsCYPUFQAAAABAQEBAQEBAQEBAQEBAQEBQs4AUPBwVYAIIHgAu4khAAAaQs4AUPBwFoIIIIgAu4khAAAaoFwAUKCgOVAIILgIu4khAAAaAAAA\/ABQcm9EaXNwbGF5WERSBfUCAw+A4wWAAOYGBwGgawE8zgBQ8HBXgAggmAC7iSEAABo9zgBQ8HCGggggiAy7iSEAABpBzgBQ8HCJgggguAy7iSEAABoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXASeQAAKQAQlUm9hVh8Q0SwS5AeHiiecAEADFIbXg+AFzgNEHhOu3+BB\/oQAAQBAAASABaCEAAAvws3DQAAAAAAQVBQI64LBRMSfgAFOgKSgQADAChBzgAE\/w5PAAeAHwBvCFQARgAHAP67AAj\/CXcAB4AfAD8LcABiAAcAAHiQcBJ5AAADAFDuuwAI\/wl3AAeAHwA\/C3IAZAAHAPa7AAj\/CXcAB4AfAD8LxgK4AgcA+7sACP8JdwAHgB8APwtcA04DBwDxuwAI\/wl3AAeAHwA\/C18DUQMHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsJBwEnkAAAMAZMRsAQT\/E08AB4AfAD8LcABiAAcApWwBBP8TTwAHgB8APwtyAGQABwC1bAEE\/xNPAAeAHwA\/C8YCuAIHAL5sAQT\/E08AB4AfAD8LXANOAwcAq2wBBP8TTwAHgB8APwtfA1EDBwAAAAAAAAAAAAAAAAAAAAAAAAAKkHASeQAAAwBkWPYBhH8XTwAHgB8ANw2DAHUABwBF9gEEfxdPAAeAHwA3DYYAeAAHAFL2AQR\/F08AB4AfADcNQgM0AwcAWPYBBH8XTwAHgB8ANw3yA+QDBwBM9gEEfxdPAAeAHwA3DfYD6AMHAAAAAAAAAAAAAAAAAAAAAAAAALSQ","infoDictionaryVendorNumber":1552,"productName":"Pro Display XDR","modelNumber":44578,"edidProductName":"ProDisplayXDR","serial":303236363,"weekOfManufacture":1,"ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleSoCIO\/dispext0@F4000000\/IOMobileFramebufferShim","infoDictionarySerial":303236363}]</string>
 	<key>storedIdentifiers@Display:8</key>
-	<string>[{"serial":809055820,"infoDictionarySerial":809055820,"edidProductName":"DELL U3224KB","edidData":"AP\/\/\/\/\/\/\/wAQrLBCTDY5MBYhAQS1Rid4OJqlrVBBsSUNUFSlSwBxT4EAgYCpQLMA0cDRAKnATdAAoPBwPoAwIDUAuYghAAAaAAAA\/wA2V0ZUNFAzCiAgICAgAAAA\/ABERUxMIFUzMjI0S0IKAAAA\/QA4TB7cigEKICAgICAgApkCAxjxSxAfX15dIgQTEgMBIwkHB4MBAABWXgCgoKApUDAgNQC5iCEAABoRRACggAAlUDAgNgC5iCEAABoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAV3ASeQMAAwFQlxoChP8XPwEvgB8Afw1iAAIABADpBAIEfxc\/AS+AHwA3DWAAAgAEABF0AQT\/E+8AL4AfAD8LUQACAAQA4gIBBP8XnwAvgB8Afw0wAAIABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGaQ","ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleSoCIO\/dispext0@F4000000\/IOMobileFramebufferShim","productName":"DELL U3224KB","alphanumericSerialNumber":"6WFT4P3","portID":209772560,"weekOfManufacture":22,"vendorNumber":4268,"yearOfManufacture":2023,"modelNumber":17072,"infoDictionaryModelNumber":17072,"systemUUID":"F59928F2-6C34-461C-A737-336769BD8DDD","infoDictionaryVendorNumber":4268}]</string>
+	<string>[{"alphanumericSerialNumber":"6WFT4P3","infoDictionaryModelNumber":17072,"systemUUID":"F59928F2-6C34-461C-A737-336769BD8DDD","modelNumber":17072,"yearOfManufacture":2023,"portID":209772560,"infoDictionarySerial":809055820,"vendorNumber":4268,"edidData":"AP\/\/\/\/\/\/\/wAQrLBCTDY5MBYhAQS1Rid4OJqlrVBBsSUNUFSlSwBxT4EAgYCpQLMA0cDRAKnATdAAoPBwPoAwIDUAuYghAAAaAAAA\/wA2V0ZUNFAzCiAgICAgAAAA\/ABERUxMIFUzMjI0S0IKAAAA\/QA4TB7cigEKICAgICAgApkCAxjxSxAfX15dIgQTEgMBIwkHB4MBAABWXgCgoKApUDAgNQC5iCEAABoRRACggAAlUDAgNgC5iCEAABoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAV3ASeQMAAwFQlxoChP8XPwEvgB8Afw1iAAIABADpBAIEfxc\/AS+AHwA3DWAAAgAEABF0AQT\/E+8AL4AfAD8LUQACAAQA4gIBBP8XnwAvgB8Afw0wAAIABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGaQ","ioDisplayLocation":"IOService:\/AppleARMPE\/arm-io@10F00000\/AppleSoCIO\/dispext0@F4000000\/IOMobileFramebufferShim","serial":809055820,"productName":"DELL U3224KB","edidProductName":"DELL U3224KB","infoDictionaryVendorNumber":4268,"weekOfManufacture":22}]</string>
 	<key>supportsHDR@Display:13</key>
 	<true/>
 	<key>supportsHDR@Display:14</key>
@@ -679,7 +679,7 @@
 	<key>supportsHDR@Display:3</key>
 	<true/>
 	<key>supportsHDR@Display:8</key>
-	<false/>
+	<true/>
 	<key>syncConfigurationControlTargets@DisplayGroup:-1001</key>
 	<string>["mostAppropriateBrightness"]</string>
 	<key>syncEnabled@DisplayGroup:-1001</key>
