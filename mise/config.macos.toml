@@ -29,8 +29,21 @@ tap_to_click = true
 
 [bootstrap.macos.defaults."com.apple.dock"]
 # Source: https://macos-defaults.com/dock/
+# Relaunch Dock after applying: killall Dock.
 "orientation" = "left"
 "show-recents" = false
+# Show an indicator below each open application in the Dock.
+"show-process-indicators" = true
+# Switch to the Space containing an application's open windows when switching apps.
+"appswitcher-all-displays" = true
+# Start the screen saver from the bottom-left Hot Corner.
+"wvous-bl-corner" = 5
+# Do not require a modifier key for the bottom-left Hot Corner.
+"wvous-bl-modifier" = 0
+# Disable the bottom-right Hot Corner.
+"wvous-br-corner" = 1
+# Do not require a modifier key for the bottom-right Hot Corner.
+"wvous-br-modifier" = 0
 
 [bootstrap.macos.defaults."com.apple.finder"]
 # https://macos-defaults.com/finder/
@@ -59,7 +72,6 @@ tap_to_click = true
 "showWindowTitlebarIcons" = true
 
 [bootstrap.macos.defaults."com.apple.AppleMultitouchTrackpad"]
-# Source: https://support.apple.com/en-au/guide/mac-help/mchlp1226/mac
 # Disable Force Click and haptic feedback.
 "ForceSuppressed" = true
 # Keep the accompanying haptic-detent state disabled.
@@ -76,7 +88,6 @@ tap_to_click = true
 "TrackpadTwoFingerFromRightEdgeSwipeGesture" = 0
 
 [bootstrap.macos.defaults."com.apple.driver.AppleBluetoothMultitouch.trackpad"]
-# Source: https://support.apple.com/en-au/guide/mac-help/mchlp1226/mac
 # Disable the five-finger pinch gesture on an Apple Bluetooth trackpad.
 "TrackpadFiveFingerPinchGesture" = 0
 # Disable the four-finger pinch gesture on an Apple Bluetooth trackpad.
