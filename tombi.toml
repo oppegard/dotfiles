@@ -11,7 +11,10 @@ include = [
 ]
 
 [[schemas.overrides]]
-targets = ["bootstrap.macos.defaults.*"]
+targets = [
+  "bootstrap.macos.defaults",
+  "bootstrap.macos.defaults.*",
+]
 
 [schemas.overrides.format.rules]
 table-keys-order = "ascending"

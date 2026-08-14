@@ -44,125 +44,124 @@ run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" import'
 login_shell = "/opt/homebrew/bin/bash"
 
 [bootstrap.macos.trackpad]
-# Source: https://support.apple.com/en-au/guide/mac-help/mchlp1226/mac
-# Tap the trackpad with one finger to click.
 tap_to_click = true
 
-# macOS defaults (https://macos-defaults.com)
-[bootstrap.macos.defaults."NSGlobalDomain"]
-# Enable keyboard navigation with Tab and Shift-Tab.
-AppleKeyboardUIMode = 2
-# Always show scroll bars.
-AppleShowScrollBars = "Always"
-# Do not capitalize words automatically.
-NSAutomaticCapitalizationEnabled = false
-# Do not replace double hyphens with smart dashes automatically.
-NSAutomaticDashSubstitutionEnabled = false
-# Do not replace straight quotes with smart quotes automatically.
-NSAutomaticQuoteSubstitutionEnabled = false
-# Do not correct spelling automatically.
-NSAutomaticSpellingCorrectionEnabled = false
+[bootstrap.macos.defaults]
+"NSGlobalDomain" = {
+  # Always show scroll bars.
+  AppleShowScrollBars = "Always",
+  # Enable keyboard navigation with Tab and Shift-Tab.
+  AppleKeyboardUIMode = 2,
+  # Do not capitalize words automatically.
+  NSAutomaticCapitalizationEnabled = false,
+  # Do not replace double hyphens with smart dashes automatically.
+  NSAutomaticDashSubstitutionEnabled = false,
+  # Do not replace straight quotes with smart quotes automatically.
+  NSAutomaticQuoteSubstitutionEnabled = false,
+  # Do not correct spelling automatically.
+  NSAutomaticSpellingCorrectionEnabled = false,
+}
 
-[bootstrap.macos.defaults."com.apple.Music"]
-# https://macos-defaults.com/misc/userwantsplaybacknotifications.html
-# `killall Music`
+"com.apple.Music" = {
+  # Do not show a notification when a new song starts.
+  userWantsPlaybackNotifications = false,
+}
 
-# Do not show a notification when a new song starts.
-userWantsPlaybackNotifications = false
+"com.apple.dock" = {
+  # Switch to the Space containing an application's open windows when switching apps.
+  appswitcher-all-displays = true,
+  orientation = "left",
+  # Show an indicator below each open application in the Dock.
+  show-process-indicators = true,
+  show-recents = false,
+  # Start the screen saver from the bottom-left Hot Corner.
+  wvous-bl-corner = 5,
+  # Do not require a modifier key for the bottom-left Hot Corner.
+  wvous-bl-modifier = 0,
+  # Disable the bottom-right Hot Corner.
+  wvous-br-corner = 1,
+  # Do not require a modifier key for the bottom-right Hot Corner.
+  wvous-br-modifier = 0,
+}
 
-[bootstrap.macos.defaults."com.apple.dock"]
-# Source: https://macos-defaults.com/dock/
-# Relaunch Dock after applying: killall Dock.
+"com.apple.finder" = {
+  # Use List view for folders without a custom view.
+  FXPreferredViewStyle = "Nlsv",
+  # Open new Finder windows to the Home folder.
+  NewWindowTarget = "PfHm",
+  # Hide Recent Tags in the Finder sidebar.
+  ShowRecentTags = false,
+  # Keep folders on top when sorting by name.
+  _FXSortFoldersFirst = true,
+}
 
-# Switch to the Space containing an application's open windows when switching apps.
-appswitcher-all-displays = true
-orientation = "left"
-# Show an indicator below each open application in the Dock.
-show-process-indicators = true
-show-recents = false
-# Start the screen saver from the bottom-left Hot Corner.
-wvous-bl-corner = 5
-# Do not require a modifier key for the bottom-left Hot Corner.
-wvous-bl-modifier = 0
-# Disable the bottom-right Hot Corner.
-wvous-br-corner = 1
-# Do not require a modifier key for the bottom-right Hot Corner.
-wvous-br-modifier = 0
+"com.apple.screencapture" = {
+  # `killall SystemUIServer`
+  location = "~/Downloads/Screenshots",
+}
 
-[bootstrap.macos.defaults."com.apple.finder"]
-# https://macos-defaults.com/finder/
-# `killall Finder`
+"com.apple.Safari" = {
+  # `killall Safari`
+  # Show the full website address.
+  ShowFullURLInSmartSearchField = true,
+}
 
-# Use List view for folders without a custom view.
-FXPreferredViewStyle = "Nlsv"
-# Open new Finder windows to the Home folder.
-NewWindowTarget = "PfHm"
-# Hide Recent Tags in the Finder sidebar.
-ShowRecentTags = false
-# Keep folders on top when sorting by name.
-_FXSortFoldersFirst = true
+"com.apple.menuextra.clock" = {
+  # `killall SystemUIServer`
+  # Do not show the date in the menu bar clock.
+  ShowDate = 2,
+  # Do not show the day of the week in the menu bar clock.
+  ShowDayOfWeek = false,
+}
 
-[bootstrap.macos.defaults."com.apple.screencapture"]
-# https://macos-defaults.com/screenshots/
-# `killall SystemUIServer`
-location = "~/Downloads/Screenshots"
+"com.apple.WindowManager" = {
+  # Do not move windows aside when clicking the desktop wallpaper.
+  EnableStandardClickToShowDesktop = false,
+  # Do not leave margins around tiled windows.
+  EnableTiledWindowMargins = false,
+  # Do not tile a window by dragging it to a screen edge.
+  EnableTilingByEdgeDrag = false,
+  # Do not use Option-drag to tile a window.
+  EnableTilingOptionAccelerator = false,
+  # Do not tile or fill a window by dragging it to the menu bar.
+  EnableTopTilingByEdgeDrag = false,
+}
 
-[bootstrap.macos.defaults."com.apple.Safari"]
-# https://macos-defaults.com/safari/showfullurlinsmartsearchfield.html
-# Show the full website address. Relaunch Safari: killall Safari.
-ShowFullURLInSmartSearchField = true
+"com.apple.universalaccess" = {
+  # Replace transparent macOS backgrounds with solid backgrounds.
+  reduceTransparency = true,
+  # Show a subtle border around toolbar buttons to indicate their click target.
+  showToolbarButtonShapes = true,
+  # Show the folder icon before the Finder window title. Relaunch Finder: killall Finder.
+  showWindowTitlebarIcons = true,
+}
 
-[bootstrap.macos.defaults."com.apple.menuextra.clock"]
-# Relaunch SystemUIServer after applying: killall SystemUIServer.
-# Do not show the date in the menu bar clock.
-ShowDate = 2
-# Do not show the day of the week in the menu bar clock.
-ShowDayOfWeek = false
+"com.apple.AppleMultitouchTrackpad" = {
+  # Keep the accompanying haptic-detent state disabled.
+  ActuateDetents = 0,
+  # Disable Force Click and haptic feedback.
+  ForceSuppressed = true,
+  # Disable the five-finger pinch gesture.
+  TrackpadFiveFingerPinchGesture = 0,
+  # Disable the four-finger pinch gesture.
+  TrackpadFourFingerPinchGesture = 0,
+  # Disable the four-finger vertical swipe gesture.
+  TrackpadFourFingerVertSwipeGesture = 0,
+  # Disable the three-finger vertical swipe gesture.
+  TrackpadThreeFingerVertSwipeGesture = 0,
+  # Disable the two-finger swipe from the right edge.
+  TrackpadTwoFingerFromRightEdgeSwipeGesture = 0,
+}
 
-[bootstrap.macos.defaults."com.apple.WindowManager"]
-# Do not move windows aside when clicking the desktop wallpaper.
-EnableStandardClickToShowDesktop = false
-# Do not leave margins around tiled windows.
-EnableTiledWindowMargins = false
-# Do not tile a window by dragging it to a screen edge.
-EnableTilingByEdgeDrag = false
-# Do not use Option-drag to tile a window.
-EnableTilingOptionAccelerator = false
-# Do not tile or fill a window by dragging it to the menu bar.
-EnableTopTilingByEdgeDrag = false
-
-[bootstrap.macos.defaults."com.apple.universalaccess"]
-# Replace transparent macOS backgrounds with solid backgrounds.
-reduceTransparency = true
-# Show a subtle border around toolbar buttons to indicate their click target.
-showToolbarButtonShapes = true
-# Show the folder icon before the Finder window title. Relaunch Finder: killall Finder.
-showWindowTitlebarIcons = true
-
-[bootstrap.macos.defaults."com.apple.AppleMultitouchTrackpad"]
-# Keep the accompanying haptic-detent state disabled.
-ActuateDetents = 0
-# Disable Force Click and haptic feedback.
-ForceSuppressed = true
-# Disable the five-finger pinch gesture.
-TrackpadFiveFingerPinchGesture = 0
-# Disable the four-finger pinch gesture.
-TrackpadFourFingerPinchGesture = 0
-# Disable the four-finger vertical swipe gesture.
-TrackpadFourFingerVertSwipeGesture = 0
-# Disable the three-finger vertical swipe gesture.
-TrackpadThreeFingerVertSwipeGesture = 0
-# Disable the two-finger swipe from the right edge.
-TrackpadTwoFingerFromRightEdgeSwipeGesture = 0
-
-[bootstrap.macos.defaults."com.apple.driver.AppleBluetoothMultitouch.trackpad"]
-# Disable the five-finger pinch gesture on an Apple Bluetooth trackpad.
-TrackpadFiveFingerPinchGesture = 0
-# Disable the four-finger pinch gesture on an Apple Bluetooth trackpad.
-TrackpadFourFingerPinchGesture = 0
-# Disable the four-finger vertical swipe gesture on an Apple Bluetooth trackpad.
-TrackpadFourFingerVertSwipeGesture = 0
-# Disable the three-finger vertical swipe gesture on an Apple Bluetooth trackpad.
-TrackpadThreeFingerVertSwipeGesture = 0
-# Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
-TrackpadTwoFingerFromRightEdgeSwipeGesture = 0
+"com.apple.driver.AppleBluetoothMultitouch.trackpad" = {
+  # Disable the five-finger pinch gesture on an Apple Bluetooth trackpad.
+  TrackpadFiveFingerPinchGesture = 0,
+  # Disable the four-finger pinch gesture on an Apple Bluetooth trackpad.
+  TrackpadFourFingerPinchGesture = 0,
+  # Disable the four-finger vertical swipe gesture on an Apple Bluetooth trackpad.
+  TrackpadFourFingerVertSwipeGesture = 0,
+  # Disable the three-finger vertical swipe gesture on an Apple Bluetooth trackpad.
+  TrackpadThreeFingerVertSwipeGesture = 0,
+  # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
+  TrackpadTwoFingerFromRightEdgeSwipeGesture = 0,
+}
