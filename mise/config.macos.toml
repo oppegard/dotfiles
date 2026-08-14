@@ -65,19 +65,21 @@ NSAutomaticSpellingCorrectionEnabled = false
 
 [bootstrap.macos.defaults."com.apple.Music"]
 # https://macos-defaults.com/misc/userwantsplaybacknotifications.html
-# Do not show a notification when a new song starts.
 # `killall Music`
+
+# Do not show a notification when a new song starts.
 userWantsPlaybackNotifications = false
 
 [bootstrap.macos.defaults."com.apple.dock"]
 # Source: https://macos-defaults.com/dock/
 # Relaunch Dock after applying: killall Dock.
-orientation = "left"
-show-recents = false
-# Show an indicator below each open application in the Dock.
-show-process-indicators = true
+
 # Switch to the Space containing an application's open windows when switching apps.
 appswitcher-all-displays = true
+orientation = "left"
+# Show an indicator below each open application in the Dock.
+show-process-indicators = true
+show-recents = false
 # Start the screen saver from the bottom-left Hot Corner.
 wvous-bl-corner = 5
 # Do not require a modifier key for the bottom-left Hot Corner.
@@ -90,14 +92,15 @@ wvous-br-modifier = 0
 [bootstrap.macos.defaults."com.apple.finder"]
 # https://macos-defaults.com/finder/
 # `killall Finder`
+
 # Use List view for folders without a custom view.
 FXPreferredViewStyle = "Nlsv"
-# Keep folders on top when sorting by name.
-_FXSortFoldersFirst = true
 # Open new Finder windows to the Home folder.
 NewWindowTarget = "PfHm"
 # Hide Recent Tags in the Finder sidebar.
 ShowRecentTags = false
+# Keep folders on top when sorting by name.
+_FXSortFoldersFirst = true
 
 [bootstrap.macos.defaults."com.apple.screencapture"]
 # https://macos-defaults.com/screenshots/
@@ -137,10 +140,10 @@ showToolbarButtonShapes = true
 showWindowTitlebarIcons = true
 
 [bootstrap.macos.defaults."com.apple.AppleMultitouchTrackpad"]
-# Disable Force Click and haptic feedback.
-ForceSuppressed = true
 # Keep the accompanying haptic-detent state disabled.
 ActuateDetents = 0
+# Disable Force Click and haptic feedback.
+ForceSuppressed = true
 # Disable the five-finger pinch gesture.
 TrackpadFiveFingerPinchGesture = 0
 # Disable the four-finger pinch gesture.

@@ -1,0 +1,17 @@
+# Format and validate mise configuration files with mise's maintained schema.
+[[schemas]]
+path = "https://mise.jdx.dev/schema/mise.json"
+include = [
+  "mise.toml",
+  ".mise.toml",
+  "mise.*.toml",
+  ".mise.*.toml",
+  "**/.mise/**/*.toml",
+  "**/mise/**/*.toml",
+]
+
+[[schemas.overrides]]
+targets = ["bootstrap.macos.defaults.*"]
+
+[schemas.overrides.format.rules]
+table-keys-order = "ascending"
