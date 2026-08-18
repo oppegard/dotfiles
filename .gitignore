@@ -1,5 +1,6 @@
 Alfred/Alfred.alfredpreferences/remote/
 .idea/
+.vscode/
 .DS_Store
 zshrc.local
 .zshrc.local
