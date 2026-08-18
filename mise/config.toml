@@ -1,6 +1,6 @@
 [settings]
 experimental = true
-idiomatic_version_file_enable_tools = ["node"]
+idiomatic_version_file_enable_tools = ["node", "ruby"]
 dotfiles.root = "~/.dotfiles"
 dotfiles.default_mode = "symlink"
 
