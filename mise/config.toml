@@ -39,6 +39,7 @@ compile = false
 [tools]
 bun = "latest"
 go = "latest"
+gum = "latest"
 node = "24"
 ruby = "4"
 tombi = "latest"
