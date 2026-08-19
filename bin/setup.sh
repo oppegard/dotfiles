@@ -19,8 +19,10 @@ export DOTFILES_DIR
 # Required before the first heading; setup may run from a shell without mise activation.
 mise -C "$DOTFILES_DIR/mise" install gum
 
-gum() {
-  mise -C "$DOTFILES_DIR/mise" exec gum -- gum "$@"
+gum_print() {
+  mise -C "$DOTFILES_DIR/mise" exec gum -- gum style --foreground 212 \
+    --border-foreground 212 --border double --align center \
+    --margin "1 0" --padding "1 2" --bold --width 72 "$@"
 }
 
 mkdir -p \
@@ -34,10 +36,8 @@ chmod 700 "$HOME/.ssh"
 __os="$(uname -s)"
 ### Mac Setup ###
 if [ "$__os" = "Darwin" ]; then
-gum style \
-  --foreground 208 --border-foreground 208 --border double \
-  --align center --margin "1 0" --padding "1 2" \
-  "☕️☕️☕️  BREWING  ☕️☕️☕️"
+  gum_print "☕️☕️☕️  BREWING  ☕️☕️☕️"
+
   BREWFILE="$DOTFILES_DIR/Brewfile"
   brew bundle install --file="$BREWFILE"
 
@@ -47,10 +47,7 @@ gum style \
   mise run -C "$DOTFILES_DIR/mise" betterdisplay:export
 fi
 
-gum style \
-  --foreground 99 --border-foreground 99 --border double \
-  --align center --margin "1 0" --padding "1 2" \
-  "☇☇☇  STOWING  ☇☇☇"
+gum_print "📦📦📦  STOWING  📦📦📦"
 STOW_DIR="$DOTFILES_DIR/stow"
 if [ ! -f "$STOW_DIR/.stowrc" ]; then
   echo "ERROR: $STOW_DIR/.stowrc not found" >&2
@@ -66,17 +63,11 @@ for stow_pkg in "${stow_pkgs[@]}"; do
     stow "$stow_pkg"
 done
 
-gum style \
-  --foreground 212 --border-foreground 212 --border double \
-  --align center --margin "1 0" --padding "1 2" \
-  "👨‍🍳👨‍🍳👨‍🍳  MISE BOOTSTRAP  👨‍🍳👨‍🍳👨‍🍳"
+gum_print "👨‍🍳👨‍🍳👨‍🍳  MISE BOOTSTRAP  👨‍🍳👨‍🍳👨‍🍳"
 cd "$DOTFILES_DIR/mise"
 mise bootstrap
 
-gum style \
-  --foreground 99 --border-foreground 99 --border double \
-  --align center --margin "1 0" --padding "1 2" \
-  "☇☇☇  STOWING WORK  ☇☇☇"
+gum_print "💼💼💼  STOWING WORK  💼💼💼"
 DOTFILES_WORK_DIR="${DOTFILES_DIR}-work"
 if [ -d "$DOTFILES_WORK_DIR" ]; then
   echo
