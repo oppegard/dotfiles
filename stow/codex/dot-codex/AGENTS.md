@@ -11,6 +11,7 @@
 - When asked to create a handoff, save it to `/tmp/handoffs/YYYYMMDD-<kebab-case-topic>.md` using the local date; create the directory if needed and never overwrite an existing file.
 - If asked to create a worktree, do it under `/tmp/worktrees/<git-repo-name>/YYYMMDD-kebab-case-topic>`.
 - Prefer `gh` CLI when appropriate.
+- When asked for guidance regarding Agile, XP, or Consulting, use the [Pivotal Alumni Codex](https://github.com/alumni-codex/alumni-codex.github.io) as a resource.
 
 ## Instruction Discovery
 
