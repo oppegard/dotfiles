@@ -36,8 +36,8 @@ __os="$(uname -s)"
 if [ "$__os" = "Darwin" ]; then
 gum style \
   --foreground 208 --border-foreground 208 --border double \
-  --align center --width 80 --margin "1 0" --padding "1 2" \
-  "☕  BREWING  ☕"
+  --align center --margin "1 0" --padding "1 2" \
+  "☕️☕️☕️  BREWING  ☕️☕️☕️"
   BREWFILE="$DOTFILES_DIR/Brewfile"
   brew bundle install --file="$BREWFILE"
 
@@ -49,8 +49,8 @@ fi
 
 gum style \
   --foreground 99 --border-foreground 99 --border double \
-  --align center --width 80 --margin "1 0" --padding "1 2" \
-  "⌁  STOWING  ⌁"
+  --align center --margin "1 0" --padding "1 2" \
+  "☇☇☇  STOWING  ☇☇☇"
 STOW_DIR="$DOTFILES_DIR/stow"
 if [ ! -f "$STOW_DIR/.stowrc" ]; then
   echo "ERROR: $STOW_DIR/.stowrc not found" >&2
@@ -68,15 +68,15 @@ done
 
 gum style \
   --foreground 212 --border-foreground 212 --border double \
-  --align center --width 80 --margin "1 0" --padding "1 2" \
-  "✦  MISE BOOTSTRAP  ✦"
+  --align center --margin "1 0" --padding "1 2" \
+  "👨‍🍳👨‍🍳👨‍🍳  MISE BOOTSTRAP  👨‍🍳👨‍🍳👨‍🍳"
 cd "$DOTFILES_DIR/mise"
 mise bootstrap
 
 gum style \
   --foreground 99 --border-foreground 99 --border double \
-  --align center --width 80 --margin "1 0" --padding "1 2" \
-  "⌁  STOWING WORK  ⌁"
+  --align center --margin "1 0" --padding "1 2" \
+  "☇☇☇  STOWING WORK  ☇☇☇"
 DOTFILES_WORK_DIR="${DOTFILES_DIR}-work"
 if [ -d "$DOTFILES_WORK_DIR" ]; then
   echo
