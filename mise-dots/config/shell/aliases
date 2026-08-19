@@ -1,6 +1,8 @@
 __os="$(uname -s)"
 
 alias ll='ls -l'
+alias lzd='lazydocker'
+alias lzg='lazygit'
 
 if [ "$__os" = "Darwin" ]; then
   alias cat='bat'
