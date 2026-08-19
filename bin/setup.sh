@@ -36,7 +36,7 @@ chmod 700 "$HOME/.ssh"
 __os="$(uname -s)"
 ### Mac Setup ###
 if [ "$__os" = "Darwin" ]; then
-  gum_print "☕️☕️☕️  BREWING  ☕️☕️☕️"
+  gum_print "☕️ ☕️ ☕️  BREWING  ☕️ ☕️ ☕️"
 
   BREWFILE="$DOTFILES_DIR/Brewfile"
   brew bundle install --file="$BREWFILE"
@@ -47,7 +47,7 @@ if [ "$__os" = "Darwin" ]; then
   mise run -C "$DOTFILES_DIR/mise" betterdisplay:export
 fi
 
-gum_print "📦📦📦  STOWING  📦📦📦"
+gum_print "📦 📦 📦  STOWING  📦 📦 📦"
 STOW_DIR="$DOTFILES_DIR/stow"
 if [ ! -f "$STOW_DIR/.stowrc" ]; then
   echo "ERROR: $STOW_DIR/.stowrc not found" >&2
@@ -63,11 +63,13 @@ for stow_pkg in "${stow_pkgs[@]}"; do
     stow "$stow_pkg"
 done
 
-gum_print "👨‍🍳👨‍🍳👨‍🍳  MISE BOOTSTRAP  👨‍🍳👨‍🍳👨‍🍳"
-cd "$DOTFILES_DIR/mise"
-mise bootstrap
+gum_print "👨‍🍳 👨‍🍳 👨‍🍳  MISE BOOTSTRAP  👨‍🍳 👨‍🍳 👨‍🍳"
+mise -C "$DOTFILES_DIR/mise" bootstrap
 
-gum_print "💼💼💼  STOWING WORK  💼💼💼"
+gum_print "⬆️ ⬆️ ⬆️  MISE UPGRADE  ⬆️ ⬆️ ⬆️"
+mise -C "$DOTFILES_DIR/mise" upgrade
+
+gum_print "💼 💼 💼  STOWING WORK  💼 💼 💼"
 DOTFILES_WORK_DIR="${DOTFILES_DIR}-work"
 if [ -d "$DOTFILES_WORK_DIR" ]; then
   echo
