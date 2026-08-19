@@ -38,7 +38,7 @@ compile = false
 
 [tools]
 bun = "latest"
-go = "latest"
+go = "1.26"
 gum = "latest"
 lazydocker = "latest"
 lazygit = "latest"
