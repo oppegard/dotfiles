@@ -43,6 +43,18 @@ run = '"{{ env.HOME }}/.dotfiles/bin/betterdisplay-prefs" import'
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/bash"
 
+# Apple's local sudo PAM override is included by /etc/pam.d/sudo and survives
+# macOS updates. This lets sudo offer Touch ID in Terminal.app, Ghostty, and
+# iTerm2 while retaining Apple's normal password fallback.
+[bootstrap.files."/etc/pam.d/sudo_local"]
+content = """
+# sudo_local: local config file which survives system update and is included for sudo
+auth       sufficient     pam_tid.so
+"""
+owner = "root"
+group = "wheel"
+mode = "0444"
+
 [bootstrap.macos.trackpad]
 tap_to_click = true
 

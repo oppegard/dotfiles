@@ -106,21 +106,6 @@ In iTerm2 have to ⌘ + ←Delete (⌘ + backspace) to send hex codes `0x18 0x7f
 
 Detailed S.O. replies: [1](https://stackoverflow.com/a/32340345), [2](https://stackoverflow.com/questions/6205157/how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line/29403520#29403520).
 
-### Enable TouchID Auth for `sudo` commands in iTerm2 ([source](https://antkowiak.it/en/mac-os-en/enable-touchid-for-sudo-in-iterm-2/))
-
-1. Add `auth sufficient pam_tid.so` to the **top** of `/etc/pam.d/sudo`
-1. Go to iTerm2 Preferences (⌘,). In Advanced(⚙) Tab, search for "Allow sessions to survive logging out and back in." and set the value to No.
-1. Restart iTerm2 (maybe?)
-
-### Rectangle.app Prefs
-
-Mise copies `mise-dots/macos/rectangle/RectangleProConfig.json` into Rectangle
-Pro's application support directory during bootstrap. Rectangle may rename the
-copy after importing it.
-
-After changing preferences, export them from Rectangle Pro and replace the
-source file in this repository.
-
 ### BetterDisplay Prefs
 
 On macOS, `bin/setup.sh` runs `mise run betterdisplay:export` to update the
