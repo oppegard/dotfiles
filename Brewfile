@@ -17,7 +17,6 @@ brew "pstree"
 brew "poppler" # pdf tools for codex
 brew "ripgrep"
 brew "screen"
-brew "shellcheck"
 brew "starship"
 brew "stow"
 brew "tmux"
