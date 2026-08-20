@@ -37,6 +37,7 @@ compile = false
 "~/.ssh/config" = "~/.dotfiles/mise-dots/ssh/config"
 
 [tools]
+actionlint = "latest"
 bun = "latest"
 go = "1.26"
 gum = "latest"
