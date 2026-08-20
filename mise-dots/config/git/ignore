@@ -2,6 +2,7 @@
 .envrc
 .idea/
 .tool-versions
+.vscode/
 mise.local.toml
 scratch/
 tmp/
