@@ -16,6 +16,8 @@ SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
 DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
 export DOTFILES_DIR
 
+git -C "$DOTFILES_DIR" pull
+
 # Required before the first heading; setup may run from a shell without mise activation.
 mise -C "$DOTFILES_DIR/mise" install gum
 
