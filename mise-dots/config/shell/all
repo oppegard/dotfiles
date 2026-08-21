@@ -1,7 +1,12 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Detect the OS once so every sourced shell fragment shares one portable lookup.
+__os="$(uname -s)"
+
 source "$HOME/.config/shell/envs"
 source "$HOME/.config/shell/aliases"
 source "$HOME/.config/shell/functions"
 source "$HOME/.config/shell/inits"
+
+unset __os

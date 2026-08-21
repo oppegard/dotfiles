@@ -1,6 +1,5 @@
 __shell_name="${ZSH_VERSION:+zsh}"
 __shell_name="${__shell_name:-bash}"
-__os="$(uname -s)"
 
 if command -v brew &>/dev/null; then
   if [[ "$__shell_name" == "bash" ]]; then
@@ -60,4 +59,3 @@ if command -v zoxide &>/dev/null; then
 fi
 
 unset __shell_name
-unset __os

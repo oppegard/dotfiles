@@ -166,7 +166,7 @@ tsl() {
 }
 
 
-if [ "$os" = "Linux" ]; then
+if [ "$__os" = "Linux" ]; then
     xdg_desktop_list() {
       local xdh="${XDG_DATA_HOME:-$HOME/.local/share}"
       local xds="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"

@@ -1,4 +1,3 @@
-__os="$(uname -s)"
 export PATH="$PATH:$HOME/.local/bin"
 export EDITOR="nvim"
 
@@ -16,5 +15,3 @@ export SHELL_START_TIME=$(date)
 if [ "$__os" = "Darwin" ]; then
   export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 fi
-
-unset __os
