@@ -1,2 +1,3 @@
-source ~/.config/shell/all
+# shellcheck shell=bash
 
+source ~/.config/shell/all

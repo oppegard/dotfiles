@@ -1,3 +1,16 @@
+# shellcheck shell=bash
+
+# Show how long the current shell has been running without spawning a process.
+shell-age() {
+  local total
+  total=$SECONDS
+  printf '%dd %02dh %02dm %02ds\n' \
+    "$((total / 86400))" \
+    "$((total % 86400 / 3600))" \
+    "$((total % 3600 / 60))" \
+    "$((total % 60))"
+}
+
 # Transcode a video to a good-balance 1080p that's great for sharing online
 transcode-video-1080p() {
   ffmpeg -i "$1" -vf scale=1920:1080 -c:v libx264 -preset fast -crf 23 -c:a copy "${1%.*}-1080p.mp4"
@@ -38,18 +51,6 @@ img2png() {
   shift
 
   magick "$img" "$@" -strip -define png:compression-filter=5 \
-    -define png:compression-level=9 \
-    -define png:compression-strategy=1 \
-    -define png:exclude-chunk=all \
-    "${img%.*}-optimized.png"
-}
-
-# Transcode any image to compressed-but-lossless PNG
-img2png() {
-  img="$1"
-  shift
-
-  magick "$img" $@ -strip -define png:compression-filter=5 \
     -define png:compression-level=9 \
     -define png:compression-strategy=1 \
     -define png:exclude-chunk=all \
@@ -129,7 +130,8 @@ tdlm() {
       tmux send-keys -t "$TMUX_PANE" "cd '$dirpath' && tdl $ai" C-m
       first=false
     else
-      local pane_id=$(tmux new-window -c "$dirpath" -P -F '#{pane_id}')
+      local pane_id
+      pane_id=$(tmux new-window -c "$dirpath" -P -F '#{pane_id}') || return
       tmux send-keys -t "$pane_id" "tdl $ai" C-m
     fi
   done
