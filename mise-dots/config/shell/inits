@@ -38,6 +38,19 @@ if [ "$__os" = "Darwin" ]; then
 
 fi
 
+if [[ "$__shell_name" == "bash" ]]; then
+  # Exchange newly entered commands with other live Bash sessions before each prompt.
+  __sync_bash_history() {
+    history -a
+    history -n
+  }
+
+  # Register synchronization once so re-sourcing the shell does not duplicate the hook.
+  if [[ " ${PROMPT_COMMAND[*]-} " != *" __sync_bash_history "* ]]; then
+    PROMPT_COMMAND+=(__sync_bash_history)
+  fi
+fi
+
 if command -v starship &>/dev/null; then
   eval "$(starship init "$__shell_name")"
 fi
