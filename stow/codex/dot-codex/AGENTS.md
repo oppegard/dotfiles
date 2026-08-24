@@ -6,6 +6,7 @@
 - When writing commit messages:
     - Limit title <= 50 chars and wrap body at 72 chars.
     - Use the "Conventional Commits 1.0.0" spec.
+    - Use the body to explain what and why vs. how. Assume the code explains the how; the message must explain the context and reasoning. 
 - Do NOT under ANY circumstances destroy or mutate infrastructucture by invoking tools or APIs (e.g. `aws rds delete-db-instance`, `terraform apply`, `npx wrangler delete`, `curl -X DELETE`).  Make full use of tools/MCPs/APIs to query in a read-only manner (e.g. `terraform show`, `aws ec2 describe-instances`); be mindful of rate-limiting.
 - When creating a handoff, save it to `/tmp/handoffs/YYYYMMDD-<kebab-case-topic>.md` using the local date; create the directory if needed and never overwrite an existing file.
 - You may create worktrees under `/tmp/worktrees/<git-repo-name>/YYYMMDD-kebab-case-topic>`.
