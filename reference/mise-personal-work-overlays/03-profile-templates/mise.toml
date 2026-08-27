@@ -1,0 +1,14 @@
+[settings]
+experimental = true
+dotfiles.root = "."
+
+[dotfiles]
+"~/.gitconfig" = "common/gitconfig"
+
+[dotfiles."~/.codex/config.toml"]
+source = "templates/codex.toml"
+mode = "template"
+
+[dotfiles."~/.config/git/identity"]
+source = "templates/git-identity"
+mode = "template"

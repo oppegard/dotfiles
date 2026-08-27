@@ -1,0 +1,5 @@
+[include]
+	path = ~/.config/git/identity
+
+[user]
+	useConfigOnly = true

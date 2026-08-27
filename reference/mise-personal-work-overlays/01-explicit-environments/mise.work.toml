@@ -1,0 +1,3 @@
+[dotfiles]
+"~/.codex/work.config.toml" = "work/codex-profile.toml"
+"~/.config/git/identity" = "work/git-identity"

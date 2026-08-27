@@ -1,0 +1,7 @@
+[settings]
+experimental = true
+dotfiles.default_mode = "symlink"
+dotfiles.root = "."
+
+[dotfiles]
+"~/.gitconfig" = "common/gitconfig"

@@ -1,0 +1,5 @@
+[projects."~/src/work"]
+trust_level = "trusted"
+
+[mcp_servers.company-docs]
+url = "https://docs.example.test/mcp"

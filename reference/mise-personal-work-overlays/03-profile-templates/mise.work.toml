@@ -1,0 +1,4 @@
+[vars]
+profile = "work"
+git_email = "work@example.test"
+git_signing_key = "work-key"

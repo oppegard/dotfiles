@@ -1,0 +1,3 @@
+[user]
+	email = {{ vars.git_email }}
+	signingkey = {{ vars.git_signing_key }}
