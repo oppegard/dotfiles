@@ -4,6 +4,6 @@ dotfiles.default_mode = "symlink"
 dotfiles.root = "."
 
 [dotfiles]
-"~/.codex/config.toml" = "personal/codex-profile.toml"
+"~/.codex/config.toml" = "personal/codex.toml"
 "~/.gitconfig" = "common/gitconfig"
 "~/.config/git/identity" = "personal/git-identity"

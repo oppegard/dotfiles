@@ -30,8 +30,8 @@ mise -C "$fixture" -E work bootstrap dotfiles apply --yes
 grep -q 'work@example.test' "$HOME/.config/git/identity"
 test "$(git config --file "$HOME/.gitconfig" --includes --get user.email)" = \
   "work@example.test"
-grep -q 'company-docs' "$HOME/.codex/work.config.toml"
-CODEX_HOME="$HOME/.codex" codex --profile work mcp list >/dev/null
+grep -q 'company-docs' "$HOME/.codex/config.toml"
+CODEX_HOME="$HOME/.codex" codex features list >/dev/null
 
 mise -C "$fixture" -E work bootstrap dotfiles apply --yes
 mise -C "$fixture" -E work bootstrap dotfiles status --missing

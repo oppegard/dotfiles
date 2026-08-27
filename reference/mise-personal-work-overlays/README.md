@@ -4,8 +4,8 @@ These are three runnable implementations of personal/work configuration
 layering, grounded in `reference/mise-dotfiles-advanced-users.md`. Each version
 manages the same two examples:
 
-- Codex `~/.codex/config.toml` and native profile files, currently supplied by
-  Stow in this repository;
+- Codex in the ChatGPT desktop app, using `~/.codex/config.toml`, currently
+  supplied by Stow in this repository;
 - Git identity `~/.config/git/identity`, alongside the common Git files already
   supplied by Mise.
 
@@ -31,9 +31,9 @@ mise -C mise -E work bootstrap dotfiles apply
 
 More specifically:
 
-- migrate Codex from Stow as explicit per-file entries; keep the personal
-  defaults in `config.toml`, deploy a private `work.config.toml` overlay only
-  on work machines, and launch it with `codex --profile work`;
+- migrate Codex from Stow as one explicit `~/.codex/config.toml` entry; keep
+  the personal source as the default and have the work Mise environment
+  replace that source with the complete private work configuration;
 - make Git identity the second example: keep common Git behavior in the
   existing `mise-dots/gitconfig`, but move identity into a small profile-owned
   file included by that common config;
@@ -48,7 +48,7 @@ genuinely varies within one target.
 
 | Version | Concept | Advantages | Costs |
 | --- | --- | --- | --- |
-| [01 explicit environments](01-explicit-environments/) | `mise.toml` supplies personal defaults; `mise.work.toml` deploys Codex's native work overlay and overrides Git identity | Selection is visible, the Codex work file layers over personal defaults, work-only targets can be absent, and private sources remain separate | Setup must consistently pass `-E work`, and Codex work sessions must use `--profile work`; switching a machine back should unapply work-only targets |
+| [01 explicit environments](01-explicit-environments/) | `mise.toml` supplies personal sources; `mise.work.toml` replaces the Codex and Git identity sources | Selection is visible and versioned, ChatGPT reads the selected canonical Codex file without launch flags, and private sources remain separate | Setup must consistently pass `-E work`; the two complete Codex files may duplicate shared settings |
 | [02 local overlay](02-local-overlay/) | A gitignored `mise.local.toml` overrides target sources on one machine | Normal bootstrap needs no profile flag and the local choice can contain private paths | Important desired state is hidden and unversioned; onboarding needs a copy/edit step; stale local files are easy to forget |
 | [03 profile templates](03-profile-templates/) | Environment files set `vars.profile`; Mise renders common templates | Avoids duplicated files and works well for a few scalar differences | Personal and work concerns become interleaved, rendered copies can drift, and templates are awkward for large Codex files or private work policy |
 
@@ -76,10 +76,12 @@ reason to make every application's overlay conditional.
 
 - The examples use fake names, addresses, and keys. No work secret or real
   employer policy belongs on this public branch.
-- Codex officially supports `$CODEX_HOME/<profile>.config.toml` files selected
-  by `--profile`; use that native composition rather than inventing a merge
-  format. Do not put the legacy `profile = "work"` selector in `config.toml`.
-  See the [official Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+- For the ChatGPT desktop app, keep the effective configuration at the
+  user-level `~/.codex/config.toml`. Codex profile files require a CLI
+  `--profile` choice, so they do not satisfy this desktop-app use case. See
+  [official config basics](https://learn.chatgpt.com/docs/config-file/config-basic),
+  the [config reference](https://learn.chatgpt.com/docs/config-file/config-reference),
+  and the [current ChatGPT overview](https://learn.chatgpt.com/).
 - Codex's directory also contains sessions, caches, plugins, and credentials.
   Manage named files only.
 - Prefer symlinks for hand-edited source files. Use `copy` or `template` only

@@ -11,4 +11,6 @@ mise -C . bootstrap dotfiles apply
 ```
 
 Mise automatically loads the local file. The selection persists on the
-machine, but it is intentionally absent from version control.
+machine, but it is intentionally absent from version control. Either choice
+puts a complete config at `~/.codex/config.toml`, so ChatGPT can start from the
+desktop without profile flags.

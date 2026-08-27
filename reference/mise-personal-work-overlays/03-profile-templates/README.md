@@ -10,4 +10,6 @@ mise -C . -E work bootstrap dotfiles apply
 
 This is compact for scalar differences, but real Codex files tend to become a
 large conditional template. It also produces independently writable copies,
-so edits to the rendered target do not update the template source.
+so edits to the rendered target do not update the template source. The
+rendered target is the canonical `~/.codex/config.toml`, which makes this
+version compatible with ChatGPT desktop startup.

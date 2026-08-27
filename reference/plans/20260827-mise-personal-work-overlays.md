@@ -4,8 +4,8 @@
 
 Prototype three reviewable ways to manage personal and work variants with
 Mise native dotfiles. Exercise two real configurations from this repository:
-Codex, which is still managed by Stow, and Git identity, whose common files
-are already managed by Mise.
+Codex in the ChatGPT desktop app, which is still managed by Stow, and Git
+identity, whose common files are already managed by Mise.
 
 ## Design
 
@@ -19,6 +19,10 @@ the reviewer's real Codex or Git configuration.
    one machine without requiring `-E work` on every invocation.
 3. Profile-driven templates: one target map renders personal or work content
    from a profile variable.
+
+The Codex case must work when ChatGPT starts from the desktop, without CLI
+flags. Every alternative therefore places the effective, complete file at
+`~/.codex/config.toml`; CLI-only Codex profile selection is out of scope.
 
 The comparison will select one production direction and explain why the other
 two remain useful patterns rather than interchangeable solutions.
