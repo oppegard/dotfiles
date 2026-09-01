@@ -45,7 +45,6 @@ cask "opencode-desktop"
 cask "rectangle-pro"
 cask "soundsource"
 cask "sublime-text"
-cask "thaw"
 cask "tuna"
 cask "visual-studio-code"
 
