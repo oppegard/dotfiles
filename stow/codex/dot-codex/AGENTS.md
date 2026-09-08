@@ -21,6 +21,10 @@
 - Update the markdown file as progress is made.
 - Do not begin coding until the plan has been reviewed and approved.
 - If creating a "handoff" doc, save it to `doc{s}/handoffs/YYYYMMDD-<kebab-case-topic>.md` using the local date; create the directory if needed and never overwrite an existing file.
+- PRs:
+  - When creating or updating a PR for a planned change, include the approved plan and current task checklist at the end of the PR description in a collapsed `<details>` section titled "Implementation Plan".
+  - Keep the main PR description concise and update the collapsed plan as work progresses.
+  - If the plan file was deleted for git, recover its latest contents git history and post/update the PR's "Implementation Plan".
 
 ## Instruction Discovery
 
