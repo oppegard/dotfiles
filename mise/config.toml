@@ -13,7 +13,7 @@ compile = false
 "~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"
 "~/.config/mise/config.linux.toml" = "~/src/dotfiles/mise/config.linux.toml"
 "~/.config/mise/config.macos.toml" = "~/src/dotfiles/mise/config.macos.toml"
-"~/.config/mise/miserc.toml" = "~/src/dotfiles/mise/.miserc.toml"
+"~/.config/mise/miserc.toml" = "~/src/dotfiles/mise/miserc.toml"
 ### End bootstraps
 
 "~/.bash_profile" = "~/.dotfiles/mise-dots/bash_profile"

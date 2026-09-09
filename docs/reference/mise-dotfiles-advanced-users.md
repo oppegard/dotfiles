@@ -113,7 +113,7 @@ are absent from the base table rather than templated into empty output.
 
 ### 4. True OS layers with ownership-aware modes: jonnyasmith
 
-`.miserc.toml` enables early `auto_env`, which loads `mise.macos.toml`,
+`miserc.toml` enables early `auto_env`, which loads `mise.macos.toml`,
 `mise.linux.toml`, or `mise.windows.toml`:
 [early config](https://github.com/jonnyasmith/dotfiles/blob/8a208b9335759500bcf8f0e08ebe39dc495ec11e/.miserc.toml#L1-L4).
 The base `[dotfiles]` table self-manages all global mise config files and uses:
