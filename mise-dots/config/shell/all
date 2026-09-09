@@ -7,6 +7,7 @@
 __os="$(uname -s)"
 
 source "$HOME/.config/shell/envs"
+[[ -r "$HOME/.config/shell/local" ]] && source "$HOME/.config/shell/local"
 source "$HOME/.config/shell/aliases"
 source "$HOME/.config/shell/functions"
 source "$HOME/.config/shell/inits"

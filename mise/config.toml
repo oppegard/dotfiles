@@ -21,8 +21,8 @@ builtin = "history-watch"
 "~/.bash_profile" = "~/.dotfiles/mise-dots/bash_profile"
 "~/.bashrc" = "~/.dotfiles/mise-dots/bashrc"
 "~/.bunfig.toml" = "~/.dotfiles/mise-dots/bunfig.toml"
-"~/.codex/config.toml" = { mode = "track" }
-"~/.codex/rules/default.rules" = { mode = "track" }
+"~/.codex/config.toml" = { mode = "track", variants = [{ profile = "work" }] }
+"~/.codex/rules/default.rules" = { mode = "track", variants = [{ profile = "work" }] }
 "~/.config/btop" = "~/.dotfiles/mise-dots/config/btop"
 "~/.config/curlrc" = "~/.dotfiles/mise-dots/config/curlrc"
 "~/.config/ghostty" = "~/.dotfiles/mise-dots/config/ghostty"
