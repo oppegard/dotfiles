@@ -25,6 +25,9 @@ if command -v fzf &>/dev/null; then
   fi
 fi
 
+# OrbStack
+source ~/.orbstack/shell/init.bash 2>/dev/null || :
+
 # 1Password
 #if [ -f "$HOME/.config/op/plugins.sh" ]; then
 #  source "$HOME/.config/op/plugins.sh"
