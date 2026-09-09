@@ -6,7 +6,6 @@ brew "btop"
 brew "coreutils"
 brew "ffmpeg" # because it's always handy
 brew "fzf"
-brew "gh"
 brew "git"
 brew "git-lfs"
 brew "gitleaks"

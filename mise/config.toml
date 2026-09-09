@@ -1,11 +1,20 @@
 [settings]
-experimental = true
-idiomatic_version_file_enable_tools = ["node", "ruby"]
 dotfiles.root = "~/.dotfiles"
 dotfiles.default_mode = "symlink"
+experimental = true
+history.describe_command = '''
+codex exec --sandbox read-only --ephemeral --color never \
+ --skip-git-repo-check --ignore-user-config \
+ --model gpt-5.6-luna --config 'model_reasoning_effort="none"' \
+ 'Describe this change to my configuration files in one line of at most 120 characters, plain text, no quotes.'"
+'''
+idiomatic_version_file_enable_tools = ["node", "ruby"]
 
 [settings.ruby]
 compile = false
+
+[bootstrap.services.mise-history]
+builtin = "history-watch"
 
 [dotfiles]
 ### Bootstraps needs to refer to real path of ~/src/dotfiles
@@ -19,6 +28,7 @@ compile = false
 "~/.bash_profile" = "~/.dotfiles/mise-dots/bash_profile"
 "~/.bashrc" = "~/.dotfiles/mise-dots/bashrc"
 "~/.bunfig.toml" = "~/.dotfiles/mise-dots/bunfig.toml"
+"~/.codex/rules/default.rules" = { mode = "track" }
 "~/.config/btop" = "~/.dotfiles/mise-dots/config/btop"
 "~/.config/curlrc" = "~/.dotfiles/mise-dots/config/curlrc"
 "~/.config/ghostty" = "~/.dotfiles/mise-dots/config/ghostty"
@@ -39,6 +49,7 @@ compile = false
 [tools]
 actionlint = "latest"
 bun = "latest"
+gh = "latest"
 go = "1.26"
 gum = "latest"
 lazydocker = "latest"
