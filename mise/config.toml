@@ -18,9 +18,13 @@ compile = false
 builtin = "history-watch"
 
 [dotfiles]
+"~/.aws/config" = { mode = "track", variants = [{ profile = "work" }] }
 "~/.bash_profile" = "~/.dotfiles/mise-dots/bash_profile"
 "~/.bashrc" = "~/.dotfiles/mise-dots/bashrc"
 "~/.bunfig.toml" = "~/.dotfiles/mise-dots/bunfig.toml"
+"~/.claude/settings.json" = { mode = "track", variants = [{ profile = "work" }] }
+"~/.codex/.ignore" = "~/.dotfiles/mise-dots/codex/.ignore"
+"~/.codex/AGENTS.md" = "~/.dotfiles/mise-dots/codex/AGENTS.md"
 "~/.codex/config.toml" = { mode = "track", variants = [{ profile = "work" }] }
 "~/.codex/rules/default.rules" = { mode = "track", variants = [{ profile = "work" }] }
 "~/.config/btop" = "~/.dotfiles/mise-dots/config/btop"
@@ -44,6 +48,7 @@ builtin = "history-watch"
 "~/.npmrc" = "~/.dotfiles/mise-dots/npmrc"
 "~/.screenrc" = "~/.dotfiles/mise-dots/screenrc"
 "~/.ssh/config" = "~/.dotfiles/mise-dots/ssh/config"
+"~/src/drafthouse/mise.toml" = { mode = "track", variants = [{ profile = "work" }] }
 
 [tools]
 actionlint = "latest"

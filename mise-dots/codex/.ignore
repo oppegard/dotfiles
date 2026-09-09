@@ -1,3 +1,4 @@
+# ripgrep config
 sessions/
 archived_sessions/
 !.tmp/

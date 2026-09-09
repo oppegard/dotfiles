@@ -1,4 +1,0 @@
---target=$HOME
---dotfiles
---ignore .*\.bak\.\D+
---verbose=1

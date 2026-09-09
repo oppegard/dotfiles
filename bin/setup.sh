@@ -54,32 +54,8 @@ if [ "$__os" = "Darwin" ]; then
   mise run -C "$DOTFILES_DIR/mise" betterdisplay:export
 fi
 
-gum_print "📦 📦 📦  STOWING  📦 📦 📦"
-STOW_DIR="$DOTFILES_DIR/stow"
-if [ ! -f "$STOW_DIR/.stowrc" ]; then
-  echo "ERROR: $STOW_DIR/.stowrc not found" >&2
-  exit 1
-fi
-
-cd "$STOW_DIR"
-stow_pkgs=(
-  codex
-)
-for stow_pkg in "${stow_pkgs[@]}"; do
-    echo "stowing $stow_pkg"
-    stow "$stow_pkg"
-done
-
 gum_print "👨‍🍳 👨‍🍳 👨‍🍳  MISE BOOTSTRAP  👨‍🍳 👨‍🍳 👨‍🍳"
 mise -C "$DOTFILES_DIR/mise" bootstrap
 
 gum_print "⬆️ ⬆️ ⬆️  MISE UPGRADE  ⬆️ ⬆️ ⬆️"
 mise -C "$DOTFILES_DIR/mise" upgrade
-
-gum_print "💼 💼 💼  STOWING WORK  💼 💼 💼"
-DOTFILES_WORK_DIR="${DOTFILES_DIR}-work"
-if [ -d "$DOTFILES_WORK_DIR" ]; then
-  echo
-  echo "Running $DOTFILES_WORK_DIR/bin/setup.sh:"
-  "$DOTFILES_WORK_DIR/bin/setup.sh"
-fi
