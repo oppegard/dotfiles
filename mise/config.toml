@@ -32,7 +32,7 @@ builtin = "history-watch"
 "~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"
 "~/.config/mise/miserc.toml" = "~/src/dotfiles/mise/miserc.toml"
 "~/.config/ripgreprc" = "~/.dotfiles/mise-dots/config/ripgreprc"
-"~/.config/shell" = "~/.dotfiles/mise-dots/config/shell"
+"~/.config/shell" = { source = "~/.dotfiles/mise-dots/config/shell", mode = "symlink-each" }
 "~/.config/starship.toml" = "~/.dotfiles/mise-dots/config/starship.toml"
 "~/.config/tmux" = "~/.dotfiles/mise-dots/config/tmux"
 "~/.config/uv" = "~/.dotfiles/mise-dots/config/uv"
@@ -47,6 +47,7 @@ builtin = "history-watch"
 
 [tools]
 actionlint = "latest"
+age = "latest"
 bun = "latest"
 gh = "latest"
 go = "1.26"
