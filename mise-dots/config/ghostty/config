@@ -1,6 +1,7 @@
 font-family = "PragmataPro Mono"
 font-size = 16
 theme = "tokyonight"
+macos-icon = "holographic"
 # 128MB scrollback in bytes (per-terminal)
 scrollback-limit = 134217728
 
