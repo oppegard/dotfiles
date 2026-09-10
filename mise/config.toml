@@ -25,8 +25,8 @@ builtin = "history-watch"
 "~/.claude/settings.json" = { mode = "track", variants = [{ profile = "work" }] }
 "~/.codex/.ignore" = "~/.dotfiles/mise-dots/codex/.ignore"
 "~/.codex/AGENTS.md" = "~/.dotfiles/mise-dots/codex/AGENTS.md"
-"~/.codex/config.toml" = { mode = "track", variants = [{ profile = "work" }] }
-"~/.codex/rules/default.rules" = { mode = "track", variants = [{ profile = "work" }] }
+"~/.codex/config.toml" = { mode = "track", variants = [{ profile = "work" }, { profile = "home" }] }
+"~/.codex/rules/default.rules" = { mode = "track", variants = [{ profile = "work" }, { profile = "home" }] }
 "~/.config/btop" = "~/.dotfiles/mise-dots/config/btop"
 "~/.config/curlrc" = "~/.dotfiles/mise-dots/config/curlrc"
 "~/.config/ghostty" = "~/.dotfiles/mise-dots/config/ghostty"
