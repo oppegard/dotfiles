@@ -26,6 +26,41 @@ git -C "$DOTFILES_DIR" pull
 # Required before the first heading; setup may run from a shell without mise activation.
 mise -C "$DOTFILES_DIR/mise" install gum
 
+resolve_mise_env() {
+  local mise_env="${MISE_ENV:-}"
+
+  if [[ -z "$mise_env" ]]; then
+    mise_env="$(
+      mise -C "$DOTFILES_DIR/mise" exec -- printenv MISE_ENV 2>/dev/null || :
+    )"
+  fi
+
+  if [[ -z "$mise_env" ]]; then
+    if [[ ! -t 0 ]]; then
+      echo "ERROR: set MISE_ENV=home or MISE_ENV=work when running non-interactively." >&2
+      return 1
+    fi
+
+    if ! mise_env="$(
+      mise -C "$DOTFILES_DIR/mise" exec gum -- \
+        gum choose --header "Select the mise environment:" home work
+    )"; then
+      echo "ERROR: mise environment selection was cancelled." >&2
+      return 1
+    fi
+  fi
+
+  if [[ ! "$mise_env" =~ ^(home|work)$ ]]; then
+    echo "ERROR: MISE_ENV must be home or work." >&2
+    return 1
+  fi
+
+  printf '%s\n' "$mise_env"
+}
+
+MISE_ENV="$(resolve_mise_env)"
+export MISE_ENV
+
 gum_print() {
   mise -C "$DOTFILES_DIR/mise" exec gum -- gum style --foreground 212 \
     --border-foreground 212 --border double --align center \

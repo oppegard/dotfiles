@@ -7,7 +7,7 @@ history.describe_command = '''
 codex exec --sandbox read-only --ephemeral --color never \
  --skip-git-repo-check --ignore-user-config \
  --model gpt-5.6-luna --config 'model_reasoning_effort="none"' \
- 'Describe this change to my configuration files in one line of at most 120 characters, plain text, no quotes.'"
+ 'Describe this change to my configuration files in one line of at most 120 characters, plain text, no quotes.'
 '''
 idiomatic_version_file_enable_tools = ["node", "ruby"]
 
@@ -34,7 +34,7 @@ builtin = "history-watch"
 "~/.config/mise/config.linux.toml" = "~/src/dotfiles/mise/config.linux.toml"
 "~/.config/mise/config.macos.toml" = "~/src/dotfiles/mise/config.macos.toml"
 "~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"
-"~/.config/mise/miserc.toml" = "~/src/dotfiles/mise/miserc.toml"
+"~/.config/mise/miserc.toml" = { source = "~/src/dotfiles/mise/miserc.toml.tera", mode = "template" }
 "~/.config/ripgreprc" = "~/.dotfiles/mise-dots/config/ripgreprc"
 "~/.config/shell" = { source = "~/.dotfiles/mise-dots/config/shell", mode = "symlink-each" }
 "~/.config/starship.toml" = "~/.dotfiles/mise-dots/config/starship.toml"
