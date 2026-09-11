@@ -33,3 +33,9 @@ At session start find every `AGENTS.md` from current working directory up to
 filesystem root, including this file. Read all found files. Apply broadest
 first, then narrower files. Deeper instructions add to or override parent
 instructions.
+
+## User Input
+
+When available, use `request_user_input` for material decisions unresolved by
+repository context. Ask 1–3 concise questions with explicit options. Proceed
+autonomously on low-risk choices.
