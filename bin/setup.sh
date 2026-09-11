@@ -87,8 +87,7 @@ __os="$(uname -s)"
 if [ "$__os" = "Darwin" ]; then
   gum_print "☕️ ☕️ ☕️  BREWING  ☕️ ☕️ ☕️"
 
-  BREWFILE="$DOTFILES_DIR/Brewfile"
-  brew bundle install --file="$BREWFILE"
+  brew bundle install --file="$DOTFILES_DIR/Brewfile"
   brew cleanup # If lots of warnings, run `brew upgrade`
 
   gum_print "🍎️ 🍎️ 🍎️  MISE Mac Tasks  🍎️ 🍎️ 🍎️"
