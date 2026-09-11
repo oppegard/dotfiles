@@ -74,23 +74,23 @@ mkdir -p \
   "$HOME/.codex" \
   "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
-  
-__os="$(uname -s)"
-### Mac Setup ###
-if [ "$__os" = "Darwin" ]; then
-  gum_print "☕️ ☕️ ☕️  BREWING  ☕️ ☕️ ☕️"
-
-  BREWFILE="$DOTFILES_DIR/Brewfile"
-  brew bundle install --file="$BREWFILE"
-
-   brew cleanup
-   # If lots of warnings, run `brew upgrade`
-
-  mise run -C "$DOTFILES_DIR/mise" betterdisplay:export
-fi
 
 gum_print "👨‍🍳 👨‍🍳 👨‍🍳  MISE BOOTSTRAP  👨‍🍳 👨‍🍳 👨‍🍳"
 mise -C "$DOTFILES_DIR/mise" bootstrap
 
 gum_print "⬆️ ⬆️ ⬆️  MISE UPGRADE  ⬆️ ⬆️ ⬆️"
 mise -C "$DOTFILES_DIR/mise" upgrade
+
+__os="$(uname -s)"
+
+### Mac Setup ###
+if [ "$__os" = "Darwin" ]; then
+  gum_print "☕️ ☕️ ☕️  BREWING  ☕️ ☕️ ☕️"
+
+  BREWFILE="$DOTFILES_DIR/Brewfile"
+  brew bundle install --file="$BREWFILE"
+  brew cleanup # If lots of warnings, run `brew upgrade`
+
+  gum_print "🍎️ 🍎️ 🍎️  MISE Mac Tasks  🍎️ 🍎️ 🍎️"
+  mise run -C "$DOTFILES_DIR/mise" betterdisplay:export
+fi
