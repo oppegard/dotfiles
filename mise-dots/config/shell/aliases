@@ -1,8 +1,7 @@
 # shellcheck shell=bash
 
-alias ll='ls -l'
-alias lzd='lazydocker'
-alias lzg='lazygit'
+alias ll='ls -la'
+alias ms='mise'
 
 if [ "$__os" = "Darwin" ]; then
   alias cat='bat'

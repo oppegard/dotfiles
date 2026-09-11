@@ -39,6 +39,8 @@ if [ "$__os" = "Darwin" ]; then
   # Try getting rid of below.. it was added for `docker pull <tab>` errors
   [[ -r /opt/homebrew/opt/bash-completion@2/etc/bash_completion.d/000_bash_completion_compat.bash ]] && . /opt/homebrew/opt/bash-completion@2/etc/bash_completion.d/000_bash_completion_compat.bash
 
+  eval "$(mise completion bash)"
+  complete -F _usage_complete_mise mise ms
 fi
 
 if [[ "$__shell_name" == "bash" ]]; then
