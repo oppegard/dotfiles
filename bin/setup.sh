@@ -94,7 +94,7 @@ if [ "$__os" = "Darwin" ]; then
   mise run -C "$DOTFILES_DIR/mise" betterdisplay:export
 
   # Make sure programs that are installed are run, so that I can configure them to open at login
-  open -a BetterDisplay
-  open -a Clocker
-  open -a SoundSource
+  open -g -a BetterDisplay
+  open -g -a Clocker
+  open -g -a SoundSource
 fi
