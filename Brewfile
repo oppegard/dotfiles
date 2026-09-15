@@ -23,6 +23,7 @@ brew "zoxide"
 
 cask "1password-cli"
 cask "bartender"
+cask "betterdisplay"
 cask "cleanshot"
 cask "claude-code"
 cask "codex"
@@ -42,6 +43,8 @@ cask "soundsource"
 cask "sublime-text"
 cask "tuna"
 cask "visual-studio-code"
+
+mas "Clocker", id: 1056643111
 
 # work
 brew "hashicorp/tap/terraform", trusted: true

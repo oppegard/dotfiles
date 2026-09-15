@@ -92,4 +92,9 @@ if [ "$__os" = "Darwin" ]; then
 
   gum_print "🍎️ 🍎️ 🍎️  MISE Mac Tasks  🍎️ 🍎️ 🍎️"
   mise run -C "$DOTFILES_DIR/mise" betterdisplay:export
+
+  # Make sure programs that are installed are run, so that I can configure them to open at login
+  open -a BetterDisplay
+  open -a Clocker
+  open -a SoundSource
 fi
