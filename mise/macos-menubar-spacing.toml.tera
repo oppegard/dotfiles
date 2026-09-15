@@ -1,0 +1,17 @@
+{% set item_spacing = 12 -%}
+{% set selection_padding = 12 -%}
+[bootstrap.macos.defaults."NSGlobalDomain"]
+NSStatusItemSelectionPadding = {{ selection_padding }} # Menu bar item padding; default is 16 or use `defaults delete`.
+NSStatusItemSpacing = {{ item_spacing }} # Menu bar item padding; default is 16 or use `defaults delete`.
+
+[[bootstrap.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSStatusItemSelectionPadding"
+host = "current"
+value = {{ selection_padding }}
+
+[[bootstrap.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSStatusItemSpacing"
+host = "current"
+value = {{ item_spacing }}
