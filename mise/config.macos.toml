@@ -73,6 +73,9 @@ tap_to_click = true
   NSAutomaticQuoteSubstitutionEnabled = false,
   # Do not correct spelling automatically.
   NSAutomaticSpellingCorrectionEnabled = false,
+  # Match Thaw's menu bar item spacing baseline.
+  NSStatusItemSpacing = 16,
+  NSStatusItemSelectionPadding = 16,
 }
 
 "com.apple.Music" = {
@@ -178,3 +181,15 @@ tap_to_click = true
   # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
   TrackpadTwoFingerFromRightEdgeSwipeGesture = 0,
 }
+
+[[bootstrap.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSStatusItemSpacing"
+host = "current"
+value = 16
+
+[[bootstrap.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSStatusItemSelectionPadding"
+host = "current"
+value = 16
