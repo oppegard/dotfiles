@@ -47,4 +47,3 @@ mas "Clocker", id: 1056643111
 
 # work
 brew "hashicorp/tap/terraform", trusted: true
-cask "terraform-linters/tap/tflint", trusted: true
