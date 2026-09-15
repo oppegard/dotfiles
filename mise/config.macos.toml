@@ -74,8 +74,8 @@ tap_to_click = true
   # Do not correct spelling automatically.
   NSAutomaticSpellingCorrectionEnabled = false,
   # Match Thaw's menu bar item spacing baseline.
-  NSStatusItemSpacing = 16,
-  NSStatusItemSelectionPadding = 16,
+  NSStatusItemSpacing = 12,
+  NSStatusItemSelectionPadding = 12,
 }
 
 "com.apple.Music" = {
@@ -186,10 +186,10 @@ tap_to_click = true
 domain = "NSGlobalDomain"
 key = "NSStatusItemSpacing"
 host = "current"
-value = 16
+value = 12 # default is 16, or use `unset`
 
 [[bootstrap.macos.defaults_entries]]
 domain = "NSGlobalDomain"
 key = "NSStatusItemSelectionPadding"
 host = "current"
-value = 16
+value = 12 # default is 16, or use `unset`
