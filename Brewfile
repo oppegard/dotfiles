@@ -44,6 +44,3 @@ cask "tuna"
 cask "visual-studio-code"
 
 mas "Clocker", id: 1056643111
-
-# work
-brew "hashicorp/tap/terraform", trusted: true

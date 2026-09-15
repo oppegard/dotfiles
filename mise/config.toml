@@ -51,6 +51,7 @@ builtin = "history-watch"
 "~/src/drafthouse/mise.toml" = { mode = "track", variants = [{ profile = "work" }] }
 
 [tools]
+"aqua:hashicorp/terraform" = "1.16.1"
 "aqua:terraform-linters/tflint" = "0.64.0"
 actionlint = "latest"
 age = "latest"
