@@ -22,11 +22,19 @@ builtin = "history-watch"
 "~/.bash_profile" = "~/.dotfiles/mise-dots/bash_profile"
 "~/.bashrc" = "~/.dotfiles/mise-dots/bashrc"
 "~/.bunfig.toml" = "~/.dotfiles/mise-dots/bunfig.toml"
-"~/.claude/settings.json" = { mode = "track", variants = [{ profile = "work" }] }
+"~/.claude/settings.json" = { mode = "track", variants = [
+  { profile = "work" },
+] }
 "~/.codex/.ignore" = "~/.dotfiles/mise-dots/codex/.ignore"
 "~/.codex/AGENTS.md" = "~/.dotfiles/mise-dots/codex/AGENTS.md"
-"~/.codex/config.toml" = { mode = "track", variants = [{ profile = "work" }, { profile = "home" }] }
-"~/.codex/rules/default.rules" = { mode = "track", variants = [{ profile = "work" }, { profile = "home" }] }
+"~/.codex/config.toml" = { mode = "track", variants = [
+  { profile = "work" },
+  { profile = "home" },
+] }
+"~/.codex/rules/default.rules" = { mode = "track", variants = [
+  { profile = "work" },
+  { profile = "home" },
+] }
 "~/.config/btop" = "~/.dotfiles/mise-dots/config/btop"
 "~/.config/curlrc" = "~/.dotfiles/mise-dots/config/curlrc"
 "~/.config/ghostty" = "~/.dotfiles/mise-dots/config/ghostty"
@@ -48,7 +56,9 @@ builtin = "history-watch"
 "~/.npmrc" = "~/.dotfiles/mise-dots/npmrc"
 "~/.screenrc" = "~/.dotfiles/mise-dots/screenrc"
 "~/.ssh/config" = "~/.dotfiles/mise-dots/ssh/config"
-"~/src/drafthouse/mise.toml" = { mode = "track", variants = [{ profile = "work" }] }
+"~/src/drafthouse/mise.toml" = { mode = "track", variants = [
+  { profile = "work" },
+] }
 
 [tools]
 "aqua:hashicorp/terraform" = "1.16.1"

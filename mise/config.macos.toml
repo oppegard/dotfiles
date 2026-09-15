@@ -61,135 +61,79 @@ tap_to_click = true
 
 [bootstrap.macos.defaults]
 "NSGlobalDomain" = {
-  # Always show scroll bars.
-  AppleShowScrollBars = "Always",
-  # Enable keyboard navigation with Tab and Shift-Tab.
-  AppleKeyboardUIMode = 2,
-  # Do not capitalize words automatically.
-  NSAutomaticCapitalizationEnabled = false,
-  # Do not replace double hyphens with smart dashes automatically.
-  NSAutomaticDashSubstitutionEnabled = false,
-  # Do not replace straight quotes with smart quotes automatically.
-  NSAutomaticQuoteSubstitutionEnabled = false,
-  # Do not correct spelling automatically.
-  NSAutomaticSpellingCorrectionEnabled = false,
-  # Match Thaw's menu bar item spacing baseline.
-  NSStatusItemSpacing = 12,
-  NSStatusItemSelectionPadding = 12,
+AppleShowScrollBars = "Always",
+AppleKeyboardUIMode = 2, # Enable keyboard navigation with Tab and Shift-Tab.
+NSAutomaticCapitalizationEnabled = false, # Do not capitalize words automatically.
+NSAutomaticDashSubstitutionEnabled = false, # Do not replace double hyphens with smart dashes automatically.
+NSAutomaticQuoteSubstitutionEnabled = false, # Do not replace straight quotes with smart quotes automatically.
+NSAutomaticSpellingCorrectionEnabled = false, # Do not correct spelling automatically.
+NSStatusItemSelectionPadding = 12, # Menu bar item padding; default is 16 or use `defaults delete`.
+NSStatusItemSpacing = 12, # Menu bar item spacing; default is 16 or use `defaults delete`.
 }
 
 "com.apple.Music" = {
-  # Do not show a notification when a new song starts.
-  userWantsPlaybackNotifications = false,
+userWantsPlaybackNotifications = false, # Do not show a notification when a new song starts.
 }
 
 "com.apple.dock" = {
-  # Switch to the Space containing an application's open windows when switching apps.
-  appswitcher-all-displays = true,
-  orientation = "left",
-  # Show an indicator below each open application in the Dock.
-  show-process-indicators = true,
-  show-recents = false,
-  # Start the screen saver from the bottom-left Hot Corner.
-  wvous-bl-corner = 5,
-  # Do not require a modifier key for the bottom-left Hot Corner.
-  wvous-bl-modifier = 0,
-  # Disable the bottom-right Hot Corner.
-  wvous-br-corner = 1,
-  # Do not require a modifier key for the bottom-right Hot Corner.
-  wvous-br-modifier = 0,
+appswitcher-all-displays = true, # Switch to the Space containing an application's open windows when switching apps.
+orientation = "left",
+show-process-indicators = true, # Show an indicator below each open application in the Dock.
+show-recents = false,
+wvous-bl-corner = 5, # Start the screen saver from the bottom-left Hot Corner.
+wvous-bl-modifier = 0, # Do not require a modifier key for the bottom-left Hot Corner.
+wvous-br-corner = 1, # Disable the bottom-right Hot Corner.
+wvous-br-modifier = 0, # Do not require a modifier key for the bottom-right Hot Corner.
 }
 
 "com.apple.finder" = {
-  # Use List view for folders without a custom view.
-  FXPreferredViewStyle = "Nlsv",
-  # Open new Finder windows to the Home folder.
-  NewWindowTarget = "PfHm",
-  # Hide Recent Tags in the Finder sidebar.
-  ShowRecentTags = false,
-  # Keep folders on top when sorting by name.
-  _FXSortFoldersFirst = true,
+FXPreferredViewStyle = "Nlsv", # Use List view for folders without a custom view.
+NewWindowTarget = "PfHm", # Open new Finder windows to the Home folder.
+ShowRecentTags = false, # Hide Recent Tags in the Finder sidebar.
+_FXSortFoldersFirst = true, # Keep folders on top when sorting by name.
 }
 
-"com.apple.screencapture" = {
-  # `killall SystemUIServer`
-  location = "~/Downloads/Screenshots",
+"com.apple.screencapture" = { # `killall SystemUIServer`
+location = "~/Downloads/Screenshots",
 }
 
-"com.apple.Safari" = {
-  # `killall Safari`
-  # Show the full website address.
-  ShowFullURLInSmartSearchField = true,
+"com.apple.Safari" = { # `killall Safari`
+ShowFullURLInSmartSearchField = true, # Show the full website address.
 }
 
-"com.apple.menuextra.clock" = {
-  # `killall SystemUIServer`
-  # Do not show the date in the menu bar clock.
-  ShowDate = 2,
-  # Do not show the day of the week in the menu bar clock.
-  ShowDayOfWeek = false,
+"com.apple.menuextra.clock" = { # `killall SystemUIServer`
+ShowDate = 2, # Do not show the date in the menu bar clock.
+ShowDayOfWeek = false, # Do not show the day of the week in the menu bar clock.
 }
 
 "com.apple.WindowManager" = {
-  # Do not move windows aside when clicking the desktop wallpaper.
-  EnableStandardClickToShowDesktop = false,
-  # Do not leave margins around tiled windows.
-  EnableTiledWindowMargins = false,
-  # Do not tile a window by dragging it to a screen edge.
-  EnableTilingByEdgeDrag = false,
-  # Do not use Option-drag to tile a window.
-  EnableTilingOptionAccelerator = false,
-  # Do not tile or fill a window by dragging it to the menu bar.
-  EnableTopTilingByEdgeDrag = false,
+EnableStandardClickToShowDesktop = false, # Do not move windows aside when clicking the desktop wallpaper.
+EnableTiledWindowMargins = false, # Do not leave margins around tiled windows.
+EnableTilingByEdgeDrag = false, # Do not tile a window by dragging it to a screen edge.
+EnableTilingOptionAccelerator = false, # Do not use Option-drag to tile a window.
+EnableTopTilingByEdgeDrag = false, # Do not tile or fill a window by dragging it to the menu bar.
 }
 
 "com.apple.universalaccess" = {
-  # Replace transparent macOS backgrounds with solid backgrounds.
-  reduceTransparency = true,
-  # Show a subtle border around toolbar buttons to indicate their click target.
-  showToolbarButtonShapes = true,
-  # Show the folder icon before the Finder window title. Relaunch Finder: killall Finder.
-  showWindowTitlebarIcons = true,
+reduceTransparency = true, # Replace transparent macOS backgrounds with solid backgrounds.
+showToolbarButtonShapes = true, # Show a subtle border around toolbar buttons to indicate their click target.
+showWindowTitlebarIcons = true, # Show the folder icon before the Finder window title. Relaunch Finder: killall Finder.
 }
 
 "com.apple.AppleMultitouchTrackpad" = {
-  # Keep the accompanying haptic-detent state disabled.
-  ActuateDetents = 0,
-  # Disable Force Click and haptic feedback.
-  ForceSuppressed = true,
-  # Disable the five-finger pinch gesture.
-  TrackpadFiveFingerPinchGesture = 0,
-  # Disable the four-finger pinch gesture.
-  TrackpadFourFingerPinchGesture = 0,
-  # Disable the four-finger vertical swipe gesture.
-  TrackpadFourFingerVertSwipeGesture = 0,
-  # Disable the three-finger vertical swipe gesture.
-  TrackpadThreeFingerVertSwipeGesture = 0,
-  # Disable the two-finger swipe from the right edge.
-  TrackpadTwoFingerFromRightEdgeSwipeGesture = 0,
+ActuateDetents = 0, # Keep the accompanying haptic-detent state disabled.
+ForceSuppressed = true, # Disable Force Click and haptic feedback.
+TrackpadFiveFingerPinchGesture = 0, # Disable the five-finger pinch gesture.
+TrackpadFourFingerPinchGesture = 0, # Disable the four-finger pinch gesture.
+TrackpadFourFingerVertSwipeGesture = 0, # Disable the four-finger vertical swipe gesture.
+TrackpadThreeFingerVertSwipeGesture = 0, # Disable the three-finger vertical swipe gesture.
+TrackpadTwoFingerFromRightEdgeSwipeGesture = 0,   # Disable the two-finger swipe from the right edge.
 }
 
 "com.apple.driver.AppleBluetoothMultitouch.trackpad" = {
-  # Disable the five-finger pinch gesture on an Apple Bluetooth trackpad.
-  TrackpadFiveFingerPinchGesture = 0,
-  # Disable the four-finger pinch gesture on an Apple Bluetooth trackpad.
-  TrackpadFourFingerPinchGesture = 0,
-  # Disable the four-finger vertical swipe gesture on an Apple Bluetooth trackpad.
-  TrackpadFourFingerVertSwipeGesture = 0,
-  # Disable the three-finger vertical swipe gesture on an Apple Bluetooth trackpad.
-  TrackpadThreeFingerVertSwipeGesture = 0,
-  # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
-  TrackpadTwoFingerFromRightEdgeSwipeGesture = 0,
+TrackpadFiveFingerPinchGesture = 0, # Disable the five-finger pinch gesture on an Apple Bluetooth trackpad.
+TrackpadFourFingerPinchGesture = 0, # Disable the four-finger pinch gesture on an Apple Bluetooth trackpad.
+TrackpadFourFingerVertSwipeGesture = 0, # Disable the four-finger vertical swipe gesture on an Apple Bluetooth trackpad.\
+TrackpadThreeFingerVertSwipeGesture = 0, # Disable the three-finger vertical swipe gesture on an Apple Bluetooth trackpad.
+TrackpadTwoFingerFromRightEdgeSwipeGesture = 0, # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
 }
-
-[[bootstrap.macos.defaults_entries]]
-domain = "NSGlobalDomain"
-key = "NSStatusItemSpacing"
-host = "current"
-value = 12 # default is 16, or use `unset`
-
-[[bootstrap.macos.defaults_entries]]
-domain = "NSGlobalDomain"
-key = "NSStatusItemSelectionPadding"
-host = "current"
-value = 12 # default is 16, or use `unset`
