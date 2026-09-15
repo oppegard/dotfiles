@@ -39,3 +39,11 @@ instructions.
 When available, use `request_user_input` for material decisions unresolved by
 repository context. Ask 1–3 concise questions with explicit options. Proceed
 autonomously on low-risk choices.
+
+## Migration Wizard Choice
+
+When the user brings up a migration, offer a choice with `request_user_input`
+when available: **Create a wizard for manual steps** (invoke `$wizard`)
+or **Continue without a wizard**. If the user has already chosen either path,
+follow that choice without asking again. For a wizard, read and follow the
+`$wizard` skill and include only steps the human must perform.
