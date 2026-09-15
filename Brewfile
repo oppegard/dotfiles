@@ -14,7 +14,6 @@ brew "pstree"
 brew "poppler" # pdf tools for codex
 brew "screen"
 brew "starship"
-brew "stow"
 brew "tmux"
 brew "uv"
 brew "watch"
