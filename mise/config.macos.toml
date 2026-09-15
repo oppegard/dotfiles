@@ -67,8 +67,8 @@ NSAutomaticCapitalizationEnabled = false, # Do not capitalize words automaticall
 NSAutomaticDashSubstitutionEnabled = false, # Do not replace double hyphens with smart dashes automatically.
 NSAutomaticQuoteSubstitutionEnabled = false, # Do not replace straight quotes with smart quotes automatically.
 NSAutomaticSpellingCorrectionEnabled = false, # Do not correct spelling automatically.
-NSStatusItemSelectionPadding = 12, # Menu bar item padding; default is 16 or use `defaults delete`.
-NSStatusItemSpacing = 12, # Menu bar item spacing; default is 16 or use `defaults delete`.
+NSStatusItemSelectionPadding = 12, # Menu bar item padding; default is 16 or use `defaults delete`; update NSGlobalDomain entry below too.
+NSStatusItemSpacing = 12, # Menu bar item spacing; default is 16 or use `defaults delete`; update NSGlobalDomain entry below too.
 }
 
 "com.apple.Music" = {
@@ -137,3 +137,15 @@ TrackpadFourFingerVertSwipeGesture = 0, # Disable the four-finger vertical swipe
 TrackpadThreeFingerVertSwipeGesture = 0, # Disable the three-finger vertical swipe gesture on an Apple Bluetooth trackpad.
 TrackpadTwoFingerFromRightEdgeSwipeGesture = 0, # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
 }
+
+[[bootstrap.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSStatusItemSpacing"
+host = "current"
+value = 12                  # default is 16, or use `unset`
+
+[[bootstrap.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "NSStatusItemSelectionPadding"
+host = "current"
+value = 12                           # default is 16, or use `unset`
