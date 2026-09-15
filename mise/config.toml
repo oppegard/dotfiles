@@ -30,7 +30,7 @@ builtin = "history-watch"
 "~/.config/btop" = "~/.dotfiles/mise-dots/config/btop"
 "~/.config/curlrc" = "~/.dotfiles/mise-dots/config/curlrc"
 "~/.config/ghostty" = "~/.dotfiles/mise-dots/config/ghostty"
-"~/.config/git" = "~/.dotfiles/mise-dots/config/git"
+"~/.config/git" = { source = "~/.dotfiles/mise-dots/config/git", mode = "symlink-each", manifest = "git" }
 "~/.config/mise/config.linux.toml" = "~/src/dotfiles/mise/config.linux.toml"
 "~/.config/mise/config.macos.toml" = "~/src/dotfiles/mise/config.macos.toml"
 "~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"

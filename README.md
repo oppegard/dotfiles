@@ -119,6 +119,15 @@ preferences, and restarts BetterDisplay.
 
 ### Git Hooks
 
+Run `bin/migrate-git-config-to-file-links --dry-run` before the interactive
+`bin/migrate-git-config-to-file-links` wizard on a machine that still links
+all of `~/.config/git` into this repository. It checks the link and source,
+shows machine-only files, makes a private backup, and asks before the cutover.
+It then makes `~/.config/git` a real directory, links the Git-tracked
+`ignore`, `local.example`, and `hooks/pre-commit` files individually, and
+moves machine-local `local` and Git LFS-generated hooks out of the repository.
+Run it after pulling this change and before `bin/setup.sh`.
+
 The mise-managed global `pre-commit` hook runs `gitleaks` against staged
 changes before a commit. The hook warns and allows the commit if `gitleaks` is
 missing.
