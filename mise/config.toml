@@ -40,6 +40,7 @@ builtin = "history-watch"
 "~/.config/ghostty" = "~/.dotfiles/mise-dots/config/ghostty"
 "~/.config/git" = { source = "~/.dotfiles/mise-dots/config/git", mode = "symlink-each", manifest = "git" }
 "~/.config/mise/conf.d/macos-menubar-spacing.toml" = { source = "~/src/dotfiles/mise/macos-menubar-spacing.toml.tera", mode = "template" }
+"~/.config/mise/config.home.toml" = "~/src/dotfiles/mise/config.home.toml"
 "~/.config/mise/config.linux.toml" = "~/src/dotfiles/mise/config.linux.toml"
 "~/.config/mise/config.macos.toml" = "~/src/dotfiles/mise/config.macos.toml"
 "~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"
