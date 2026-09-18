@@ -1,14 +1,14 @@
 [dotfiles]
-"~/.config/borders/bordersrc" = "~/.dotfiles/mise-dots/macos/bordersrc"
-"~/.config/linearmouse/linearmouse.json" = "~/.dotfiles/mise-dots/macos/linearmouse.json"
+"~/.config/borders/bordersrc" = "~/.dotfiles/files/home/.config/borders/bordersrc"
+"~/.config/linearmouse/linearmouse.json" = "~/.dotfiles/files/home/.config/linearmouse/linearmouse.json"
 "~/.homebrew/Brewfile" = "~/.dotfiles/Brewfile"
-"~/.local/bin/fix-tahoe-focus" = "~/.dotfiles/mise-dots/macos/xdg-bin/fix-tahoe-focus"
-"~/.local/bin/flush-dns" = "~/.dotfiles/mise-dots/macos/xdg-bin/flush-dns"
-"~/.local/bin/restart-soundsource" = "~/.dotfiles/mise-dots/macos/xdg-bin/restart-soundsource"
-"~/.local/bin/try" = "~/.dotfiles/mise-dots/macos/xdg-bin/try-darwin-aarch64"
-"~/Library/Application Support/Sublime Text 3/Packages/User" = "~/.dotfiles/mise-dots/config/sublime-text/Packages/User"
-"~/Library/Application Support/Rectangle Pro/RectangleProConfig.json" = { source = "~/.dotfiles/mise-dots/macos/RectangleProConfig.json", mode = "copy" }
-"~/Library/Application Support/Tuna/config.toml" = "~/.dotfiles/mise-dots/macos/tuna.toml"
+"~/.local/bin/fix-tahoe-focus" = "~/.dotfiles/files/home/.local/bin/fix-tahoe-focus"
+"~/.local/bin/flush-dns" = "~/.dotfiles/files/home/.local/bin/flush-dns"
+"~/.local/bin/restart-soundsource" = "~/.dotfiles/files/home/.local/bin/restart-soundsource"
+"~/.local/bin/try" = "~/.dotfiles/files/home/.local/bin/try-darwin-aarch64"
+"~/Library/Application Support/Sublime Text 3/Packages/User" = "~/.dotfiles/files/home/.config/sublime-text/Packages/User"
+"~/Library/Application Support/Rectangle Pro/RectangleProConfig.json" = { source = "~/.dotfiles/files/home/Library/Application Support/Rectangle Pro/RectangleProConfig.json", mode = "copy" }
+"~/Library/Application Support/Tuna/config.toml" = "~/.dotfiles/files/home/Library/Application Support/Tuna/config.toml"
 
 [tasks."macos-defaults:record"]
 description = "Record one interactive macOS defaults change"
@@ -23,7 +23,7 @@ run = 'mise -C "{{ env.HOME }}/.dotfiles/mise" bootstrap macos defaults status -
 [tasks."macos-defaults:unsupported:check"]
 description = "Verify reviewed host-scoped and complex macOS defaults"
 shell = "bash -c"
-run = '"{{ env.HOME }}/.dotfiles/bin/macos-defaults-audit" verify --manifest "{{ env.HOME }}/.dotfiles/mise-dots/macos/unsupported-defaults.json"'
+run = '"{{ env.HOME }}/.dotfiles/bin/macos-defaults-audit" verify --manifest "{{ env.HOME }}/.dotfiles/files/macos/unsupported-defaults.json"'
 
 [tasks."betterdisplay:check"]
 description = "Check BetterDisplay sync profile against dotfiles"

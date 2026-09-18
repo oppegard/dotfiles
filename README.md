@@ -27,7 +27,7 @@ Darken non-key window:
 
 Add Color to Active Window Borders:
 - https://github.com/FelixKratz/JankyBorders
-- prefs are in `mise-dots/macos/bordersrc`
+- prefs are in `files/home/.config/borders/bordersrc`
 
 ## Install Fonts
 
@@ -109,7 +109,7 @@ Detailed S.O. replies: [1](https://stackoverflow.com/a/32340345), [2](https://st
 ### BetterDisplay Prefs
 
 On macOS, `bin/setup.sh` runs `mise run betterdisplay:export` to update the
-portable synchronization profile at `mise-dots/macos/BetterDisplay.plist`.
+portable synchronization profile at `files/macos/BetterDisplay.plist`.
 The profile enables BetterDisplay's all-display `mostAppropriateBrightness`
 synchronization without tracking machine-specific display identities or current
 brightness values. Use `mise run betterdisplay:check` to inspect profile drift,
@@ -119,14 +119,14 @@ preferences, and restarts BetterDisplay.
 
 ### Git Hooks
 
-Run `bin/migrate-git-config-to-file-links --dry-run` before the interactive
-`bin/migrate-git-config-to-file-links` wizard on a machine that still links
-all of `~/.config/git` into this repository. It checks the link and source,
-shows machine-only files, makes a private backup, and asks before the cutover.
-It then makes `~/.config/git` a real directory, links the Git-tracked
-`ignore`, `local.example`, and `hooks/pre-commit` files individually, and
-moves machine-local `local` and Git LFS-generated hooks out of the repository.
-Run it after pulling this change and before `bin/setup.sh`.
+Run `bin/migrate-mise-dots-to-files-home --dry-run` before the interactive
+`bin/migrate-mise-dots-to-files-home` wizard on each existing machine after
+pulling the compatibility change and before `bin/setup.sh`. It validates the
+old and new source trees, makes a private backup, asks before repointing live
+links, preserves machine-owned files under the `symlink-each` directories,
+and verifies a second apply is a no-op. It also subsumes the older Git-only
+migration for a machine that still links all of `~/.config/git` into the
+repository.
 
 The mise-managed global `pre-commit` hook runs `gitleaks` against staged
 changes before a commit. The hook warns and allows the commit if `gitleaks` is

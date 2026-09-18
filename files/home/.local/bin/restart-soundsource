@@ -1,0 +1,82 @@
+#!/bin/zsh
+set -euo pipefail
+
+__os="$(uname -s)"
+if [[ "$__os" != "Darwin" ]]; then
+  echo "Only supported on macOS" >&2
+  exit 1
+fi
+
+APP_NAME="SoundSource"
+NUKE=0
+
+usage() {
+  cat <<'EOF'
+Usage:
+  restart-soundsource              Restart SoundSource only
+  restart-soundsource -N, --nuke   Restart SoundSource and macOS Core Audio
+  restart-soundsource --help
+
+Notes:
+  --nuke runs: sudo killall coreaudiod
+  This will interrupt active audio, calls, Bluetooth audio, AirPlay, etc.
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --nuke|-N)
+      NUKE=1
+      shift
+      ;;
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+quit_soundsource() {
+  # Ask politely first, because this lets the app clean up.
+  /usr/bin/osascript -e "quit app \"$APP_NAME\"" >/dev/null 2>&1 || true
+
+  # Give it a moment to exit.
+  for _ in {1..20}; do
+    if ! /usr/bin/pgrep -x "$APP_NAME" >/dev/null 2>&1; then
+      return 0
+    fi
+    /bin/sleep 0.1
+  done
+
+  # Escalate if it ignored the quit request.
+  /usr/bin/killall "$APP_NAME" >/dev/null 2>&1 || true
+}
+
+start_soundsource() {
+  # -g opens without bringing it to the foreground.
+  /usr/bin/open -g -a "$APP_NAME"
+}
+
+if [[ "$NUKE" -eq 1 ]]; then
+  echo "Restarting SoundSource and Core Audio..."
+  quit_soundsource
+
+  # Make sudo prompt happen before touching coreaudiod.
+  /usr/bin/sudo -v
+  /usr/bin/sudo /usr/bin/killall coreaudiod || true
+
+  # Let launchd restart coreaudiod before reopening SoundSource.
+  /bin/sleep 1
+  start_soundsource
+  echo "Done. Heavy restart complete."
+else
+  echo "Restarting SoundSource..."
+  quit_soundsource
+  start_soundsource
+  echo "Done."
+fi

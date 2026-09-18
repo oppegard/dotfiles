@@ -1,0 +1,182 @@
+[catalogs]
+searchPriorities = []
+sortOrders = []
+
+    [[catalogs.globalScopes]]
+    catalogIdentifier = 'tuna.effects'
+
+        [catalogs.globalScopes.scope]
+        kind = 'none'
+
+    [[catalogs.globalScopes]]
+    catalogIdentifier = 'tuna.emoji'
+
+        [catalogs.globalScopes.scope]
+        kind = 'none'
+
+    [[catalogs.globalScopes]]
+    catalogIdentifier = 'tuna.smart-folders'
+
+        [catalogs.globalScopes.scope]
+        kind = 'none'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Ghostty.app'
+key = 't'
+label = 'Terminal'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'show'
+        subjectIdentifiers = [ 'path:/Applications/Ghostty.app' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Google Chrome.app'
+key = 'b'
+label = 'Primary Browser'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'show'
+        subjectIdentifiers = [ 'path:/Applications/Google Chrome.app' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Mimestream.app'
+key = 'e'
+label = 'Email'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'show'
+        subjectIdentifiers = [ 'path:/Applications/Mimestream.app' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
+iconPath = 'document.on.clipboard'
+key = 'v'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/browse'
+        behavior = 'run'
+        presentation = 'show'
+        subjectIdentifiers = [ 'tuna.clipboard/clipboard.history.root' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Fantastical.app'
+key = 'c'
+label = 'Calendar'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'show'
+        subjectIdentifiers = [ 'path:/Applications/Fantastical.app' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
+iconPath = 'bubble.fill'
+key = 'm'
+
+    [comboMode.bindings.destination]
+    type = 'group'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Slack.app'
+        key = 's'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/open'
+                behavior = 'run'
+                presentation = 'show'
+                subjectIdentifiers = [ 'path:/Applications/Slack.app' ]
+                type = 'savedCommand'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/IntelliJ IDEA.app'
+key = 'i'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'show'
+        subjectIdentifiers = [ 'path:/Applications/IntelliJ IDEA.app' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
+iconPath = '/Applications/Codex.app'
+key = 'a'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'show'
+        subjectIdentifiers = [ 'path:/Applications/ChatGPT.app' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
+iconPath = '/System/Library/CoreServices/Finder.app'
+key = 'f'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'show'
+        subjectIdentifiers = [ 'path:/System/Library/CoreServices/Finder.app' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
+key = 'B'
+label = 'Secondary Browser'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'tuna.applications//System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app' ]
+        type = 'savedCommand'
+
+[settings]
+comboModeCheatsheetDelayMS = 500
+comboModeCheatsheetExpandGroups = true
+comboModeCheatsheetShowDetails = false
+comboModeDoublePressTrigger = 'rightCommand'
+comboModeModifierTrigger = 'rightOption'
+comboModeTriggerType = 'modifier'
+fuzzyModeTriggerType = 'disabled'
+physicalHyperKeySource = 'rightOption'

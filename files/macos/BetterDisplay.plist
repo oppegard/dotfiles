@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>allowExternallyInduced@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001</key>
+	<true/>
+	<key>delta@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001</key>
+	<false/>
+	<key>enabled@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001</key>
+	<true/>
+	<key>syncConfigurationControlTargets@DisplayGroup:-1001</key>
+	<string>["mostAppropriateBrightness"]</string>
+	<key>syncEnabled@DisplayGroup:-1001</key>
+	<true/>
+</dict>
+</plist>

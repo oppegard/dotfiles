@@ -1,0 +1,12 @@
+.DS_Store
+.envrc
+.idea/
+.tool-versions
+.vscode/
+mise.local.toml
+scratch/
+tmp/
+
+
+**/.claude/settings.local.json
+**/.claude/worktrees/

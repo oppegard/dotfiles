@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+set -e
+
+if [ "$(uname -s)" = "Darwin" ]; then
+    SUBL="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+else
+    SUBL="/usr/local/bin/subl"
+fi
+
+[ -x "$SUBL" ] || {
+    echo "subl not found at $SUBL" >&2
+    exit 1
+}
+
+exec "$SUBL" "$@"

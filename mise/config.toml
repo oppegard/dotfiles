@@ -19,14 +19,14 @@ builtin = "history-watch"
 
 [dotfiles]
 "~/.aws/config" = { mode = "track", variants = [{ profile = "work" }] }
-"~/.bash_profile" = "~/.dotfiles/mise-dots/bash_profile"
-"~/.bashrc" = "~/.dotfiles/mise-dots/bashrc"
-"~/.bunfig.toml" = "~/.dotfiles/mise-dots/bunfig.toml"
+"~/.bash_profile" = "~/.dotfiles/files/home/.bash_profile"
+"~/.bashrc" = "~/.dotfiles/files/home/.bashrc"
+"~/.bunfig.toml" = "~/.dotfiles/files/home/.bunfig.toml"
 "~/.claude/settings.json" = { mode = "track", variants = [
   { profile = "work" },
 ] }
-"~/.codex/.ignore" = "~/.dotfiles/mise-dots/codex/.ignore"
-"~/.codex/AGENTS.md" = "~/.dotfiles/mise-dots/codex/AGENTS.md"
+"~/.codex/.ignore" = "~/.dotfiles/files/home/.codex/.ignore"
+"~/.codex/AGENTS.md" = "~/.dotfiles/files/home/.codex/AGENTS.md"
 "~/.codex/config.toml" = { mode = "track", variants = [
   { profile = "work" },
   { profile = "home" },
@@ -35,29 +35,29 @@ builtin = "history-watch"
   { profile = "work" },
   { profile = "home" },
 ] }
-"~/.config/btop" = "~/.dotfiles/mise-dots/config/btop"
-"~/.config/curlrc" = "~/.dotfiles/mise-dots/config/curlrc"
-"~/.config/ghostty" = "~/.dotfiles/mise-dots/config/ghostty"
-"~/.config/git" = { source = "~/.dotfiles/mise-dots/config/git", mode = "symlink-each", manifest = "git" }
+"~/.config/btop" = "~/.dotfiles/files/home/.config/btop"
+"~/.config/curlrc" = "~/.dotfiles/files/home/.config/curlrc"
+"~/.config/ghostty" = "~/.dotfiles/files/home/.config/ghostty"
+"~/.config/git" = { source = "~/.dotfiles/files/home/.config/git", mode = "symlink-each", manifest = "git" }
 "~/.config/mise/conf.d/macos-menubar-spacing.toml" = { source = "~/src/dotfiles/mise/macos-menubar-spacing.toml.tera", mode = "template" }
 "~/.config/mise/config.home.toml" = "~/src/dotfiles/mise/config.home.toml"
 "~/.config/mise/config.linux.toml" = "~/src/dotfiles/mise/config.linux.toml"
 "~/.config/mise/config.macos.toml" = "~/src/dotfiles/mise/config.macos.toml"
 "~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"
 "~/.config/mise/miserc.toml" = { source = "~/src/dotfiles/mise/miserc.toml.tera", mode = "template" }
-"~/.config/ripgreprc" = "~/.dotfiles/mise-dots/config/ripgreprc"
-"~/.config/shell" = { source = "~/.dotfiles/mise-dots/config/shell", mode = "symlink-each" }
-"~/.config/starship.toml" = "~/.dotfiles/mise-dots/config/starship.toml"
-"~/.config/tmux" = "~/.dotfiles/mise-dots/config/tmux"
-"~/.config/uv" = "~/.dotfiles/mise-dots/config/uv"
-"~/.digrc" = "~/.dotfiles/mise-dots/digrc"
+"~/.config/ripgreprc" = "~/.dotfiles/files/home/.config/ripgreprc"
+"~/.config/shell" = { source = "~/.dotfiles/files/home/.config/shell", mode = "symlink-each" }
+"~/.config/starship.toml" = "~/.dotfiles/files/home/.config/starship.toml"
+"~/.config/tmux" = "~/.dotfiles/files/home/.config/tmux"
+"~/.config/uv" = "~/.dotfiles/files/home/.config/uv"
+"~/.digrc" = "~/.dotfiles/files/home/.digrc"
 "~/.dotfiles" = "~/src/dotfiles"
-"~/.gitconfig" = "~/.dotfiles/mise-dots/gitconfig"
-"~/.inputrc" = "~/.dotfiles/mise-dots/inputrc"
-"~/.local/bin" = { source = "~/.dotfiles/mise-dots/xdg-bin", mode = "symlink-each" }
-"~/.npmrc" = "~/.dotfiles/mise-dots/npmrc"
-"~/.screenrc" = "~/.dotfiles/mise-dots/screenrc"
-"~/.ssh/config" = "~/.dotfiles/mise-dots/ssh/config"
+"~/.gitconfig" = "~/.dotfiles/files/home/.gitconfig"
+"~/.inputrc" = "~/.dotfiles/files/home/.inputrc"
+"~/.local/bin" = { source = "~/.dotfiles/files/home/.local/bin", mode = "symlink-each", exclude = ["fix-tahoe-focus", "flush-dns", "restart-soundsource", "screen-5.0.1", "try-darwin-aarch64", "try-linux-x86_64"] }
+"~/.npmrc" = "~/.dotfiles/files/home/.npmrc"
+"~/.screenrc" = "~/.dotfiles/files/home/.screenrc"
+"~/.ssh/config" = "~/.dotfiles/files/home/.ssh/config"
 "~/src/drafthouse/mise.toml" = { mode = "track", variants = [
   { profile = "work" },
 ] }

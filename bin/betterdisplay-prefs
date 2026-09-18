@@ -15,7 +15,7 @@ done
 SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
 DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
 PREFERENCES_DOMAIN="pro.betterdisplay.BetterDisplay"
-PREFERENCES_PATH="$DOTFILES_DIR/mise-dots/macos/BetterDisplay.plist"
+PREFERENCES_PATH="$DOTFILES_DIR/files/macos/BetterDisplay.plist"
 APPLICATION_PATH="/Applications/BetterDisplay.app"
 MANAGED_KEYS=(
   "allowExternallyInduced@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001"
@@ -113,7 +113,7 @@ export_sync_profile() {
   fi
 
   mv "$profile_path" "$PREFERENCES_PATH"
-  echo "BetterDisplay synchronization profile exported; commit mise-dots/macos/BetterDisplay.plist."
+  echo "BetterDisplay synchronization profile exported; commit files/macos/BetterDisplay.plist."
 }
 
 quit_betterdisplay() {

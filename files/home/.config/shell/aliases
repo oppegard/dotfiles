@@ -1,0 +1,12 @@
+# shellcheck shell=bash
+
+alias ll='ls -la'
+alias ms='mise'
+
+if [ "$__os" = "Darwin" ]; then
+  alias cat='bat'
+  alias notahoe='open "/Users/glenn/src/misc/stop-tahoe-update/profiles/deferral-90days.mobileconfig"; sleep 2; open "x-apple.systempreferences:com.apple.preferences.configurationprofiles"'
+  alias typora="/Applications/Typora.app/Contents/MacOS/Typora"
+fi
+
+alias ccusage='bunx ccusage'

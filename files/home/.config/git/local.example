@@ -1,0 +1,20 @@
+# Copy this file to ~/.config/git/local and customize it per machine.
+#
+# Personal-only laptop:
+# [user]
+# 	email = oppegard@gmail.com
+#
+# Work-only laptop:
+# [user]
+# 	email = glenn.oppegard@focused.io
+#
+# Mixed-use laptop with a private work tree override:
+[user]
+	email = oppegard@gmail.com
+
+[includeIf "gitdir:~/src/work/"]
+	path = ~/.config/git/email-work
+
+# Example ~/.config/git/email-work contents:
+# [user]
+# 	email = glenn.oppegard@focused.io

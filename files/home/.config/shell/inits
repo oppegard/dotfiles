@@ -1,0 +1,68 @@
+# shellcheck shell=bash
+
+__shell_name="${ZSH_VERSION:+zsh}"
+__shell_name="${__shell_name:-bash}"
+
+if command -v brew &>/dev/null; then
+  if [[ "$__shell_name" == "bash" ]]; then
+    source /opt/homebrew/completions/bash/brew
+  fi
+fi
+
+if command -v mise &>/dev/null; then
+  eval "$(mise activate "$__shell_name")"
+fi
+
+if command -v try &>/dev/null; then
+  eval "$(try init ~/src/tries)"
+fi
+
+if command -v fzf &>/dev/null; then
+  if [[ "$__shell_name" == "bash" ]]; then
+    eval "$(fzf --bash)"
+  elif [[ "$__shell_name" == "zsh" ]]; then
+    source <(fzf --zsh)
+  fi
+fi
+
+# OrbStack
+source ~/.orbstack/shell/init.bash 2>/dev/null || :
+
+# 1Password
+#if [ -f "$HOME/.config/op/plugins.sh" ]; then
+#  source "$HOME/.config/op/plugins.sh"
+#fi
+
+# Misc Completions
+if [ "$__os" = "Darwin" ]; then
+  [[ -r /opt/homebrew/share/bash-completion/bash_completion ]] && . /opt/homebrew/share/bash-completion/bash_completion
+  # Try getting rid of below.. it was added for `docker pull <tab>` errors
+  [[ -r /opt/homebrew/opt/bash-completion@2/etc/bash_completion.d/000_bash_completion_compat.bash ]] && . /opt/homebrew/opt/bash-completion@2/etc/bash_completion.d/000_bash_completion_compat.bash
+
+  eval "$(mise completion bash)"
+  complete -F _usage_complete_mise mise ms
+fi
+
+if [[ "$__shell_name" == "bash" ]]; then
+  # Exchange newly entered commands with other live Bash sessions before each prompt.
+  __sync_bash_history() {
+    history -a
+    history -n
+  }
+
+  # Register synchronization once so re-sourcing the shell does not duplicate the hook.
+  if [[ " ${PROMPT_COMMAND[*]-} " != *" __sync_bash_history "* ]]; then
+    PROMPT_COMMAND+=(__sync_bash_history)
+  fi
+fi
+
+if command -v starship &>/dev/null; then
+  eval "$(starship init "$__shell_name")"
+fi
+
+# Keep zoxide last so later prompt setup does not drop its hook.
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init "$__shell_name")"
+fi
+
+unset __shell_name
