@@ -513,12 +513,17 @@ prepare_symlink_each_target() {
 record_old_links() {
   local target="$1" mode="$2" link
   if [[ "$mode" == symlink && -L "$target" ]]; then
-    link_points_to_old_tree "$target" && printf '%s\n' "$target" >> "$backup_dir/remaining-old-links"
+    if link_points_to_old_tree "$target"; then
+      printf '%s\n' "$target" >> "$backup_dir/remaining-old-links"
+    fi
   elif [[ "$mode" == symlink-each && -d "$target" ]]; then
     while IFS= read -r -d '' link; do
-      link_points_to_old_tree "$link" && printf '%s\n' "$link" >> "$backup_dir/remaining-old-links"
+      if link_points_to_old_tree "$link"; then
+        printf '%s\n' "$link" >> "$backup_dir/remaining-old-links"
+      fi
     done < <(find "$target" -type l -print0)
   fi
+  return 0
 }
 
 verify_unmanaged() {
