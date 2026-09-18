@@ -119,15 +119,6 @@ preferences, and restarts BetterDisplay.
 
 ### Git Hooks
 
-Run `bin/migrate-mise-dots-to-files-home --dry-run` before the interactive
-`bin/migrate-mise-dots-to-files-home` wizard on each existing machine after
-pulling the compatibility change and before `bin/setup.sh`. It validates the
-old and new source trees, makes a private backup, asks before repointing live
-links, preserves machine-owned files under the `symlink-each` directories,
-and verifies a second apply is a no-op. It also subsumes the older Git-only
-migration for a machine that still links all of `~/.config/git` into the
-repository.
-
 The mise-managed global `pre-commit` hook runs `gitleaks` against staged
 changes before a commit. The hook warns and allows the commit if `gitleaks` is
 missing.

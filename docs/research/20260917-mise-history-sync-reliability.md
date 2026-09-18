@@ -32,12 +32,11 @@ authentication or network-sync failures.
 - the missing executable was
   `.../gh_2.100.0_macOS_arm64/bin/gh`.
 
-`mise which gh` now resolves `gh` 2.101.0. Git configuration identifies the
-cause precisely: [mise-dots/gitconfig](../../mise-dots/gitconfig) configures
-the `github.com` and `gist.github.com` helpers with the obsolete 2.100.0
-absolute path. `launchctl print` shows the history LaunchAgent itself starts
-the durable `/Users/glenn/.local/bin/mise dot watch` command; it does not name
-`gh`.
+`mise which gh` now resolves `gh` 2.101.0. The then-current global Git
+configuration identifies the cause precisely: the `github.com` and
+`gist.github.com` helpers used the obsolete 2.100.0 absolute path.
+`launchctl print` shows the history LaunchAgent itself starts the durable
+`/Users/glenn/.local/bin/mise dot watch` command; it does not name `gh`.
 
 Thus local checkpoint capture can continue while **publishing and pulling are
 blocked**. The stale HTTPS helper is the cause of the sync failure, not merely
