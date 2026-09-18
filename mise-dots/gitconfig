@@ -77,9 +77,11 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+# Do not run `gh auth setup-git`: it records gh's resolved executable path, which becomes stale after mise upgrades gh.
+# Source: https://github.com/cli/cli/blob/trunk/pkg/cmd/auth/shared/gitcredentials/helper_config.go#L20-L64
 [credential "https://github.com"]
 	helper = 
-	helper = !/Users/glenn/.local/share/mise/installs/gh/latest/gh_2.100.0_macOS_arm64/bin/gh auth git-credential
+	helper = !MISE_EXEC_AUTO_INSTALL=0 $HOME/.local/bin/mise exec --quiet gh -- gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/Users/glenn/.local/share/mise/installs/gh/latest/gh_2.100.0_macOS_arm64/bin/gh auth git-credential
+	helper = !MISE_EXEC_AUTO_INSTALL=0 $HOME/.local/bin/mise exec --quiet gh -- gh auth git-credential

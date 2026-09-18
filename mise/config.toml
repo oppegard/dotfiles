@@ -68,7 +68,7 @@ builtin = "history-watch"
 actionlint = "1"
 age = "1"
 bun = "1"
-gh = "2"
+gh = { version = "2", postinstall = '"$HOME/.dotfiles/bin/check-gh-credential-helper"' }
 go = "1.26"
 gum = "2"
 lazydocker = "latest"
