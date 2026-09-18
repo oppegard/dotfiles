@@ -4,9 +4,9 @@
 
 - Ask for confirmation before adding new production dependencies.
 - When writing commit messages:
-    - Limit title <= 50 chars and wrap body at 72 chars.
-    - Use the "Conventional Commits 1.0.0" spec.
-    - Use the body to explain what and why vs. how. Assume the code explains the how; the message must explain the context and reasoning. 
+  - Limit title <= 50 chars and wrap body at 72 chars.
+  - Use the "Conventional Commits 1.0.0" spec.
+  - Use the body to explain what and why vs. how. Assume the code explains the how; the message must explain the context and reasoning.
 - Do NOT under ANY circumstances destroy or mutate infrastructucture by invoking tools or APIs (e.g. `aws rds delete-db-instance`, `terraform apply`, `npx wrangler delete`, `curl -X POST`).  Make full use of tools/MCPs/APIs to query in a read-only manner (e.g. `terraform show`, `aws ec2 describe-instances`); be mindful of rate-limiting.
 - Do not ever merge a PR. I will directly instruct you if I want different behavior.
 - You may create worktrees under `/tmp/worktrees/<git-repo-name>/YYYMMDD-kebab-case-topic>`.
@@ -16,8 +16,9 @@
   - `gh` for GitHub and `actionlint` for GH Actions
   - `mise` - query https://mise.jdx.dev/ for latest docs, as the featureset changes weekly.
 
-## Planning Workflow
+## Planning Mode Workflow
 - Before implementing any significant change, always create a `YYYMMDD-kebab-case-topic.md` file in the project's `doc{s}/plans/` directory using the local date; create the directory if needed and never overwrite an existing file.
+- If you request user input to execute the plan but "execution" means writing the markdown file, specifically ask for user input with a promp "Execute writing of plan to markdown at <path>?". I don't want ambiguity of when "execute" means writing the markdown file, or actually executing the work described by a plan.
 - The plan must outline the proposed changes, the reasoning behind them, and a checklist of tasks to be completed.
 - Update the markdown file as progress is made.
 - Do not begin coding until the plan has been reviewed and approved.
