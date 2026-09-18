@@ -419,8 +419,21 @@ backup_target() {
   printf '%s\t%s\n' "$state" "$rel" >> "$backup_dir/backed-targets.tsv"
 }
 
+manifest_owns_target_rel() {
+  local target_label="$1" rel="$2" scope target old_rel new_rel mode
+  while IFS=$'\t' read -r scope target old_rel new_rel mode; do
+    [[ -z "$scope" || "$scope" == \#* || "$scope" == support ]] && continue
+    scope_is_active "$scope" || continue
+    [[ "$target" == "$target_label/$rel" ]] && return 0
+  done < "$manifest"
+  return 1
+}
+
 source_owns_rel() {
   local target_label="$1" old_rel="$2" new_rel="$3" rel="$4"
+  if manifest_owns_target_rel "$target_label" "$rel"; then
+    return 0
+  fi
   if [[ "$target_label" == "$git_target_label" ]]; then
     git -C "$repo_dir" ls-files --error-unmatch -- "$old_rel/$rel" >/dev/null 2>&1 ||
       git -C "$repo_dir" ls-files --error-unmatch -- "$new_rel/$rel" >/dev/null 2>&1
