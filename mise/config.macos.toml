@@ -59,6 +59,20 @@ mode = "0444"
 [bootstrap.macos.trackpad]
 tap_to_click = true
 
+[bootstrap.macos.dock]
+apps = [
+  "/Applications/Google Chrome.app",
+  "/Applications/Mimestream.app",
+  "/Applications/Fantastical.app",
+  "/Applications/Slack.app",
+  "/Applications/ChatGPT.app",
+  "/Applications/Things3.app",
+  "/Applications/Obsidian.app",
+  "/Applications/Ghostty.app",
+  "~/Applications/IntelliJ IDEA.app",
+  "/Applications/Sublime Text.app",
+]
+
 [bootstrap.macos.defaults]
 "NSGlobalDomain" = {
 AppleShowScrollBars = "Always",
