@@ -135,3 +135,21 @@ TrackpadFourFingerVertSwipeGesture = 0, # Disable the four-finger vertical swipe
 TrackpadThreeFingerVertSwipeGesture = 0, # Disable the three-finger vertical swipe gesture on an Apple Bluetooth trackpad.
 TrackpadTwoFingerFromRightEdgeSwipeGesture = 0, # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
 }
+
+[[bootstrap.macos.defaults_entries]] # Internal keyboard: remap capslock -> ctrl
+domain = "NSGlobalDomain"
+key = "com.apple.keyboard.modifiermapping.0-0-0"
+host = "current"
+value = [{ "HIDKeyboardModifierMappingDst" = 30064771300, "HIDKeyboardModifierMappingSrc" = 30064771129 }]
+
+[[bootstrap.macos.defaults_entries]] # Lofree Flow84 (VID 0x05AC, PID 0x024F): remap capslock -> ctrl
+domain = "NSGlobalDomain"
+key = "com.apple.keyboard.modifiermapping.1452-591-0"
+host = "current"
+value = [{ "HIDKeyboardModifierMappingDst" = 30064771300, "HIDKeyboardModifierMappingSrc" = 30064771129 }]
+
+[[bootstrap.macos.defaults_entries]] # Keychron Q1 Pro (VID 0x3434, PID 0x0610): remap capslock -> ctrl
+domain = "NSGlobalDomain"
+key = "com.apple.keyboard.modifiermapping.13364-1552-0"
+host = "current"
+value = [{ "HIDKeyboardModifierMappingDst" = 30064771300, "HIDKeyboardModifierMappingSrc" = 30064771129 }]

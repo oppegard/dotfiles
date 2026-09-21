@@ -61,10 +61,11 @@ qlmanage -r
 ## Preferences
 
 Managed macOS defaults live in `mise/config.macos.toml`. This repository tracks
-only intentional scalar, per-user preferences that are documented by
-[macos-defaults](https://github.com/yannbertrand/macos-defaults). It does not
-manage host-scoped, system-wide, complex, third-party, device-specific, or
-undocumented settings.
+only intentional preferences that are either documented by
+[macos-defaults](https://github.com/yannbertrand/macos-defaults) or isolated by
+a reviewed, single-setting before/after audit. It does not manage system-wide
+defaults, third-party application state, or values merely because they appear
+in a broad audit.
 
 To add one preference after changing it in System Settings:
 
@@ -79,11 +80,16 @@ catalog; then add the typed value to `mise/config.macos.toml`, along with the
 upstream-derived description and any documented activation action. Do not add a
 preference merely because it appears in an audit or a diff.
 
-The earlier fresh-user audit remains useful for investigating which live values
-differ from a clean Sequoia account, but it is not an import source. Its scalar
-candidates include ordinary application/account state as well as preferences.
+For host-scoped or complex Apple preferences, use `bin/macos-defaults-audit` to
+take focused before/after snapshots. Its reviewed `mise-candidates.toml` output
+uses `[bootstrap.macos.defaults]` for ordinary preferences and
+`[[bootstrap.macos.defaults_entries]]` with `host = "current"` for ByHost
+preferences. Arrays and dictionaries are supported; plist dates and binary data
+remain unsupported. The earlier fresh-user audit remains useful for broad
+investigation, but it is not an import source because its candidates include
+ordinary application and account state as well as preferences.
 
-Check only the catalog-backed mise desired state without writing:
+Check the mise-managed desired state without writing:
 
 ```sh
 mise -C mise run macos-defaults:status

@@ -11,6 +11,7 @@ require "tempfile"
 class MacosDefaultsAudit
   VERSION = 1
   SCALAR_TYPES = %w[boolean integer float string].freeze
+  TOML_TYPES = (SCALAR_TYPES + %w[array dict]).freeze
 
   def initialize(argv)
     @command = argv.shift
@@ -139,7 +140,7 @@ class MacosDefaultsAudit
     by_host = File.join(preferences_dir, "ByHost")
     return {} unless Dir.exist?(by_host)
 
-    Dir.glob(File.join(by_host, "*.plist")).sort.each_with_object({}) do |path, result|
+    Dir.glob(File.join(by_host, "*.plist"), File::FNM_DOTMATCH).sort.each_with_object({}) do |path, result|
       name = canonical_host_domain(File.basename(path, ".plist"))
       next unless name == "NSGlobalDomain" || name.start_with?("com.apple.")
 
@@ -253,11 +254,24 @@ class MacosDefaultsAudit
   end
 
   def classification(scope, current)
-    return "unsupported_host_scoped" if scope == "host_domains"
     return "unmanaged_absent" if current.nil?
-    return "mise_candidate" if SCALAR_TYPES.include?(current["type"])
+    return "unsupported_complex_value" unless mise_compatible?(current)
+    return "mise_current_host_candidate" if scope == "host_domains"
 
-    "unsupported_complex_value"
+    "mise_candidate"
+  end
+
+  def mise_compatible?(entry)
+    return false unless entry.is_a?(Hash) && TOML_TYPES.include?(entry["type"])
+
+    case entry["type"]
+    when "array"
+      entry.fetch("value").all? { |item| mise_compatible?(item) }
+    when "dict"
+      entry.fetch("value").values.all? { |item| mise_compatible?(item) }
+    else
+      true
+    end
   end
 
   def markdown_report(report)
@@ -283,23 +297,44 @@ class MacosDefaultsAudit
 
   def toml_candidates(differences)
     candidates = differences.select { |entry| entry["classification"] == "mise_candidate" }
+    current_host_candidates = differences.select { |entry| entry["classification"] == "mise_current_host_candidate" }
     lines = ["# Review each entry before copying it to mise/config.macos.toml.", "# Generated from live preference snapshots; this file is not managed state.", ""]
     candidates.group_by { |entry| entry["domain"] }.sort.each do |domain, entries|
-      lines << "[bootstrap.macos.defaults.\"#{domain.gsub('"', '\\\\"')}\"]"
+      lines << "[bootstrap.macos.defaults.#{toml_string(domain)}]"
       entries.sort_by { |entry| entry["key"] }.each do |entry|
-        lines << "\"#{entry["key"].gsub('"', '\\\\"')}\" = #{toml_value(entry.fetch("current").fetch("value"))}"
+        lines << "#{toml_string(entry["key"])} = #{toml_value(entry.fetch("current"))}"
       end
+      lines << ""
+    end
+    current_host_candidates.sort_by { |entry| [entry["domain"], entry["key"]] }.each do |entry|
+      lines << "[[bootstrap.macos.defaults_entries]]"
+      lines << "domain = #{toml_string(entry["domain"])}"
+      lines << "key = #{toml_string(entry["key"])}"
+      lines << 'host = "current"'
+      lines << "value = #{toml_value(entry.fetch("current"))}"
       lines << ""
     end
     lines.join("\n")
   end
 
-  def toml_value(value)
-    case value
-    when String then value.to_json
-    when TrueClass, FalseClass, Integer, Float then value.to_s
-    else raise "unsupported TOML candidate value: #{value.inspect}"
+  def toml_value(entry)
+    case entry.fetch("type")
+    when "string" then toml_string(entry.fetch("value"))
+    when *SCALAR_TYPES then entry.fetch("value").to_s
+    when "array"
+      "[#{entry.fetch("value").map { |item| toml_value(item) }.join(", ")}]"
+    when "dict"
+      values = entry.fetch("value").sort.map do |key, value|
+        "#{toml_string(key)} = #{toml_value(value)}"
+      end
+      "{ #{values.join(", ")} }"
+    else
+      raise "unsupported TOML candidate value: #{entry.inspect}"
     end
+  end
+
+  def toml_string(value)
+    value.to_json
   end
 
   def display(value)

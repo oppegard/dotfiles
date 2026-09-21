@@ -55,6 +55,16 @@ if ! printf '%s\n' "$dry_run_output" | rg -F 'defaults write com.example.dotfile
   exit 1
 fi
 
+if ! printf '%s\n' "$dry_run_output" | rg -F 'com.example.dotfiles-mise-test.modifiermapping'; then
+  echo "dry run did not print the current-host modifier mapping key" >&2
+  exit 1
+fi
+
+if ! printf '%s\n' "$dry_run_output" | rg -F 'NSGlobalDomain (current host)'; then
+  echo "dry run did not scope the modifier mapping to the current host" >&2
+  exit 1
+fi
+
 if printf '%s\n' "$dry_run_output" | rg -i 'killall|restart|log out'; then
   echo "dry run must not restart applications or sessions" >&2
   exit 1

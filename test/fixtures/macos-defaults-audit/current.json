@@ -5,12 +5,24 @@
     "com.apple.example": {
       "ChangedType": { "type": "boolean", "value": true },
       "NewScalar": { "type": "string", "value": "live only" },
-      "Complex": { "type": "array", "value": [{ "type": "string", "value": "changed" }] }
+      "Complex": { "type": "array", "value": [{ "type": "string", "value": "changed" }] },
+      "Unsupported": { "type": "data", "value": "AA==" }
     }
   },
   "host_domains": {
     "NSGlobalDomain": {
-      "HostOnly": { "type": "integer", "value": 2 }
+      "HostOnly": {
+        "type": "array",
+        "value": [
+          {
+            "type": "dict",
+            "value": {
+              "HIDKeyboardModifierMappingDst": { "type": "integer", "value": 2 },
+              "HIDKeyboardModifierMappingSrc": { "type": "integer", "value": 0 }
+            }
+          }
+        ]
+      }
     }
   }
 }

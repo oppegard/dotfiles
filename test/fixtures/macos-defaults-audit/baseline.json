@@ -10,7 +10,18 @@
   },
   "host_domains": {
     "NSGlobalDomain": {
-      "HostOnly": { "type": "integer", "value": 1 }
+      "HostOnly": {
+        "type": "array",
+        "value": [
+          {
+            "type": "dict",
+            "value": {
+              "HIDKeyboardModifierMappingDst": { "type": "integer", "value": 1 },
+              "HIDKeyboardModifierMappingSrc": { "type": "integer", "value": 0 }
+            }
+          }
+        ]
+      }
     }
   }
 }

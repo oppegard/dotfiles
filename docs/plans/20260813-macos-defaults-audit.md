@@ -9,7 +9,7 @@ Use only the live difference between Glenn's macOS 15.7.3 (24G419) account and a
 - Add `bin/macos-defaults-audit`, implemented with `/usr/bin/ruby` and Ruby's standard library only, plus macOS's built-in `defaults` and `plutil`.
   - `snapshot --output <file>`: capture effective `NSGlobalDomain`, all `com.apple.*` user-default domains, and Apple/GlobalPreferences host-scoped (`ByHost`) plists. Export each plist as XML, parse it with Ruby `REXML`, and record domain, key, plist type, value, host scope, OS build, and hardware metadata.
   - `compare --baseline <file> --current <file> --output <dir>`: emit deterministic JSON and Markdown reports containing only domain/key pairs that differ, including absent domains/keys and type differences.
-  - Classify differences as native mise candidates (bool/integer/float/string, non-host), unsupported host-scoped values, or unsupported complex plist values. Reports and snapshots remain in a mode-700 temporary directory and are never committed automatically.
+  - Classify differences as native mise candidates, current-host mise candidates, or unsupported plist values. Mise candidates may contain recursively supported booleans, integers, floats, strings, arrays, and dictionaries. Reports and snapshots remain in a mode-700 temporary directory and are never committed automatically.
 
 - Establish the baseline:
   1. Create a temporary local standard user, with no Apple Account or personalized setup.
@@ -18,10 +18,10 @@ Use only the live difference between Glenn's macOS 15.7.3 (24G419) account and a
 
 - After review, add only explicitly approved live-diff candidates to `mise/config.macos.toml`:
   - Prefer mise's friendly macOS sections when an audited key maps exactly to one.
-  - Put all other approved scalar values in `[bootstrap.macos.defaults]`, preserving their audited domain, type, and value.
+  - Put all other approved values in `[bootstrap.macos.defaults]`, preserving their audited domain, type, and value.
   - Do not duplicate a friendly-section key in the raw table.
-  - Store approved host-scoped and composite values in a separate audited manifest; expose a read-only `mise` task to verify them. Do not add a custom apply mechanism for unsupported values.
-  - mise will manage only per-user scalar defaults; it cannot manage `-currentHost`, system (`sudo defaults`), arrays, dictionaries, dates, or data values. [mise macOS Defaults documentation](https://mise.jdx.dev/bootstrap/macos-defaults.html)
+  - Put approved host-scoped values in `[[bootstrap.macos.defaults_entries]]` with `host = "current"`; arrays and dictionaries are represented recursively as TOML values.
+  - Store only unsupported dates and data values in the separate audited manifest. Mise does not manage system (`sudo defaults`), date, or binary data values. [mise macOS Defaults documentation](https://mise.jdx.dev/bootstrap/macos-defaults.html)
 
 - Update `bin/setup.sh`'s Darwin path to run `mise bootstrap macos defaults status` after the existing `mise bootstrap`, so setup reports drift without changing preferences. Applying is always explicit and confirmed with:
   - `mise -C mise bootstrap macos defaults apply --dry-run`
