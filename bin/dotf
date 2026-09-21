@@ -1,0 +1,71 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SOURCE_PATH="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE_PATH" ]; do
+    SOURCE_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
+    SOURCE_PATH="$(readlink "$SOURCE_PATH")"
+    case "$SOURCE_PATH" in
+        /*) ;;
+        *) SOURCE_PATH="$SOURCE_DIR/$SOURCE_PATH" ;;
+    esac
+done
+
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
+DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
+export DOTFILES_DIR
+# shellcheck source=bin/lib/dotf-common.sh
+source "$SCRIPT_DIR/lib/dotf-common.sh"
+
+cmd_run() {
+    "$SCRIPT_DIR/bootstrap"
+    ensure_homebrew_env
+    ensure_mise_env
+    verify_tools
+    announce "Tool prerequisites installed"
+    cat <<'EOF'
+
+This subprocess cannot update your Terminal's environment. Run:
+
+  eval "$(/opt/homebrew/bin/brew shellenv bash)"
+  export PATH="$HOME/.local/bin:$PATH"
+  export MISE_AUTO_ENV=true
+
+Continue with BOOTSTRAP.md steps 7–10: select your profile, adopt private
+history, configure Git identity, and prepare BetterDisplay.
+Then run ./bin/setup.sh as described in Step 11.
+EOF
+}
+
+cmd_help() {
+    cat <<'EOF'
+dotf - Dotfiles tool bootstrap
+
+Usage: dotf <command>
+
+Commands:
+  run    Install missing Homebrew, Homebrew Bash, and mise; stop before setup
+  help   Show this help (also --help or -h)
+EOF
+}
+
+main() {
+    if [ "$#" -ne 1 ]; then
+        cmd_help >&2
+        return 1
+    fi
+    case "$1" in
+        run) cmd_run ;;
+        help|--help|-h) cmd_help ;;
+        *)
+            printf 'Error: Unknown command "%s"\n' "$1" >&2
+            cmd_help >&2
+            return 1
+            ;;
+    esac
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi

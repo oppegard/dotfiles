@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -euo pipefail
+
+BOOTSTRAP_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bin/lib/dotf-common.sh
+source "$BOOTSTRAP_DIR/lib/dotf-common.sh"
+
+bootstrap_homebrew() {
+    local install_script
+    if [ ! -x /opt/homebrew/bin/brew ]; then
+        announce "Installing Homebrew"
+        install_script="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        /bin/bash -c "$install_script"
+    fi
+    ensure_homebrew_env
+}
+
+bootstrap_bash() {
+    if [ ! -x /opt/homebrew/bin/bash ]; then
+        announce "Installing Homebrew Bash"
+        /opt/homebrew/bin/brew install bash
+    fi
+}
+
+bootstrap_mise() {
+    export PATH="$HOME/.local/bin:$PATH"
+    if ! command -v mise >/dev/null 2>&1; then
+        announce "Installing mise"
+        curl -fsSL https://mise.run | sh
+    fi
+    ensure_mise_env
+}
+
+main() {
+    if [ "$#" -ne 0 ]; then
+        echo "Usage: bootstrap" >&2
+        return 1
+    fi
+    if [ "$(uname -s)" != Darwin ] || [ "$(uname -m)" != arm64 ]; then
+        echo "Error: bootstrap requires Apple Silicon macOS (a native arm64 terminal)." >&2
+        return 1
+    fi
+    bootstrap_homebrew
+    bootstrap_bash
+    bootstrap_mise
+    verify_tools
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi
