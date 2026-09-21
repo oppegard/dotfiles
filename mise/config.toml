@@ -39,19 +39,18 @@ builtin = "history-watch"
 "~/.config/curlrc" = "~/.dotfiles/files/home/.config/curlrc"
 "~/.config/ghostty" = "~/.dotfiles/files/home/.config/ghostty"
 "~/.config/git" = { source = "~/.dotfiles/files/home/.config/git", mode = "symlink-each", manifest = "git" }
-"~/.config/mise/conf.d/macos-menubar-spacing.toml" = { source = "~/src/dotfiles/mise/macos-menubar-spacing.toml.tera", mode = "template" }
-"~/.config/mise/config.home.toml" = "~/src/dotfiles/mise/config.home.toml"
-"~/.config/mise/config.linux.toml" = "~/src/dotfiles/mise/config.linux.toml"
-"~/.config/mise/config.macos.toml" = "~/src/dotfiles/mise/config.macos.toml"
-"~/.config/mise/config.toml" = "~/src/dotfiles/mise/config.toml"
-"~/.config/mise/miserc.toml" = { source = "~/src/dotfiles/mise/miserc.toml.tera", mode = "template" }
+"~/.config/mise/conf.d/macos-menubar-spacing.toml" = { source = "~/.dotfiles/mise/macos-menubar-spacing.toml.tera", mode = "template" }
+"~/.config/mise/config.home.toml" = "~/.dotfiles/mise/config.home.toml"
+"~/.config/mise/config.linux.toml" = "~/.dotfiles/mise/config.linux.toml"
+"~/.config/mise/config.macos.toml" = "~/.dotfiles/mise/config.macos.toml"
+"~/.config/mise/config.toml" = "~/.dotfiles/mise/config.toml"
+"~/.config/mise/miserc.toml" = { source = "~/.dotfiles/mise/miserc.toml.tera", mode = "template" }
 "~/.config/ripgreprc" = "~/.dotfiles/files/home/.config/ripgreprc"
 "~/.config/shell" = { source = "~/.dotfiles/files/home/.config/shell", mode = "symlink-each" }
 "~/.config/starship.toml" = "~/.dotfiles/files/home/.config/starship.toml"
 "~/.config/tmux" = "~/.dotfiles/files/home/.config/tmux"
 "~/.config/uv" = "~/.dotfiles/files/home/.config/uv"
 "~/.digrc" = "~/.dotfiles/files/home/.digrc"
-"~/.dotfiles" = "~/src/dotfiles"
 "~/.gitconfig" = "~/.dotfiles/files/home/.gitconfig"
 "~/.inputrc" = "~/.dotfiles/files/home/.inputrc"
 "~/.local/bin" = { source = "~/.dotfiles/files/home/.local/bin", mode = "symlink-each", exclude = ["fix-tahoe-focus", "flush-dns", "restart-soundsource", "screen-5.0.1", "try-darwin-aarch64", "try-linux-x86_64"] }

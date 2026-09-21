@@ -162,7 +162,8 @@ tools from Step 2 provide Git for the clone.
 
   Both fetch and push URLs should use `git@github.com`, not HTTPS.
 
-  Do not create `~/.dotfiles`; mise will create it as a symlink to this checkout.
+  Do not create `~/.dotfiles`; `./bin/dotf run` will create it as a symlink to
+  this checkout.
 
   **Confidence: Repository-verified.** The current origin and all hard-coded
   checkout sources were verified. A second clone was not made from GitHub.

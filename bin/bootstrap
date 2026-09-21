@@ -3,8 +3,19 @@
 set -euo pipefail
 
 BOOTSTRAP_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(dirname "$BOOTSTRAP_DIR")"
 # shellcheck source=bin/lib/dotf-common.sh
 source "$BOOTSTRAP_DIR/lib/dotf-common.sh"
+
+ensure_dotfiles_checkout() {
+    local target="$HOME/.dotfiles"
+
+    if [ "$DOTFILES_ROOT" = "$target" ] || [ -e "$target" ] || [ -L "$target" ]; then
+        return
+    fi
+
+    ln -s "$DOTFILES_ROOT" "$target"
+}
 
 bootstrap_homebrew() {
     local install_script
@@ -37,6 +48,7 @@ main() {
         echo "Usage: bootstrap" >&2
         return 1
     fi
+    ensure_dotfiles_checkout
     if [ "$(uname -s)" != Darwin ] || [ "$(uname -m)" != arm64 ]; then
         echo "Error: bootstrap requires Apple Silicon macOS (a native arm64 terminal)." >&2
         return 1
