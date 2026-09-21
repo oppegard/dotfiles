@@ -17,6 +17,34 @@ ensure_dotfiles_checkout() {
     ln -s "$DOTFILES_ROOT" "$target"
 }
 
+ensure_full_disk_access() {
+    local terminal_app
+
+    if /usr/bin/defaults read com.apple.universalaccess >/dev/null 2>&1; then
+        return
+    fi
+
+    case "${TERM_PROGRAM:-}" in
+        Apple_Terminal) terminal_app="Terminal.app" ;;
+        ghostty|Ghostty) terminal_app="Ghostty.app" ;;
+        *) terminal_app="${TERM_PROGRAM:-the terminal app running this bootstrap}" ;;
+    esac
+
+    announce "Full Disk Access is required for $terminal_app"
+    open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles" \
+        >/dev/null 2>&1 || true
+    cat >&2 <<EOF
+In System Settings > Privacy & Security > Full Disk Access:
+
+  1. Add and enable $terminal_app.
+  2. Quit $terminal_app completely and reopen it.
+  3. Rerun ./bin/dotf run.
+
+Bootstrap stopped because macOS applies Full Disk Access only to a new app process.
+EOF
+    return 1
+}
+
 bootstrap_homebrew() {
     local install_script
     if [ ! -x /opt/homebrew/bin/brew ]; then
@@ -53,6 +81,7 @@ main() {
         echo "Error: bootstrap requires Apple Silicon macOS (a native arm64 terminal)." >&2
         return 1
     fi
+    ensure_full_disk_access
     bootstrap_homebrew
     bootstrap_bash
     bootstrap_mise

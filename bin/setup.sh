@@ -15,11 +15,10 @@ done
 SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
 DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
 export DOTFILES_DIR
+# shellcheck source=bin/lib/dotf-common.sh
+source "$SCRIPT_DIR/lib/dotf-common.sh"
 
-if ! command -v mise &>/dev/null; then
-  echo "ERROR: mise is not installed. See https://mise.jdx.dev/installing-mise.html."
-  exit 1
-fi
+ensure_mise_env
 
 git -C "$DOTFILES_DIR" pull
 

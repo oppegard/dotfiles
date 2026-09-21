@@ -22,10 +22,13 @@ ensure_homebrew_env() {
 ensure_mise_env() {
     export PATH="$HOME/.local/bin:$PATH"
     hash -r
+
     if ! command -v mise >/dev/null 2>&1; then
         echo "Error: mise was not found in ~/.local/bin or PATH." >&2
         return 1
     fi
+
+    eval "$(mise activate bash)"
 }
 
 verify_tools() {
