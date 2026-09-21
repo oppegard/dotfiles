@@ -18,9 +18,12 @@ ensure_dotfiles_checkout() {
 }
 
 ensure_full_disk_access() {
-    local terminal_app
+    local preferences_file terminal_app
+    preferences_file="$HOME/Library/Preferences/com.apple.universalaccess.plist"
 
-    if /usr/bin/defaults read com.apple.universalaccess >/dev/null 2>&1; then
+    # Test FDA write access without changing the file.
+    if [ -e "$preferences_file" ] &&
+        (exec 3>>"$preferences_file") 2>/dev/null; then
         return
     fi
 
