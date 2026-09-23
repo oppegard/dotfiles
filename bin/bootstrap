@@ -99,8 +99,9 @@ main() {
     debug "Bootstrapping development environment..."
 
     bootstrap_homebrew
-    bootstrap_bash
+#    bootstrap_bash
     bootstrap_mise
+    mise bootstrap packages apply
     verify_tools
 
     debug "Bootstrap complete."
