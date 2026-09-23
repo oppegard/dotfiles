@@ -7,6 +7,14 @@ DOTFILES_ROOT="$(dirname "$BOOTSTRAP_DIR")"
 # shellcheck source=bin/lib/dotf-common.sh
 source "$BOOTSTRAP_DIR/lib/dotf-common.sh"
 
+is_macos() {
+    [ "$(uname -s)" = "Darwin" ]
+}
+
+is_linux() {
+    [ "$(uname -s)" = "Linux" ]
+}
+
 ensure_dotfiles_checkout() {
     local target="$HOME/.dotfiles"
 
@@ -18,6 +26,10 @@ ensure_dotfiles_checkout() {
 }
 
 ensure_full_disk_access() {
+    if ! is_macos; then
+        return 0
+    fi
+
     local preferences_file terminal_app
     preferences_file="$HOME/Library/Preferences/com.apple.universalaccess.plist"
 
@@ -49,6 +61,10 @@ EOF
 }
 
 bootstrap_homebrew() {
+    if ! is_macos; then
+        return 0
+    fi
+
     local install_script
     if [ ! -x /opt/homebrew/bin/brew ]; then
         announce "Installing Homebrew"
@@ -80,15 +96,14 @@ main() {
         return 1
     fi
     ensure_dotfiles_checkout
-    if [ "$(uname -s)" != Darwin ] || [ "$(uname -m)" != arm64 ]; then
-        echo "Error: bootstrap requires Apple Silicon macOS (a native arm64 terminal)." >&2
-        return 1
-    fi
-    ensure_full_disk_access
+    debug "Bootstrapping development environment..."
+
     bootstrap_homebrew
     bootstrap_bash
     bootstrap_mise
     verify_tools
+
+    debug "Bootstrap complete."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then

@@ -2,6 +2,8 @@ Alfred/Alfred.alfredpreferences/remote/
 .idea/
 .vscode/
 .DS_Store
+*.log
+logs/
 zshrc.local
 .zshrc.local
 vendor/macos-defaults/diffs/
