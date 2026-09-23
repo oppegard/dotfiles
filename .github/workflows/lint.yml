@@ -15,8 +15,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  scan:
-    name: Scan repository
+  lint:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
@@ -38,7 +37,7 @@ jobs:
           cache: true
           install: false
 
-      - name: Install secret scanning tools
+      - name: Install gitleaks
         run: mise use -g "gitleaks@$(awk -F '\"' '/^gitleaks = / { print $2 }' mise/config.toml)"
 
       - name: Run lint
