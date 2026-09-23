@@ -1,64 +1,8 @@
 # dotfiles
 
-Another dotfiles repo.
+- We do not store secrets on the system in plaintext.
 
-Meta: lint this file via `docker run --rm -v $PWD:/workdir ghcr.io/igorshubovych/markdownlint-cli:latest "*.md" --fix`
-
-# Browser Customization
-
-## Chrome
-
-Get rid of "Sign in with Google" on sites like StackOverflow, from https://underpassapp.com/news/2025/7/5.html:
-1. Go to  chrome://settings/content/federatedIdentityApi
-2. Select "Block sign-in prompts from identity services"
-
-# New Mac Setup
-
-TODO: automate where sensible 🤖
-Consider:
-- https://github.com/omacom-io/omamac
-
-## Make Active/Key Window More Pominent
-
-Darken non-key window:
-- https://hazeover.com
-- 10% haze
-- Animation: ease in & out at 0.1 sec
-
-Add Color to Active Window Borders:
-- https://github.com/FelixKratz/JankyBorders
-- prefs are in `files/home/.config/borders/bordersrc`
-
-## Install Fonts
-
-- Essential Pragmata Pro
-- [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans)
-- [iA Writer Mono & Quattro](https://github.com/iaolo/iA-Fonts)
-- Source Code Pro
-  - *Sauce* Code variant preferred for [Starship](https://starship.rs/)
-  - `brew tap homebrew/cask-fonts && brew install font-sauce-code-pro-nerd-font`
-  - Assign font in iTerm and IntelliJ
-
-## Enable QuickLook Plugins
-
-```sh
-for plugin in ~/Library/QuickLook/*qlgenerator; do
-  echo enabling $plugin;
-  xattr -d -r com.apple.quarantine ${plugin}
-done
-qlmanage -r
-```
-
-## Install Utilities
-
-- [Mac Mouse Fix](https://mousefix.org/) ([github](https://github.com/noah-nuebling/mac-mouse-fix))
-  - Best for non-Apple mice, like MX Master 3.
-  - Enable Smooth Scrolling
-- [AppCleaner](https://freemacsoft.net/appcleaner/) or [UninstallPKG](https://www.corecode.io/uninstallpkg/) to be able to remove cruft from installers using .pkg and admin privs.
-- [TimeMachineEditor](https://tclementdev.com/timemachineeditor/) to schedule TM backups overnight.
-- [GMailinator](https://github.com/wwwjfy/GMailinator) - GMail shortcuts for Mail.app (requires [Xcode](https://developer.apple.com))
-
-## Preferences
+## MacOS Preferences
 
 Managed macOS defaults live in `mise/config.macos.toml`. This repository tracks
 only intentional preferences that are either documented by
@@ -92,25 +36,15 @@ ordinary application and account state as well as preferences.
 Check the mise-managed desired state without writing:
 
 ```sh
-mise -C mise run macos-defaults:status
+mise -C mise bootstrap macos defaults status --missing
 ```
 
-`macos-defaults:status` exits non-zero when a managed value is missing or
-different. Inspect writes with `--dry-run`, then explicitly apply them:
+Inspect writes with `--dry-run`, then explicitly apply them:
 
 ```sh
 mise -C mise bootstrap macos defaults apply --dry-run
 mise -C mise bootstrap macos defaults apply
 ```
-
-Mise never restarts applications. Follow the activation action recorded beside
-the changed preference, if any.
-
-### Map ⌘ + ←Delete to backward-kill-line in iTerm2 + zsh
-
-In iTerm2 have to ⌘ + ←Delete (⌘ + backspace) to send hex codes `0x18 0x7f`. Then ensure `bindkey ... backward-kill-line` is in `.zshrc`.
-
-Detailed S.O. replies: [1](https://stackoverflow.com/a/32340345), [2](https://stackoverflow.com/questions/6205157/how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line/29403520#29403520).
 
 ### BetterDisplay Prefs
 
@@ -123,61 +57,7 @@ or `mise run betterdisplay:import` to apply it. Import asks for confirmation,
 saves the current full preferences to `/tmp`, preserves local display-specific
 preferences, and restarts BetterDisplay.
 
-### Git Hooks
-
-The mise-managed global `pre-commit` hook runs `gitleaks` against staged
-changes before a commit. The hook warns and allows the commit if `gitleaks` is
-missing.
-
-On macOS, the Brewfile installs `gitleaks`. On Linux, install it with the
-distro package manager.
-
-To disable only the global Gitleaks check for one repository:
-
-```sh
-git config hooks.gitleaks false
-```
-
-Repository-local `.git/hooks/pre-commit` scripts still run after the global
-hook.
-
-### Firefox
-
-Disable autoplay of YouTube Channel Trailers
-
-- go to `about:config`
-- `media.autoplay.default = 5`
-- `media.autoplay.blocking_policy = 2`
-
-[source](https://www.reddit.com/r/firefox/comments/hohrym/autoplay_settings_changed_blocking_seems_much/)
-
-#### userChrome.css
-
-Enable in new Firefox:
-
-- Open about:config.
-- Set toolkit.legacyUserProfileCustomizations.stylesheets to `true`.
-- Open about:support and search for "Profile Folder". Copy the path.
-- Quit Firefox and symlink the `chrome` folder:
-  - `ln -s $HOME/src/dotfiles/Firefox/chrome "$HOME/Library/Application Support/Firefox/Profiles/u6rri5xi.default-release/"`
-- Start Firefox.
-
-## SSH Setup
-
-From 1Password, copy `memex_id_ed25519` and `id_ed25519` to `~/.ssh/`.
-
-```sh
-chmod 0600 ~/.ssh/*id*
-```
-
 # Resources
-
-## Single Site Browsers (SSB)
-
-[BZG](https://www.bzgapps.com) provides:
-
-- Unite for WebKit-based SSB
-- Coherence X
 
 ## launchd
 
