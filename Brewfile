@@ -6,9 +6,6 @@ brew "btop"
 brew "coreutils"
 brew "ffmpeg" # because it's always handy
 brew "fzf"
-brew "git"
-brew "git-lfs"
-brew "gitleaks"
 brew "neovim"
 brew "pstree"
 brew "poppler" # pdf tools for codex

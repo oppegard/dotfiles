@@ -1,2 +1,13 @@
+[tools]
+hk = { version = "2.0.1", postinstall = "hk install --mise" }
+
 [env]
 _.path = ["./bin"]
+
+[tasks."lint:secrets"]
+description = "Scan the working tree for hardcoded secrets"
+run = "gitleaks dir --redact=85 --no-banner --no-color --max-target-megabytes 5 --config .gitleaks.toml ."
+
+[tasks.lint]
+description = "Run all lint checks"
+depends = ["lint:secrets"]

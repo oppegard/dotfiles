@@ -39,7 +39,6 @@
 	excludesFile = ~/.config/git/ignore
 	pager = less -FXRS -x2
 #	editor = subl --wait --new-window
-	hooksPath = ~/.config/git/hooks
 [diff]
 	algorithm = histogram
 [fetch]
@@ -85,3 +84,6 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !MISE_EXEC_AUTO_INSTALL=0 $HOME/.local/bin/mise exec --quiet gh -- gh auth git-credential
+[hook "hk-pre-commit"]
+	command = test \"${HK:-1}\" = \"0\" || ~/.local/bin/mise x hk -- hk run pre-commit --from-hook --staged
+	event = pre-commit
