@@ -58,9 +58,3 @@ ensure_mise_env() {
 
     eval "$(mise activate bash)"
 }
-
-verify_tools() {
-    /opt/homebrew/bin/brew --version
-    /opt/homebrew/bin/bash --version
-    mise --version
-}

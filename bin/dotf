@@ -54,7 +54,6 @@ cmd_run() {
     "$SCRIPT_DIR/bootstrap"
     ensure_homebrew_env
     ensure_mise_env
-    verify_tools
     announce "Tool prerequisites installed"
     cat <<'EOF'
 

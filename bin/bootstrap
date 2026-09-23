@@ -61,6 +61,7 @@ EOF
 }
 
 bootstrap_homebrew() {
+    debug "Bootstrapping homebrew..."
     if ! is_macos; then
         return 0
     fi
@@ -74,16 +75,9 @@ bootstrap_homebrew() {
     ensure_homebrew_env
 }
 
-bootstrap_bash() {
-    if [ ! -x /opt/homebrew/bin/bash ]; then
-        announce "Installing Homebrew Bash"
-        /opt/homebrew/bin/brew install bash
-    fi
-}
-
 bootstrap_mise() {
-    export PATH="$HOME/.local/bin:$PATH"
-    if ! command -v mise >/dev/null 2>&1; then
+    debug "Bootstrapping mise..."
+    if ! ensure_mise_env; then
         announce "Installing mise"
         curl -fsSL https://mise.run | sh
     fi
@@ -99,10 +93,8 @@ main() {
     debug "Bootstrapping development environment..."
 
     bootstrap_homebrew
-#    bootstrap_bash
     bootstrap_mise
     mise bootstrap packages apply
-    verify_tools
 
     debug "Bootstrap complete."
 }
