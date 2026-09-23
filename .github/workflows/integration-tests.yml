@@ -1,0 +1,224 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect changes that do not need integration
+        id: integration_optional
+        shell: bash
+        run: |
+          set -euo pipefail
+          
+          case "${{ github.event_name }}" in
+            pull_request)
+              base_sha="${{ github.event.pull_request.base.sha }}"
+              head_sha="${{ github.event.pull_request.head.sha }}"
+              ;;
+            *)
+              echo "integration_optional=false" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
+          
+          if [ "$base_sha" = "0000000000000000000000000000000000000000" ]; then
+            echo "integration_optional=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          
+          git diff --name-only --no-renames "$base_sha" "$head_sha" > "$RUNNER_TEMP/changed-files"
+          mapfile -t files < "$RUNNER_TEMP/changed-files"
+          
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "integration_optional=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          
+          integration_optional=true
+          
+          for file in "${files[@]}"; do
+            case "$file" in
+              test/*|docs/*|README.md|AGENTS.md)
+                ;;
+              *)
+                integration_optional=false
+                break
+                ;;
+            esac
+          done
+          
+          echo "integration_optional=$integration_optional" >> "$GITHUB_OUTPUT"
+          printf 'integration_optional=%s\n' "$integration_optional"
+          printf 'changed files:\n%s\n' "$(printf '%s\n' "${files[@]}")"
+
+  integration-test:
+    needs: detect-changes
+    if: ${{ !cancelled() }}
+    # Expand the matrix even for skips so required platform check names exist.
+    runs-on: ${{ needs.detect-changes.outputs.integration_optional == 'true' && 'ubuntu-slim' || matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-26.04
+
+    steps:
+      - name: Require successful change detection
+        run: test "${{ needs.detect-changes.result }}" = success
+
+      - name: Skip integration for prose or test-only changes
+        if: needs.detect-changes.outputs.integration_optional == 'true'
+        run: echo "No integration-relevant changes."
+
+      - name: Checkout repository
+        if: needs.detect-changes.outputs.integration_optional != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Run dotfiles integration script
+        if: needs.detect-changes.outputs.integration_optional != 'true'
+        id: run
+        timeout-minutes: 1
+        env:
+          DEBUG: true
+          CI: true
+          NONINTERACTIVE: true
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bin/dotf run
+
+#      - name: Upload logs
+#        if: always() && needs.detect-changes.outputs.integration_optional != 'true'
+#        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+#        with:
+#          name: logs-${{ matrix.os }}
+#          path: |
+#            output.log
+#            output-second.log
+#            fish-init.log
+#          retention-days: 7
+#
+#  non-admin-integration-test:
+#    needs: detect-changes
+#    if: ${{ !cancelled() && (needs.detect-changes.result != 'success' || needs.detect-changes.outputs.integration_optional != 'true') }}
+#    runs-on: macos-latest
+#    timeout-minutes: 20
+#
+#    steps:
+#      - name: Require successful change detection
+#        run: test "${{ needs.detect-changes.result }}" = success
+#
+#      - name: Checkout repository
+#        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+#
+#      - name: Set up Ruby
+#        uses: ruby/setup-ruby@4c56a21280b36d862b5fc31348f463d60bdc55d5 # v1.301.0
+#        with:
+#          ruby-version: 'ruby'
+#          bundler-cache: false
+#
+#      - name: Prepare non-admin macOS runner user
+#        run: |
+#          set -euo pipefail
+#
+#          username="dotfiles-ci"
+#          home_dir="/Users/${username}"
+#          repo_dir="${home_dir}/dotfiles"
+#
+#          if ! id -u "${username}" >/dev/null 2>&1; then
+#            next_uid="$(dscl . -list /Users UniqueID | awk '{print $2}' | sort -n | tail -1)"
+#            next_uid="$((next_uid + 1))"
+#            sudo dscl . -create "/Users/${username}"
+#            sudo dscl . -create "/Users/${username}" UserShell /bin/bash
+#            sudo dscl . -create "/Users/${username}" RealName "Dotfiles CI"
+#            sudo dscl . -create "/Users/${username}" UniqueID "${next_uid}"
+#            sudo dscl . -create "/Users/${username}" PrimaryGroupID 20
+#            sudo dscl . -create "/Users/${username}" NFSHomeDirectory "${home_dir}"
+#            sudo createhomedir -c -u "${username}" >/dev/null
+#          fi
+#
+#          sudo rm -rf "${home_dir}/.homebrew" "${home_dir}/Library/Caches/Homebrew"
+#          sudo mkdir -p "${repo_dir}"
+#          sudo rsync -a --delete --exclude .git "${GITHUB_WORKSPACE}/" "${repo_dir}/"
+#          sudo chown -R "${username}:staff" "${home_dir}"
+#          sudo -H -u "${username}" bash -lc '
+#            if id -Gn | tr " " "\n" | grep -qx admin; then
+#              echo "User unexpectedly has admin rights"
+#              exit 1
+#            fi
+#          '
+#
+#      - name: Seed immutable gem credentials for non-admin user
+#        run: |
+#          set -euo pipefail
+#
+#          username="dotfiles-ci"
+#
+#          sudo -H -u "${username}" bash <<'BASH'
+#          set -euo pipefail
+#          mkdir -p "$HOME/.gem"
+#          cp "$HOME/dotfiles/files/home/.gem/credentials" "$HOME/.gem/credentials"
+#          printf '\n# stale copy for integration test\n' >> "$HOME/.gem/credentials"
+#          chflags uchg "$HOME/.gem/credentials"
+#          ls -lO "$HOME/.gem/credentials"
+#          BASH
+#
+#      - name: Run dotfiles integration script as non-admin macOS user
+#        id: non_admin_run
+#        timeout-minutes: 20
+#        env:
+#          DEBUG: true
+#          CI: true
+#          NONINTERACTIVE: true
+#          AUBE_DISABLE_TARBALL_STREAM: "1"
+#          GITHUB_TOKEN: ${{ github.token }}
+#          MISE_CI_TOOLS: "gum,github:aubepkg/aube,npm:@earendil-works/pi-coding-agent,fzf,aqua:fish-shell/fish-shell,pipx,pipx:playwright"
+#          BREW_CI_PACKAGES: "duti"
+#          BREW_CI_CASKS: ""
+#        run: |
+#          set -euo pipefail
+#
+#          username="dotfiles-ci"
+#          home_dir="/Users/${username}"
+#          runner_path="$PATH"
+#
+#          sudo -H -u "${username}" env \
+#            HOME="${home_dir}" \
+#            PATH="${home_dir}/.homebrew/bin:${runner_path}:${home_dir}/.local/bin" \
+#            DEBUG="${DEBUG}" \
+#            CI="${CI}" \
+#            NONINTERACTIVE="${NONINTERACTIVE}" \
+#            AUBE_DISABLE_TARBALL_STREAM="${AUBE_DISABLE_TARBALL_STREAM}" \
+#            GITHUB_TOKEN="${GITHUB_TOKEN}" \
+#            MISE_CI_TOOLS="${MISE_CI_TOOLS}" \
+#            BREW_CI_PACKAGES="${BREW_CI_PACKAGES}" \
+#            BREW_CI_CASKS="${BREW_CI_CASKS}" \
+#            bash "${home_dir}/dotfiles/tools/ci/run_dotfiles_integration.sh" "${home_dir}/dotfiles"
+#
+#      - name: Upload non-admin logs
+#        if: always()
+#        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+#        with:
+#          name: logs-macos-latest-non-admin
+#          path: |
+#            /Users/dotfiles-ci/dotfiles/output.log
+#            /Users/dotfiles-ci/dotfiles/output-second.log
+#            /Users/dotfiles-ci/dotfiles/fish-init.log
+#          retention-days: 7
