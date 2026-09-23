@@ -102,7 +102,13 @@ jobs:
           CI: true
           NONINTERACTIVE: true
           GITHUB_TOKEN: ${{ github.token }}
-        run: bin/dotf run
+        shell: bash
+        run: |
+          set -euo pipefail
+          # run one
+          bin/dotf run
+          # run two
+          bin/dotf run
 
 #      - name: Upload logs
 #        if: always() && needs.detect-changes.outputs.integration_optional != 'true'
