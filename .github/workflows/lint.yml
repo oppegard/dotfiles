@@ -39,7 +39,7 @@ jobs:
           install: false
 
       - name: Install secret scanning tools
-        run: mise install -g "gitleaks@$(awk -F '\"' '/^gitleaks = / { print $2 }' mise/config.toml)"
+        run: mise use -g "gitleaks@$(awk -F '\"' '/^gitleaks = / { print $2 }' mise/config.toml)"
 
       - name: Run lint
         run: mise run lint
