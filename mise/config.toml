@@ -22,7 +22,6 @@ compile = false
 [bootstrap.hooks]
 post-packages = 'bash "$HOME/.dotfiles/bin/hooks/post-packages-hook.sh"'
 
-
 [bootstrap.services.mise-history]
 builtin = "history-watch"
 
