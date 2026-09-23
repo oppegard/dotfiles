@@ -7,3 +7,7 @@ _.path = ["./bin"]
 [tasks."lint:secrets"]
 description = "Scan the working tree for hardcoded secrets"
 run = "gitleaks dir --redact=85 --no-banner --no-color --max-target-megabytes 5 --config .gitleaks.toml ."
+
+[tasks.lint]
+description = "Run all lint checks"
+depends = ["lint:secrets"]
