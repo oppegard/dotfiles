@@ -38,13 +38,15 @@ announce() {
 }
 
 ensure_homebrew_env() {
-    local shellenv
-    if [ ! -x /opt/homebrew/bin/brew ]; then
-        echo "Error: Homebrew was not found at /opt/homebrew/bin/brew." >&2
-        return 1
+    if [ -x "$HOME/.homebrew/bin/brew" ]; then
+        eval "$("$HOME/.homebrew/bin/brew" shellenv bash)"
+    elif command -v brew &> /dev/null; then
+        eval "$(brew shellenv bash)"
+    elif [ -x /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv bash)"
+    elif [ -x /usr/local/bin/brew ]; then
+        eval "$(/usr/local/bin/brew shellenv bash)"
     fi
-    shellenv="$(/opt/homebrew/bin/brew shellenv bash)" || return
-    eval "$shellenv"
 }
 
 ensure_mise_env() {
