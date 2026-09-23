@@ -1,0 +1,111 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect changes that do not need integration
+        id: integration_optional
+        shell: bash
+        run: |
+          set -euo pipefail
+          
+          case "${{ github.event_name }}" in
+            pull_request)
+              base_sha="${{ github.event.pull_request.base.sha }}"
+              head_sha="${{ github.event.pull_request.head.sha }}"
+              ;;
+            *)
+              echo "integration_optional=false" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
+          
+          if [ "$base_sha" = "0000000000000000000000000000000000000000" ]; then
+            echo "integration_optional=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          
+          git diff --name-only --no-renames "$base_sha" "$head_sha" > "$RUNNER_TEMP/changed-files"
+          mapfile -t files < "$RUNNER_TEMP/changed-files"
+          
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "integration_optional=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          
+          integration_optional=true
+          
+          for file in "${files[@]}"; do
+            case "$file" in
+              test/*|docs/*|README.md|AGENTS.md)
+                ;;
+              *)
+                integration_optional=false
+                break
+                ;;
+            esac
+          done
+          
+          echo "integration_optional=$integration_optional" >> "$GITHUB_OUTPUT"
+          printf 'integration_optional=%s\n' "$integration_optional"
+          printf 'changed files:\n%s\n' "$(printf '%s\n' "${files[@]}")"
+
+  integration-test:
+    needs: detect-changes
+    if: ${{ !cancelled() }}
+    # Expand the matrix even for skips so required platform check names exist.
+    runs-on: ${{ needs.detect-changes.outputs.integration_optional == 'true' && 'ubuntu-slim' || matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-26.04
+
+    steps:
+      - name: Require successful change detection
+        run: test "${{ needs.detect-changes.result }}" = success
+
+      - name: Skip integration for prose or test-only changes
+        if: needs.detect-changes.outputs.integration_optional == 'true'
+        run: echo "No integration-relevant changes."
+
+      - name: Checkout repository
+        if: needs.detect-changes.outputs.integration_optional != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Run dotfiles integration script
+        if: needs.detect-changes.outputs.integration_optional != 'true'
+        id: run
+        timeout-minutes: 1
+        env:
+          DEBUG: true
+          CI: true
+          NONINTERACTIVE: true
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # run one
+          bin/dotf run
+          # run two
+          bin/dotf run

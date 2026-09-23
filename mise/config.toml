@@ -15,9 +15,12 @@ idiomatic_version_file_enable_tools = ["node", "ruby"]
 compile = false
 
 [bootstrap.packages]
-"brew:git" = { os = "macos" }
 "apt:git" = { os = "linux" }
+"brew:git" = { os = "macos" }
 "pacman:git" = { os = "linux" }
+"apt:bash" = { version = "latest" }
+"brew:bash" = { version = "latest" }
+"pacman:bash" = { version = "latest" }
 
 [bootstrap.hooks]
 post-packages = 'bash "$HOME/.dotfiles/bin/hooks/post-packages-hook.sh"'
