@@ -1,4 +1,4 @@
-name: Secrets
+name: Lint
 
 on:
   pull_request:
@@ -39,7 +39,7 @@ jobs:
           install: false
 
       - name: Install secret scanning tools
-        run: mise install hk gitleaks
+        run: mise install -g "gitleaks@$(awk -F '\"' '/^gitleaks = / { print $2 }' mise/config.toml)"
 
-      - name: Scan checkout
+      - name: Run lint
         run: mise run lint
