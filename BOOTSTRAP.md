@@ -271,9 +271,10 @@ tools from Step 2 provide Git for the clone.
   targets should be absent. If mise reports a conflict, stop and inspect it; do
   not add `--replace-history` or `--force-dotfiles` as a shortcut.
 
-  SSH is intentional. The checked-in Git configuration contains a
-  version-specific GitHub HTTPS credential-helper path that is already stale on
-  the reviewed Mac. SSH avoids that helper for both repositories.
+  SSH is needed for this initial adoption because `gh` is not installed until
+  `setup.sh` runs, and the managed Git credential helper is not yet guaranteed
+  to be present. Step 13 switches ongoing history synchronization to HTTPS
+  through `gh`.
 
 - [ ] Verify the rendered profile, history origin, paths, and dotfile state:
 
@@ -430,28 +431,54 @@ tools from Step 2 provide Git for the clone.
   **Confidence: Repository-verified.** The startup chain and desired login shell
   were inspected. The account's login shell was not changed during this review.
 
-### 13. Restart and verify the mise history watcher
+### 13. Switch history sync to HTTPS and restart the watcher
 
-- [ ] Reapply the service after setup so it uses the final mise executable and
-  state directory:
+- [ ] Authenticate the installed GitHub CLI for HTTPS. If `gh auth status`
+  already shows the intended account and HTTPS Git operations, skip the login
+  command:
+
+  ```sh
+  mise -C "$HOME/src/dotfiles/mise" exec gh -- \
+    gh auth login --hostname github.com --git-protocol https --web
+  gh auth status
+  ```
+
+- [ ] Confirm the managed credential helper can read the private history
+  repository, then reconnect its machine-local origin. Review mise's preview
+  before confirming; keep branch `main` and automatic `sync` mode:
+
+  ```sh
+  GIT_TERMINAL_PROMPT=0 git ls-remote https://github.com/oppegard/setup.git HEAD
+  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles origin set \
+    https://github.com/oppegard/setup.git --branch main --sync sync
+  ```
+
+  Mise uses Git's checked-in `gh auth git-credential` helper for this HTTPS
+  origin. Do not run `gh auth setup-git`: it can replace the stable helper with
+  a path tied to one mise-managed `gh` installation. The dotfiles checkout
+  remains on its separate SSH remote.
+
+- [ ] Ensure the service is applied, then restart its process so it reads the
+  new origin:
 
   ```sh
   mise -C "$HOME/src/dotfiles/mise" bootstrap services apply
+  launchctl kickstart -k "gui/$(id -u)/dev.mise.mise-history"
   mise -C "$HOME/src/dotfiles/mise" bootstrap services status
   mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles status
   launchctl print "gui/$(id -u)/dev.mise.mise-history"
   ```
 
   `dotfiles status` should report automatic capture as running and watching this
-  store. It should also show the SSH setup-repository origin.
+  store. The history origin should be `https://github.com/oppegard/setup.git`,
+  and the sync status should have no error.
 
-  Do not run `mise dot sync` merely as a health check: sync may publish local
-  tracked-file changes. Use status first and inspect anything pending.
+  Reconnecting in `sync` mode can publish pending checkpoints. Do not run
+  `mise dot sync` merely as a health check: it may publish local tracked-file
+  changes. Use status first and inspect anything pending.
 
-  **Confidence: Mixed.** Status and LaunchAgent diagnostics were run read-only.
-  The reviewed Mac currently reports that its older watcher should be restarted
-  with `bootstrap services apply`; that mutation was intentionally not performed
-  during this documentation review.
+  **Confidence: Mixed.** HTTPS access and the origin switch were verified on
+  the reviewed Mac. A fresh-Mac sign-in and adoption were not exercised here.
 
 ### 14. Verify convergence and repository cleanliness
 
@@ -495,24 +522,12 @@ tools from Step 2 provide Git for the clone.
 
 ### 16. Authenticate optional CLIs and services
 
-- [ ] Authenticate GitHub CLI after mise has installed it, while keeping Git
-  transport on SSH:
-
-  ```sh
-  mise -C "$HOME/src/dotfiles/mise" exec gh -- \
-    gh auth login --hostname github.com --git-protocol ssh --web --skip-ssh-key
-  ```
-
-  Do not run `gh auth setup-git` until the checked-in version-specific HTTPS
-  credential-helper entry has been repaired. It is not required for SSH remotes.
-
 - [ ] On a work Mac, authenticate AWS, Drafthouse, Claude, Codex, and other
   services as needed. Mise history restores configuration files, not active
   login sessions, keychain items, browser sessions, or short-lived credentials.
 
-  **Confidence: Mixed.** The GitHub CLI syntax is current and the repository
-  installs `gh`; service-specific authentication was intentionally not tested or
-  recorded here.
+  **Confidence: Lower confidence.** Service-specific authentication was
+  intentionally not tested or recorded here.
 
 ## Troubleshooting
 
@@ -639,21 +654,22 @@ tools from Step 2 provide Git for the clone.
 
 ### GitHub authentication fails after dotfiles are applied
 
-- [ ] Confirm both remotes use SSH:
+- [ ] Check the two independent remotes and the HTTPS helper:
 
   ```sh
   git -C "$HOME/src/dotfiles" remote get-url origin
   mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles origin
-  ssh -o BatchMode=yes -T git@github.com
+  gh auth status
+  "$HOME/src/dotfiles/bin/check-gh-credential-helper"
+  GIT_TERMINAL_PROMPT=0 git ls-remote https://github.com/oppegard/setup.git HEAD
   ```
 
-  If either remote is HTTPS, reconnect it to the corresponding SSH URL after
-  reviewing the target. Do not depend on the checked-in version-specific `gh`
-  credential-helper path.
+  The dotfiles checkout remains on SSH. After Step 13, the setup-history origin
+  should be HTTPS so its background sync uses the managed `gh` credential
+  helper. If it is still SSH, repeat Step 13 after verifying HTTPS access.
 
-  **Confidence: Verified here.** The stale helper and current failed HTTPS
-  history fetch were observed read-only; the SSH workaround was not applied to
-  the reviewed machine.
+  **Confidence: Verified here.** The managed helper and private-repository
+  HTTPS access were checked on the reviewed Mac.
 
 ## Upstream references
 
