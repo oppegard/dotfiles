@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>build</key>
-	<string>2282</string>
+	<string>2355</string>
 	<key>preferences</key>
 	<dict>
 		<key>CPU.Menu.Launcher</key>
@@ -45,9 +45,9 @@
 		<key>License.Validation.license</key>
 		<string>hank-dull-mayo-bite-9284-7</string>
 		<key>License.Validation.signature</key>
-		<string>MIGIAkIBoBuHCiwb0wOscTWD6LUnp8Unt8zv14v26BRnZ6+y+pLTLFhRq9PQYhM1S19MSTApUn8qYHPdJowD+mXQP23CzCoCQgGe9dUgL51i7A28vT0mOQWsU1TE20DLNWkI+dJiOuQZRzj+UZ+K1vaiAGDjbcw3pMsbjtSmehs+tsN2OqgiQqYRlw==</string>
+		<string>MIGHAkEsTlV8HUqZHTne/1zZzw0U8UOtmcoPsrUp/afOGInMuM1qcxaX7+1iNTeekxbWbBj9RepTBhdF8OZGUrMCprTfTgJCAftBua9reh9bzRteC+vnsJxtRxA+SAfodWyr6+C7fdqsA0XqLBTGT5Y/Ynuv/rqOJBXKGVEogc8x5HT2/uyKY2Ha</string>
 		<key>License.Validation.time</key>
-		<string>1781015534</string>
+		<string>1789490562</string>
 		<key>Menu.Theme.Light</key>
 		<string>gray</string>
 		<key>Menubar.Global.ReducePadding</key>
@@ -119,6 +119,8 @@
 		<string>semibold</string>
 		<key>Network.Menubar.Mode.Bandwidth.Upload.Value.Light.Text.Color</key>
 		<string>0.8679245114326477 2.180446159075912e-07 0 0.9952830076217651</string>
+		<key>Network.Menubar.Mode.Value.ShowArrows</key>
+		<false/>
 		<key>Notifications.Items</key>
 		<array>
 			<dict>
@@ -219,9 +221,9 @@
 		<key>Status.BackgroundInstall</key>
 		<true/>
 		<key>Status.Build.Last</key>
-		<real>2282</real>
+		<real>2355</real>
 		<key>Status.Version.Last</key>
-		<real>7.3000001907348633</real>
+		<real>7.5</real>
 		<key>UpdateFrequency</key>
 		<integer>0</integer>
 		<key>Updater.AutomaticallyInstall</key>
