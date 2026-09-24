@@ -17,6 +17,7 @@ brew "yt-dlp"
 brew "zoxide"
 
 cask "1password-cli"
+cask "alfred"
 cask "bartender"
 cask "betterdisplay"
 cask "chatgpt"
