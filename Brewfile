@@ -43,7 +43,9 @@ cask "slack"
 cask "soundsource"
 cask "sublime-text"
 cask "tuna"
+cask "typora"
 cask "visual-studio-code"
 
 mas "Clocker", id: 1056643111
+mas "iA Writer", id: 775737590
 mas "Things 3", id: 904280696
