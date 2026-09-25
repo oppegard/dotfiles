@@ -80,6 +80,7 @@ bootstrap_mise() {
     if ! ensure_mise_env; then
         announce "Installing mise"
         curl -fsSL https://mise.run | sh
+        export MISE_AUTO_ENV=true
     fi
     ensure_mise_env
 }
@@ -94,7 +95,7 @@ main() {
 
     bootstrap_homebrew
     bootstrap_mise
-    mise bootstrap packages apply
+    mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap packages apply
 
     debug "Bootstrap complete."
 }

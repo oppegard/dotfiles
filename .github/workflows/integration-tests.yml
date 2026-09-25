@@ -102,7 +102,7 @@ jobs:
           CI: true
           NONINTERACTIVE: true
           GITHUB_TOKEN: ${{ github.token }}
-          MISE_VERBOSE: 1
+          MISE_ENV: home
         shell: bash
         run: |
           set -euo pipefail
