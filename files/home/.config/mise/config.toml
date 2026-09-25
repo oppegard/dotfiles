@@ -42,12 +42,14 @@ builtin = "history-watch"
 "~/.config/curlrc" = "~/.dotfiles/files/home/.config/curlrc"
 "~/.config/ghostty" = "~/.dotfiles/files/home/.config/ghostty"
 "~/.config/git" = { source = "~/.dotfiles/files/home/.config/git", mode = "symlink-each", manifest = "git" }
-"~/.config/mise/conf.d/macos-menubar-spacing.toml" = { source = "~/.dotfiles/mise/macos-menubar-spacing.toml.tera", mode = "template" }
-"~/.config/mise/config.home.toml" = "~/.dotfiles/mise/config.home.toml"
-"~/.config/mise/config.linux.toml" = "~/.dotfiles/mise/config.linux.toml"
-"~/.config/mise/config.macos.toml" = "~/.dotfiles/mise/config.macos.toml"
-"~/.config/mise/config.toml" = "~/.dotfiles/mise/config.toml"
-"~/.config/mise/miserc.toml" = { source = "~/.dotfiles/mise/miserc.toml.tera", mode = "template" }
+
+"~/.config/mise/miserc.toml" = { source = "~/.dotfiles/files/home/.config/mise/miserc.toml.tera", mode = "template" }
+"~/.config/mise/config.toml" = "~/.dotfiles/files/home/.config/mise/config.toml"
+"~/.config/mise/config.home.toml" = "~/.dotfiles/files/home/.config/mise/config.home.toml"
+"~/.config/mise/config.linux.toml" = "~/.dotfiles/files/home/.config/mise/config.linux.toml"
+"~/.config/mise/config.macos.toml" = "~/.dotfiles/files/home/.config/mise/config.macos.toml"
+"~/.config/mise/conf.d/macos-menubar-spacing.toml" = { source = "~/.dotfiles/files/home/.config/mise/conf.d/macos-menubar-spacing.toml.tera", mode = "template" }
+
 "~/.config/ripgreprc" = "~/.dotfiles/files/home/.config/ripgreprc"
 "~/.config/shell" = { source = "~/.dotfiles/files/home/.config/shell", mode = "symlink-each" }
 "~/.config/starship.toml" = "~/.dotfiles/files/home/.config/starship.toml"
