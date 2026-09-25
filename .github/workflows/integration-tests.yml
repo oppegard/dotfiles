@@ -96,7 +96,7 @@ jobs:
       - name: Run dotfiles integration script
         if: needs.detect-changes.outputs.integration_optional != 'true'
         id: run
-        timeout-minutes: 1
+        timeout-minutes: 3
         env:
           DEBUG: true
           CI: true

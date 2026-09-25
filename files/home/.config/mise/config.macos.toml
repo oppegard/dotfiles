@@ -1,7 +1,18 @@
 [bootstrap.packages]
 "brew:git" = "latest"
 "brew:bash" = "latest"
+"brew:mas" = "latest"
+"brew-cask:chatgpt" = "latest"
+"brew-cask:fantastical" = "latest"
+"brew-cask:ghostty" = "latest"
+"brew-cask:google-chrome" = "latest"
+"brew-cask:jetbrains-toolbox" = "latest"
+"brew-cask:mimestream" = "latest"
+"brew-cask:obsidian" = "latest"
+"brew-cask:slack" = "latest"
+"brew-cask:sublime-text" = "latest"
 "brew-cask:visual-studio-code" = "latest"
+"mas:904280696" = "latest" # Things 3
 
 [bootstrap.user]
 login_shell = "/opt/homebrew/bin/bash"
