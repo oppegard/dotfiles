@@ -10,4 +10,4 @@ run = "gitleaks dir --redact=85 --no-banner --no-color --max-target-megabytes 5 
 
 [tasks.lint]
 description = "Run all lint checks"
-depends = ["lint:secrets"]
+depends = ['lint:*']
