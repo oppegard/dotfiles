@@ -14,7 +14,7 @@
 - Tools to use when available:
   - `shellcheck`
   - `gh` for GitHub and `actionlint` for GH Actions
-  - `mise` - query https://mise.jdx.dev/ for latest docs, as the featureset changes weekly.
+  - `mise` - query https://mise.jdx.dev/ for latest docs, as the featureset changes weekly. For examples of advanced usage of mise itself, check https://github.com/jdx/mise, https://github.com/jdx/fnox, and https://github.com/jdx/hk.
 
 ## Planning Mode Workflow
 - Before implementing any significant change, always create a `YYYMMDD-kebab-case-topic.md` file in the project's `doc{s}/plans/` directory using the local date; create the directory if needed and never overwrite an existing file.
