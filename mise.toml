@@ -5,7 +5,6 @@ taplo = "latest"
 
 [env]
 _.path = ["./bin"]
-HK_MISE = 1
 
 [tasks.lint]
 description = "Run all lint checks"
