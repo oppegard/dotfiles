@@ -7,10 +7,6 @@ taplo = "latest"
 _.path = ["./bin"]
 HK_MISE = 1
 
-[tasks."lint:secrets"]
-description = "Scan the working tree for hardcoded secrets"
-run = "mise x "
-
 [tasks.lint]
 description = "Run all lint checks"
 run = "hk check --all --verbose"
