@@ -8,3 +8,9 @@
 "~/.config/waybar" = "~/.dotfiles/files/home/.config/waybar"
 "~/.local/bin/screen" = "~/.dotfiles/files/home/.local/bin/screen-5.0.1"
 "~/.local/bin/try" = "~/.dotfiles/files/home/.local/bin/try-linux-x86_64"
+
+[bootstrap.packages]
+"apt:bash" = "latest"
+"pacman:bash" = "latest"
+"apt:git" = "latest"
+"pacman:git" = "latest"
