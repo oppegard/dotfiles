@@ -9,8 +9,8 @@ HK_MISE = 1
 
 [tasks."lint:secrets"]
 description = "Scan the working tree for hardcoded secrets"
-run = "gitleaks dir --redact=85 --no-banner --no-color --max-target-megabytes 5 --config .gitleaks.toml ."
+run = "mise x "
 
 [tasks.lint]
 description = "Run all lint checks"
-depends = ['lint:*']
+run = "hk check --all --verbose"
