@@ -103,10 +103,13 @@ jobs:
           NONINTERACTIVE: true
           GITHUB_TOKEN: ${{ github.token }}
           MISE_ENV: home
+          MISE_TRUSTED_CONFIG_PATHS: "$GITHUB_WORKSPACE/files/home/.config/mise"
+          MISE_VERBOSE: 1
         shell: bash
         run: |
           set -euo pipefail
+          rm -f ~/.bash_profile ~/.bashrc ~/.gitconfig # make VM closer to fresh machine
           # run one
-          bin/dotf run
+          MISE_YES=true bin/dotf run
           # run two
           bin/dotf run

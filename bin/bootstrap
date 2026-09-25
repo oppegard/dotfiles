@@ -95,7 +95,7 @@ main() {
 
     bootstrap_homebrew
     bootstrap_mise
-    mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap packages apply
+    mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap
 
     debug "Bootstrap complete."
 }
