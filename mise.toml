@@ -1,8 +1,11 @@
 [tools]
+gitleaks = "8.30.1"
 hk = { version = "2.0.1", postinstall = "hk install --mise" }
+taplo = "latest"
 
 [env]
 _.path = ["./bin"]
+HK_MISE = 1
 
 [tasks."lint:secrets"]
 description = "Scan the working tree for hardcoded secrets"
