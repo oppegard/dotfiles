@@ -143,7 +143,7 @@ fi
 default_ref="$(git symbolic-ref -q --short "refs/remotes/$remote/HEAD" || true)"
 default_branch=""
 if [ -n "$default_ref" ]; then
-	default_branch="${default_ref#${remote}/}"
+	default_branch="${default_ref#"${remote}"/}"
 else
 	for c in main master trunk develop dev; do
 		if git show-ref --verify --quiet "refs/remotes/$remote/$c" ||
@@ -178,7 +178,11 @@ fi
 is_protected() {
 	local b="$1"
 	local p
-	for p in $protect_patterns; do
+	local -a patterns
+	IFS=$' \t\n' read -r -a patterns <<<"$protect_patterns"
+	for p in "${patterns[@]}"; do
+		# Wildcards in protection rules are intentional.
+		# shellcheck disable=SC2254
 		case "$b" in
 		$p) return 0 ;;
 		esac
