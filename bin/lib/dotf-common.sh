@@ -7,56 +7,56 @@
 # absent (defaults to the GNU format). This is the single place that decides
 # whether to use gdate, so the macOS/BSD fallback lives in one spot.
 dotf_date() {
-    local gnu_format="$1"
-    local posix_format="${2:-$gnu_format}"
-    if command -v gdate &> /dev/null; then
-        gdate "+$gnu_format"
-    else
-        date "+$posix_format"
-    fi
+  local gnu_format="$1"
+  local posix_format="${2:-$gnu_format}"
+  if command -v gdate &>/dev/null; then
+    gdate "+$gnu_format"
+  else
+    date "+$posix_format"
+  fi
 }
 
 debug() {
-    timestamp=$(dotf_date '%H:%M:%S.%3N' '%H:%M:%S')
-    local message="[$timestamp] $1"
+  timestamp=$(dotf_date '%H:%M:%S.%3N' '%H:%M:%S')
+  local message="[$timestamp] $1"
 
-    # Always write to log file
-    echo "$message" >> "$LOG_FILE"
+  # Always write to log file
+  echo "$message" >>"$LOG_FILE"
 
-    # Also output to STDOUT if DEBUG=true
-    if [ "${DEBUG:-false}" = "true" ]; then
-        echo "$message"
-    fi
+  # Also output to STDOUT if DEBUG=true
+  if [ "${DEBUG:-false}" = "true" ]; then
+    echo "$message"
+  fi
 }
 
 announce() {
-    if command -v gum >/dev/null 2>&1; then
-        gum style --bold --foreground 212 "$1"
-    else
-        printf '==> %s\n' "$1"
-    fi
+  if command -v gum >/dev/null 2>&1; then
+    gum style --bold --foreground 212 "$1"
+  else
+    printf '==> %s\n' "$1"
+  fi
 }
 
 ensure_homebrew_env() {
-    if [ -x "$HOME/.homebrew/bin/brew" ]; then
-        eval "$("$HOME/.homebrew/bin/brew" shellenv bash)"
-    elif command -v brew &> /dev/null; then
-        eval "$(brew shellenv bash)"
-    elif [ -x /opt/homebrew/bin/brew ]; then
-        eval "$(/opt/homebrew/bin/brew shellenv bash)"
-    elif [ -x /usr/local/bin/brew ]; then
-        eval "$(/usr/local/bin/brew shellenv bash)"
-    fi
+  if [ -x "$HOME/.homebrew/bin/brew" ]; then
+    eval "$("$HOME/.homebrew/bin/brew" shellenv bash)"
+  elif command -v brew &>/dev/null; then
+    eval "$(brew shellenv bash)"
+  elif [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv bash)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv bash)"
+  fi
 }
 
 ensure_mise_env() {
-    export PATH="$HOME/.local/bin:$PATH"
-    hash -r
+  export PATH="$HOME/.local/bin:$PATH"
+  hash -r
 
-    if ! command -v mise >/dev/null 2>&1; then
-        echo "Error: mise was not found in ~/.local/bin or PATH." >&2
-        return 1
-    fi
+  if ! command -v mise >/dev/null 2>&1; then
+    echo "Error: mise was not found in ~/.local/bin or PATH." >&2
+    return 1
+  fi
 
-    eval "$(mise activate bash)"
+  eval "$(mise activate bash)"
 }

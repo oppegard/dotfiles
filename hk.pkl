@@ -7,7 +7,7 @@ steps {
     exclude = List("Alfred/**/**")
   }
   ["shfmt"] = (Builtins.shfmt) {
-    exclude = List("Alfred/**/**")
+    exclude = List("Alfred/**/**", "vendor/**/**")
   }
   ["taplo"] = (Builtins.taplo_format) {
     exclude = List("**/Tuna/config.toml")
