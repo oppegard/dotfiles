@@ -2,7 +2,7 @@ name: Integration Tests
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   schedule:
     - cron: "23 6 * * *"
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          
+
           case "${{ github.event_name }}" in
             pull_request)
               base_sha="${{ github.event.pull_request.base.sha }}"
@@ -38,22 +38,22 @@ jobs:
               exit 0
               ;;
           esac
-          
+
           if [ "$base_sha" = "0000000000000000000000000000000000000000" ]; then
             echo "integration_optional=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          
+
           git diff --name-only --no-renames "$base_sha" "$head_sha" > "$RUNNER_TEMP/changed-files"
           mapfile -t files < "$RUNNER_TEMP/changed-files"
-          
+
           if [ "${#files[@]}" -eq 0 ]; then
             echo "integration_optional=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          
+
           integration_optional=true
-          
+
           for file in "${files[@]}"; do
             case "$file" in
               test/*|docs/*|README.md|AGENTS.md)
@@ -64,7 +64,7 @@ jobs:
                 ;;
             esac
           done
-          
+
           echo "integration_optional=$integration_optional" >> "$GITHUB_OUTPUT"
           printf 'integration_optional=%s\n' "$integration_optional"
           printf 'changed files:\n%s\n' "$(printf '%s\n' "${files[@]}")"
