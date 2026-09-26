@@ -1,10 +1,8 @@
 toml-version = "v1.1.0"
 
-[format.rules]
-key-value-equals-sign-alignment = false
-key-value-equals-sign-space-width = 1
-# string-quote-style = "double"
-trailing-comment-alignment = false
 
-# Tombi has no global equivalents for Taplo's reorder_keys and reorder_arrays.
-# Sorting requires schema metadata or per-file comment directives.
+[format.rules]
+key-value-equals-sign-alignment = true
+line-width                      = 80
+table-blank-lines               = 2
+trailing-comment-alignment      = true

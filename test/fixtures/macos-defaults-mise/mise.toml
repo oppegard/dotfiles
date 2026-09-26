@@ -1,10 +1,11 @@
 [bootstrap.macos.defaults."com.example.dotfiles-mise-test"]
 boolean = true
 
+
 [[bootstrap.macos.defaults_entries]]
 domain = "NSGlobalDomain"
-host = "current"
-key = "com.example.dotfiles-mise-test.modifiermapping"
-value = [
+host   = "current"
+key    = "com.example.dotfiles-mise-test.modifiermapping"
+value  = [
   { HIDKeyboardModifierMappingDst = 2, HIDKeyboardModifierMappingSrc = 0 },
 ]

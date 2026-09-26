@@ -1,11 +1,12 @@
 [bootstrap.repos]
 "~/src/skills/matt-w-horn-skills" = {
-url = "https://github.com/matt-w-horn/skills.git",
-ref = "12b68e0858eed3b53249baf7344b24853160098c",
+  url = "https://github.com/matt-w-horn/skills.git",
+  ref = "12b68e0858eed3b53249baf7344b24853160098c"
 }
+
 
 [dotfiles]
 "~/.agents/skills/financial-planning" = {
-source = "~/src/skills/matt-w-horn-skills/skills/financial-planning",
-mode = "symlink",
+  source = "~/src/skills/matt-w-horn-skills/skills/financial-planning",
+  mode   = "symlink"
 }

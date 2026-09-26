@@ -1,16 +1,18 @@
 [dotfiles]
-"~/.config/hypr" = "~/.dotfiles/files/home/.config/hypr"
-"~/.config/keyd" = "~/.dotfiles/files/home/.config/keyd"
-"~/.config/omarchy" = "~/.dotfiles/files/home/.config/omarchy"
-"~/.config/sublime-text/Packages/User" = "~/.dotfiles/files/home/.config/sublime-text/Packages/User"
-"~/.config/uwsm" = "~/.dotfiles/files/home/.config/uwsm"
-"~/.config/walker" = "~/.dotfiles/files/home/.config/walker"
-"~/.config/waybar" = "~/.dotfiles/files/home/.config/waybar"
+"~/.config/hypr"      = "~/.dotfiles/files/home/.config/hypr"
+"~/.config/keyd"      = "~/.dotfiles/files/home/.config/keyd"
+"~/.config/omarchy"   = "~/.dotfiles/files/home/.config/omarchy"
+"~/.config/uwsm"      = "~/.dotfiles/files/home/.config/uwsm"
+"~/.config/walker"    = "~/.dotfiles/files/home/.config/walker"
+"~/.config/waybar"    = "~/.dotfiles/files/home/.config/waybar"
 "~/.local/bin/screen" = "~/.dotfiles/files/home/.local/bin/screen-5.0.1"
-"~/.local/bin/try" = "~/.dotfiles/files/home/.local/bin/try-linux-x86_64"
+"~/.local/bin/try"    = "~/.dotfiles/files/home/.local/bin/try-linux-x86_64"
+
+"~/.config/sublime-text/Packages/User" = "~/.dotfiles/files/home/.config/sublime-text/Packages/User"
+
 
 [bootstrap.packages]
-"apt:bash" = "latest"
-"apt:git" = "latest"
+"apt:bash"    = "latest"
+"apt:git"     = "latest"
 "pacman:bash" = "latest"
-"pacman:git" = "latest"
+"pacman:git"  = "latest"

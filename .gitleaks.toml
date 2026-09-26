@@ -5,12 +5,14 @@
 
 title = "glenno gitleaks config"
 
+
 [extend]
 useDefault = true
 
+
 [[allowlists]]
 description = "vendored or generated directories that aren't part of the project's source"
-paths = [
+paths       = [
   '''(^|/)\.bundle/(ruby|cache|gems|extensions|plugin|plugins|vendor)/''',
   '''(^|/)\.cargo/''',
   '''(^|/)\.gem/''',
@@ -29,8 +31,9 @@ paths = [
   '''(^|/)vendor/cache/''',
 ]
 
+
 [[allowlists]]
-condition = "AND"
+condition   = "AND"
 description = "Git GPG signing key fingerprints"
-paths = ['''(^|/)\.gitconfig$''', '''(^|/)files/home/\.gitconfig$''']
-regexes = ['''signingkey\s*=\s*[A-F0-9]{40}''']
+paths       = ['''(^|/)\.gitconfig$''', '''(^|/)files/home/\.gitconfig$''']
+regexes     = ['''signingkey\s*=\s*[A-F0-9]{40}''']
