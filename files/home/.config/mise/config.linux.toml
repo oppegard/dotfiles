@@ -11,6 +11,6 @@
 
 [bootstrap.packages]
 "apt:bash" = "latest"
-"pacman:bash" = "latest"
 "apt:git" = "latest"
+"pacman:bash" = "latest"
 "pacman:git" = "latest"
