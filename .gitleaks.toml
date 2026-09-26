@@ -1,8 +1,10 @@
+#:schema https://www.schemastore.org/gitleaks.json
 # Credit: https://github.com/nateberkopec/dotfiles/blob/main/files/home/.claude/skills/dev-env-setup/scripts/check-dev-env/gitleaks-default.toml
 # Extends gitleaks' default rules and allowlists common vendored/build
 # directories that ship with dependencies and are typically gitignored.
 
 title = "glenno gitleaks config"
+
 [extend]
 useDefault = true
 

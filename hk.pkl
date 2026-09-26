@@ -18,7 +18,7 @@ steps {
   ["shfmt"] = (Builtins.shfmt) {
     exclude = bash_exclude
   }
-  ["taplo"] = (Builtins.taplo_format) {
+  ["tombi"] = (Builtins.tombi_format) {
     exclude = List("**/Tuna/config.toml")
   }
   ["yamlfmt"] = Builtins.yamlfmt
