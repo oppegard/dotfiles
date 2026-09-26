@@ -20,33 +20,23 @@ cask "1password-cli"
 cask "alfred"
 cask "bartender"
 cask "betterdisplay"
-cask "chatgpt"
 cask "cleanshot"
 cask "claude-code"
 cask "codex"
-cask "fantastical"
 cask "forklift"
-cask "ghostty"
-cask "google-chrome"
 cask "hazeover"
 cask "hopper-disassembler"
 cask "iina"
 cask "istat-menus"
-cask "jetbrains-toolbox"
 cask "libreoffice-still" # for https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md
 cask "linearmouse"
-cask "mimestream"
-cask "obsidian"
 cask "orbstack"
 cask "rectangle-pro"
-cask "slack"
 cask "soundsource"
-cask "sublime-text"
 cask "tailscale-app"
 cask "tuna"
 cask "typora"
 
 mas "Clocker", id: 1056643111
 mas "iA Writer", id: 775737590
-mas "Things 3", id: 904280696
 mas "TripMode", id: 1513400665

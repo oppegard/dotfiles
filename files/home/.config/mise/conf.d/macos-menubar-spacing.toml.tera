@@ -15,4 +15,3 @@ domain = "NSGlobalDomain"
 key = "NSStatusItemSpacing"
 host = "current"
 value = {{ item_spacing }}
-

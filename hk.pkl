@@ -1,29 +1,25 @@
 amends "package://github.com/jdx/hk/releases/download/v2.0.1/hk@2.0.1#/Config.pkl"
 
-local secrets = new Step {
-  check = new CommandSpec {
-    command = new Command {
-      argv = List("mise", "run", "lint:secrets")
-    }
-    effect = "read"
-  }
-}
+import "package://github.com/jdx/hk/releases/download/v2.0.1/hk@2.0.1#/Builtins.pkl"
 
-hooks {
-  ["check"] {
-    fix = false
-    stage = false
-    stash = "none"
-    steps {
-      ["secrets"] = secrets
+local bash_exclude = List("Alfred/**/**", "vendor/**/**")
+steps {
+  ["gitleaks"] = Builtins.gitleaks
+  ["newlines"] = (Builtins.newlines) {
+    exclude = List("Alfred/**/**")
+  }
+  ["shellcheck"] = (Builtins.shellcheck) {
+    exclude = bash_exclude
+    check = new CommandSpec {
+      command = "shellcheck -x {{ files }}"
+      effect = "read"
     }
   }
-  ["pre-commit"] {
-    fix = false
-    stage = false
-    stash = "none"
-    steps {
-      ["secrets"] = secrets
-    }
+  ["shfmt"] = (Builtins.shfmt) {
+    exclude = bash_exclude
   }
+  ["tombi"] = (Builtins.tombi_format) {
+    exclude = List("**/Tuna/config.toml")
+  }
+  ["yamlfmt"] = Builtins.yamlfmt
 }

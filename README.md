@@ -4,24 +4,27 @@
 
 ## MacOS Preferences
 
-Managed macOS defaults live in `mise/config.macos.toml`. This repository tracks
-only intentional preferences that are either documented by
+Managed macOS defaults live in
+`files/home/.config/mise/config.macos.toml`. This repository tracks only
+intentional preferences that are either documented by
 [macos-defaults](https://github.com/yannbertrand/macos-defaults) or isolated by
 a reviewed, single-setting before/after audit. It does not manage system-wide
 defaults, third-party application state, or values merely because they appear
 in a broad audit.
 
-To add one preference after changing it in System Settings:
+Run the commands in this section from the repository root. To add one
+preference after changing it in System Settings:
 
 ```sh
-mise -C mise run macos-defaults:record
+mise -C files/home/.config/mise run macos-defaults:record
 ```
 
 The interactive, vendored script captures a before/after diff in
 `vendor/macos-defaults/diffs/<name>` (ignored by Git). Change **only one**
 preference while it waits. Match the reported domain and key to the upstream
-catalog; then add the typed value to `mise/config.macos.toml`, along with the
-upstream-derived description and any documented activation action. Do not add a
+catalog; then add the typed value to
+`files/home/.config/mise/config.macos.toml`, along with the upstream-derived
+description and any documented activation action. Do not add a
 preference merely because it appears in an audit or a diff.
 
 For host-scoped or complex Apple preferences, use `bin/macos-defaults-audit` to
@@ -36,14 +39,14 @@ ordinary application and account state as well as preferences.
 Check the mise-managed desired state without writing:
 
 ```sh
-mise -C mise bootstrap macos defaults status --missing
+mise -C files/home/.config/mise bootstrap macos defaults status --missing
 ```
 
 Inspect writes with `--dry-run`, then explicitly apply them:
 
 ```sh
-mise -C mise bootstrap macos defaults apply --dry-run
-mise -C mise bootstrap macos defaults apply
+mise -C files/home/.config/mise bootstrap macos defaults apply --dry-run
+mise -C files/home/.config/mise bootstrap macos defaults apply
 ```
 
 ### BetterDisplay Prefs

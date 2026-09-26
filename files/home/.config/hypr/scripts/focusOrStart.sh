@@ -8,13 +8,13 @@ workspaceOnStart=$3
 #echo "*** $workspaceOnStart ***" >>/tmp/bar
 
 running=$(hyprctl -j clients | jq -r ".[] | select(.class == \"${className}\") | .workspace.id")
-echo $running
+echo "$running"
 
 if [[ $running != "" ]]; then
   echo "focus"
   hyprctl dispatch focuswindow class:"${className}"
 else
   echo "start"
-  hyprctl dispatch workspace $workspaceOnStart
+  hyprctl dispatch workspace "$workspaceOnStart"
   ${execCommand} &
 fi

@@ -10,10 +10,10 @@ is included in [LICENSE](LICENSE).
 SHA-256 checksum is
 `6c06decd82f83356a6bce6f7b84c1f9c5fe6c782e22e8c745069908587b65dfc`.
 
-Run the recorder with:
+Run the recorder from the repository root with:
 
 ```sh
-mise -C mise run macos-defaults:record
+mise -C files/home/.config/mise run macos-defaults:record
 ```
 
 Enter a name, change exactly one setting while the script waits, then press a

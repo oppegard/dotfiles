@@ -2,7 +2,7 @@ name: Integration Tests
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   schedule:
     - cron: "23 6 * * *"
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          
+
           case "${{ github.event_name }}" in
             pull_request)
               base_sha="${{ github.event.pull_request.base.sha }}"
@@ -38,22 +38,22 @@ jobs:
               exit 0
               ;;
           esac
-          
+
           if [ "$base_sha" = "0000000000000000000000000000000000000000" ]; then
             echo "integration_optional=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          
+
           git diff --name-only --no-renames "$base_sha" "$head_sha" > "$RUNNER_TEMP/changed-files"
           mapfile -t files < "$RUNNER_TEMP/changed-files"
-          
+
           if [ "${#files[@]}" -eq 0 ]; then
             echo "integration_optional=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          
+
           integration_optional=true
-          
+
           for file in "${files[@]}"; do
             case "$file" in
               test/*|docs/*|README.md|AGENTS.md)
@@ -64,7 +64,7 @@ jobs:
                 ;;
             esac
           done
-          
+
           echo "integration_optional=$integration_optional" >> "$GITHUB_OUTPUT"
           printf 'integration_optional=%s\n' "$integration_optional"
           printf 'changed files:\n%s\n' "$(printf '%s\n' "${files[@]}")"
@@ -93,19 +93,34 @@ jobs:
         if: needs.detect-changes.outputs.integration_optional != 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Exclude Cask and MAS packages in CI
+        if: runner.os == 'macOS'
+        run: echo 'MISE_SYSTEM_PACKAGES_MANAGERS=brew' >> "$GITHUB_ENV"
+
       - name: Run dotfiles integration script
         if: needs.detect-changes.outputs.integration_optional != 'true'
         id: run
-        timeout-minutes: 1
+        timeout-minutes: 3
         env:
           DEBUG: true
           CI: true
           NONINTERACTIVE: true
           GITHUB_TOKEN: ${{ github.token }}
+          MISE_ENV: home
+          MISE_VERBOSE: 0
         shell: bash
         run: |
           set -euo pipefail
-          # run one
+          rm -f ~/.bash_profile ~/.bashrc ~/.gitconfig # make VM closer to fresh machine
+          if [[ "$RUNNER_OS" == macOS ]]; then
+            mkdir -p "$HOME/.local/bin"
+            ln -s /usr/bin/true "$HOME/.local/bin/chsh" # mock chsh for user.login_shell
+          fi
+
+          echo "::group::RUN1"
+          MISE_YES=true bin/dotf run
+          echo "::endgroup::"
+
+          echo "::group::RUN2"
           bin/dotf run
-          # run two
-          bin/dotf run
+          echo "::endgroup::"

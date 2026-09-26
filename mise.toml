@@ -1,13 +1,21 @@
 [tools]
-hk = { version = "2.0.1", postinstall = "hk install --mise" }
+gitleaks   = "8.30.1"
+hk         = { version = "2.0.1", postinstall = "hk install --mise" }
+shellcheck = "latest"
+shfmt      = "latest"
+tombi      = "latest"
+yamlfmt    = "latest"
+
 
 [env]
 _.path = ["./bin"]
 
-[tasks."lint:secrets"]
-description = "Scan the working tree for hardcoded secrets"
-run = "gitleaks dir --redact=85 --no-banner --no-color --max-target-megabytes 5 --config .gitleaks.toml ."
 
 [tasks.lint]
 description = "Run all lint checks"
-depends = ["lint:secrets"]
+run         = "hk check --all"
+
+
+[tasks.lint-fix]
+description = "Automatically fix all lint issues"
+run         = "hk fix --all"

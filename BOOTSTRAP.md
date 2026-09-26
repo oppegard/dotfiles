@@ -52,8 +52,9 @@ if the installed CLI behaves differently.
   Homebrew and mise's privileged bootstrap entries will ask for elevation.
 
   **Confidence: Repository-verified.** The privileged operations are visible in
-  the Homebrew installer and `mise/config.macos.toml`; they were not applied
-  during this review.
+  the Homebrew installer and
+  `files/home/.config/mise/config.macos.toml`; they were not applied during this
+  review.
 
 - [ ] Sign in to the Mac App Store with the Apple Account that owns Clocker.
 
@@ -237,7 +238,8 @@ tools from Step 2 provide Git for the clone.
   A home Mac gets the same file with `env = ["home"]`.
 
   **Confidence: Verified here.** Both profiles were rendered from
-  `mise/miserc.toml.tera` into an isolated mise configuration directory.
+  `files/home/.config/mise/miserc.toml.tera` into an isolated mise configuration
+  directory.
 
 ### 8. Adopt the separate mise history repository
 
@@ -262,7 +264,7 @@ tools from Step 2 provide Git for the clone.
 - [ ] Adopt the private history over SSH and apply only dotfiles:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" bootstrap \
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap \
     --adopt git@github.com:oppegard/setup.git \
     --only dotfiles
   ```
@@ -280,9 +282,9 @@ tools from Step 2 provide Git for the clone.
 
   ```sh
   sed -n '1,20p' "$HOME/.config/mise/miserc.toml"
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles origin
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles paths
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles status
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles origin
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles paths
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles status
   ```
 
   The origin should be `git@github.com:oppegard/setup.git`, and the status should
@@ -347,7 +349,7 @@ tools from Step 2 provide Git for the clone.
   preferences:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" run betterdisplay:import
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" run betterdisplay:import
   ```
 
   Confirm the task when prompted. It backs up the current BetterDisplay
@@ -360,7 +362,7 @@ tools from Step 2 provide Git for the clone.
 
   ```sh
   open -g -a BetterDisplay
-  mise -C "$HOME/src/dotfiles/mise" run betterdisplay:import
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" run betterdisplay:import
   ```
 
   This step prevents a first-run cycle in `setup.sh`: the script installs
@@ -438,7 +440,7 @@ tools from Step 2 provide Git for the clone.
   command:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" exec gh -- \
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" exec gh -- \
     gh auth login --hostname github.com --git-protocol https --web
   gh auth status
   ```
@@ -449,7 +451,7 @@ tools from Step 2 provide Git for the clone.
 
   ```sh
   GIT_TERMINAL_PROMPT=0 git ls-remote https://github.com/oppegard/setup.git HEAD
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles origin set \
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles origin set \
     https://github.com/oppegard/setup.git --branch main --sync sync
   ```
 
@@ -462,10 +464,10 @@ tools from Step 2 provide Git for the clone.
   new origin:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" bootstrap services apply
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap services apply
   launchctl kickstart -k "gui/$(id -u)/dev.mise.mise-history"
-  mise -C "$HOME/src/dotfiles/mise" bootstrap services status
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles status
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap services status
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles status
   launchctl print "gui/$(id -u)/dev.mise.mise-history"
   ```
 
@@ -486,8 +488,8 @@ tools from Step 2 provide Git for the clone.
 
   ```sh
   mise doctor
-  mise -C "$HOME/src/dotfiles/mise" bootstrap status --missing
-  mise -C "$HOME/src/dotfiles/mise" run betterdisplay:check
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap status --missing
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" run betterdisplay:check
   brew bundle check --file="$HOME/src/dotfiles/Brewfile"
   git -C "$HOME/src/dotfiles" status --short
   ```
@@ -547,17 +549,17 @@ tools from Step 2 provide Git for the clone.
   ```sh
   export MISE_AUTO_ENV=true
   export MISE_ENV=work  # use home instead on a personal Mac
-  mise -C "$HOME/src/dotfiles/mise" config ls
-  mise -C "$HOME/src/dotfiles/mise" tasks ls
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" config ls
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" tasks ls
   ```
 
 - [ ] If `~/.config/mise/miserc.toml` is absent or stale, preview and then apply
   only that template:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles diff \
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles diff \
     "$HOME/.config/mise/miserc.toml"
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles apply --yes \
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles apply --yes \
     "$HOME/.config/mise/miserc.toml"
   ```
 
@@ -570,8 +572,8 @@ tools from Step 2 provide Git for the clone.
 - [ ] Inspect status and the individual conflict:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles status
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles conflicts PATH
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles status
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles conflicts PATH
   ```
 
 - [ ] After reviewing both versions, choose one path at a time.
@@ -579,15 +581,15 @@ tools from Step 2 provide Git for the clone.
   To take the setup repository's version:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles pull \
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles pull \
     --take-remote PATH
   ```
 
   To keep a local file, save it first and then resolve the conflict:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles save PATH
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles pull \
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles save PATH
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles pull \
     --keep-local PATH
   ```
 
@@ -609,7 +611,7 @@ tools from Step 2 provide Git for the clone.
   that exact file:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles save \
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles save \
     "$HOME/.codex/rules/default.rules" \
     --description "save home Codex rules"
   ```
@@ -629,7 +631,7 @@ tools from Step 2 provide Git for the clone.
   ```sh
   brew install --cask betterdisplay
   open -g -a BetterDisplay
-  mise -C "$HOME/src/dotfiles/mise" run betterdisplay:import
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" run betterdisplay:import
   cd "$HOME/src/dotfiles"
   ./bin/setup.sh
   ```
@@ -658,7 +660,7 @@ tools from Step 2 provide Git for the clone.
 
   ```sh
   git -C "$HOME/src/dotfiles" remote get-url origin
-  mise -C "$HOME/src/dotfiles/mise" bootstrap dotfiles origin
+  mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap dotfiles origin
   gh auth status
   "$HOME/src/dotfiles/bin/check-gh-credential-helper"
   GIT_TERMINAL_PROMPT=0 git ls-remote https://github.com/oppegard/setup.git HEAD
@@ -687,8 +689,8 @@ The following checks were run without changing the real mise history, tracked
 files, history origin, watcher service, login shell, macOS defaults, or
 BetterDisplay preferences:
 
-- Rendered `mise/miserc.toml.tera` for both `home` and `work` into an isolated
-  mise configuration directory.
+- Rendered `files/home/.config/mise/miserc.toml.tera` for both `home` and
+  `work` into an isolated mise configuration directory.
 - Created an isolated profile-scoped tracked file, saved it to a synthetic local
   bare Git origin, and restored it into separate mise config/state directories
   with `mise bootstrap --adopt ... --only dotfiles`.

@@ -4,12 +4,12 @@ set -euo pipefail
 
 SOURCE_PATH="${BASH_SOURCE[0]}"
 while [ -L "$SOURCE_PATH" ]; do
-    SOURCE_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
-    SOURCE_PATH="$(readlink "$SOURCE_PATH")"
-    case "$SOURCE_PATH" in
-        /*) ;;
-        *) SOURCE_PATH="$SOURCE_DIR/$SOURCE_PATH" ;;
-    esac
+	SOURCE_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
+	SOURCE_PATH="$(readlink "$SOURCE_PATH")"
+	case "$SOURCE_PATH" in
+	/*) ;;
+	*) SOURCE_PATH="$SOURCE_DIR/$SOURCE_PATH" ;;
+	esac
 done
 
 SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
@@ -21,41 +21,41 @@ LOGS_DIR="$DOTFILES_DIR/logs"
 LOG_RETENTION=30
 
 rotate_logs() {
-    local retention="${1:-$LOG_RETENTION}"
-    local logs=()
-    local log_file
+	local retention="${1:-$LOG_RETENTION}"
+	local logs=()
+	local log_file
 
-    [ -d "$LOGS_DIR" ] || return 0
+	[ -d "$LOGS_DIR" ] || return 0
 
-    while IFS= read -r log_file; do
-        [ -n "$log_file" ] && logs+=("$log_file")
-    done < <(find "$LOGS_DIR" -maxdepth 1 -type f -name 'dotf_*.log' | sort -r)
+	while IFS= read -r log_file; do
+		[ -n "$log_file" ] && logs+=("$log_file")
+	done < <(find "$LOGS_DIR" -maxdepth 1 -type f -name 'dotf_*.log' | sort -r)
 
-    local index
-    for ((index = retention; index < ${#logs[@]}; index++)); do
-        rm -f -- "${logs[$index]}"
-    done
+	local index
+	for ((index = retention; index < ${#logs[@]}; index++)); do
+		rm -f -- "${logs[$index]}"
+	done
 }
 
 # Initialize logging - create logs directory and set up log file
 init_logging() {
-    mkdir -p "$LOGS_DIR"
-    rotate_logs $((LOG_RETENTION - 1))
-    # Generate timestamp for log filename
-    LOG_TIMESTAMP=$(dotf_date '%Y-%m-%d_%H-%M-%S')
-    LOG_FILE="$LOGS_DIR/dotf_${LOG_TIMESTAMP}.log"
-    export LOG_FILE
-    : > "$LOG_FILE"
+	mkdir -p "$LOGS_DIR"
+	rotate_logs $((LOG_RETENTION - 1))
+	# Generate timestamp for log filename
+	LOG_TIMESTAMP=$(dotf_date '%Y-%m-%d_%H-%M-%S')
+	LOG_FILE="$LOGS_DIR/dotf_${LOG_TIMESTAMP}.log"
+	export LOG_FILE
+	: >"$LOG_FILE"
 }
 
 cmd_run() {
-    init_logging
-    debug "Starting dotf run command"
-    "$SCRIPT_DIR/bootstrap"
-    ensure_homebrew_env
-    ensure_mise_env
-    announce "Tool prerequisites installed"
-    cat <<'EOF'
+	init_logging
+	debug "Starting dotf run command"
+	"$SCRIPT_DIR/bootstrap"
+	ensure_homebrew_env
+	ensure_mise_env
+	announce "Tool prerequisites installed"
+	cat <<'EOF'
 
 This subprocess cannot update your Terminal's environment. Run:
 
@@ -68,11 +68,11 @@ history, configure Git identity, and prepare BetterDisplay.
 Then run ./bin/setup.sh as described in Step 11.
 EOF
 
-    debug "Run complete"
+	debug "Run complete"
 }
 
 cmd_help() {
-    cat <<'EOF'
+	cat <<'EOF'
 dotf - Dotfiles tool bootstrap
 
 Usage: dotf <command>
@@ -84,24 +84,24 @@ EOF
 }
 
 main() {
-    rotate_logs
+	rotate_logs
 
-    if [ "$#" -ne 1 ]; then
-        cmd_help >&2
-        return 1
-    fi
+	if [ "$#" -ne 1 ]; then
+		cmd_help >&2
+		return 1
+	fi
 
-    case "$1" in
-        run) cmd_run ;;
-        help|--help|-h) cmd_help ;;
-        *)
-            printf 'Error: Unknown command "%s"\n' "$1" >&2
-            cmd_help >&2
-            return 1
-            ;;
-    esac
+	case "$1" in
+	run) cmd_run ;;
+	help | --help | -h) cmd_help ;;
+	*)
+		printf 'Error: Unknown command "%s"\n' "$1" >&2
+		cmd_help >&2
+		return 1
+		;;
+	esac
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-    main "$@"
+	main "$@"
 fi

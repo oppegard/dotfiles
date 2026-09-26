@@ -1,0 +1,6 @@
+[*.sh]
+indent_style = space
+indent_size = 2
+# shfmt
+case_indent = true
+simplify = false

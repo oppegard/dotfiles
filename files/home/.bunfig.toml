@@ -1,2 +1,4 @@
+#:schema https://www.schemastore.org/bunfig.json
+
 [install]
-minimumReleaseAge = 604800 # 7 days, in seconds
+minimumReleaseAge = 604800  # 7 days, in seconds

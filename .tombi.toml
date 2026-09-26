@@ -1,0 +1,8 @@
+toml-version = "v1.1.0"
+
+
+[format.rules]
+key-value-equals-sign-alignment = true
+line-width                      = 80
+table-blank-lines               = 2
+trailing-comment-alignment      = true
