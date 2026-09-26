@@ -93,9 +93,9 @@ jobs:
         if: needs.detect-changes.outputs.integration_optional != 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Exclude Mac App Store packages in CI
+      - name: Exclude Cask and MAS packages in CI
         if: runner.os == 'macOS'
-        run: echo 'MISE_SYSTEM_PACKAGES_MANAGERS=brew,brew-cask' >> "$GITHUB_ENV"
+        run: echo 'MISE_SYSTEM_PACKAGES_MANAGERS=brew' >> "$GITHUB_ENV"
 
       - name: Run dotfiles integration script
         if: needs.detect-changes.outputs.integration_optional != 'true'
@@ -107,13 +107,20 @@ jobs:
           NONINTERACTIVE: true
           GITHUB_TOKEN: ${{ github.token }}
           MISE_ENV: home
-          MISE_TRUSTED_CONFIG_PATHS: "$GITHUB_WORKSPACE/files/home/.config/mise"
-          MISE_VERBOSE: 1
+          MISE_VERBOSE: 0
         shell: bash
         run: |
           set -euo pipefail
           rm -f ~/.bash_profile ~/.bashrc ~/.gitconfig # make VM closer to fresh machine
-          # run one
+          if [[ "$RUNNER_OS" == macOS ]]; then
+            mkdir -p "$HOME/.local/bin"
+            ln -s /usr/bin/true "$HOME/.local/bin/chsh" # mock chsh for user.login_shell
+          fi
+
+          echo "::group::RUN1"
           MISE_YES=true bin/dotf run
-          # run two
+          echo "::endgroup::"
+
+          echo "::group::RUN2"
           bin/dotf run
+          echo "::endgroup::"
