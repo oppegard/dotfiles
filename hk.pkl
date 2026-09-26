@@ -3,7 +3,9 @@ import "package://github.com/jdx/hk/releases/download/v2.0.1/hk@2.0.1#/Builtins.
 
 steps {
   ["gitleaks"] = Builtins.gitleaks
-  ["newlines"] = Builtins.newlines
+  ["newlines"] = (Builtins.newlines) {
+    exclude = List("Alfred/**/**")
+  }
   ["shfmt"] = (Builtins.shfmt) {
     exclude = List("Alfred/**/**")
   }
