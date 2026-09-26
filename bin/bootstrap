@@ -8,47 +8,47 @@ DOTFILES_ROOT="$(dirname "$BOOTSTRAP_DIR")"
 source "$BOOTSTRAP_DIR/lib/dotf-common.sh"
 
 is_macos() {
-    [ "$(uname -s)" = "Darwin" ]
+	[ "$(uname -s)" = "Darwin" ]
 }
 
 is_linux() {
-    [ "$(uname -s)" = "Linux" ]
+	[ "$(uname -s)" = "Linux" ]
 }
 
 ensure_dotfiles_checkout() {
-    local target="$HOME/.dotfiles"
+	local target="$HOME/.dotfiles"
 
-    if [ "$DOTFILES_ROOT" = "$target" ] || [ -e "$target" ] || [ -L "$target" ]; then
-        return
-    fi
+	if [ "$DOTFILES_ROOT" = "$target" ] || [ -e "$target" ] || [ -L "$target" ]; then
+		return
+	fi
 
-    ln -s "$DOTFILES_ROOT" "$target"
+	ln -s "$DOTFILES_ROOT" "$target"
 }
 
 ensure_full_disk_access() {
-    if ! is_macos; then
-        return 0
-    fi
+	if ! is_macos; then
+		return 0
+	fi
 
-    local preferences_file terminal_app
-    preferences_file="$HOME/Library/Preferences/com.apple.universalaccess.plist"
+	local preferences_file terminal_app
+	preferences_file="$HOME/Library/Preferences/com.apple.universalaccess.plist"
 
-    # Test FDA write access without changing the file.
-    if [ -e "$preferences_file" ] &&
-        (exec 3>>"$preferences_file") 2>/dev/null; then
-        return
-    fi
+	# Test FDA write access without changing the file.
+	if [ -e "$preferences_file" ] &&
+		(exec 3>>"$preferences_file") 2>/dev/null; then
+		return
+	fi
 
-    case "${TERM_PROGRAM:-}" in
-        Apple_Terminal) terminal_app="Terminal.app" ;;
-        ghostty|Ghostty) terminal_app="Ghostty.app" ;;
-        *) terminal_app="${TERM_PROGRAM:-the terminal app running this bootstrap}" ;;
-    esac
+	case "${TERM_PROGRAM:-}" in
+	Apple_Terminal) terminal_app="Terminal.app" ;;
+	ghostty | Ghostty) terminal_app="Ghostty.app" ;;
+	*) terminal_app="${TERM_PROGRAM:-the terminal app running this bootstrap}" ;;
+	esac
 
-    announce "Full Disk Access is required for $terminal_app"
-    open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles" \
-        >/dev/null 2>&1 || true
-    cat >&2 <<EOF
+	announce "Full Disk Access is required for $terminal_app"
+	open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles" \
+		>/dev/null 2>&1 || true
+	cat >&2 <<EOF
 In System Settings > Privacy & Security > Full Disk Access:
 
   1. Add and enable $terminal_app.
@@ -57,49 +57,53 @@ In System Settings > Privacy & Security > Full Disk Access:
 
 Bootstrap stopped because macOS applies Full Disk Access only to a new app process.
 EOF
-    return 1
+	return 1
 }
 
 bootstrap_homebrew() {
-    debug "Bootstrapping homebrew..."
-    if ! is_macos; then
-        return 0
-    fi
+	debug "Bootstrapping homebrew..."
+	if ! is_macos; then
+		return 0
+	fi
 
-    local install_script
-    if [ ! -x /opt/homebrew/bin/brew ]; then
-        announce "Installing Homebrew"
-        install_script="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        /bin/bash -c "$install_script"
-    fi
-    ensure_homebrew_env
+	local install_script
+	if [ ! -x /opt/homebrew/bin/brew ]; then
+		announce "Installing Homebrew"
+		install_script="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+		/bin/bash -c "$install_script"
+	fi
+	ensure_homebrew_env
 }
 
 bootstrap_mise() {
-    debug "Bootstrapping mise..."
-    if ! ensure_mise_env; then
-        announce "Installing mise"
-        curl -fsSL https://mise.run | sh
-        export MISE_AUTO_ENV=true
-    fi
-    ensure_mise_env
+	debug "Bootstrapping mise..."
+	if ! ensure_mise_env; then
+		announce "Installing mise"
+		curl -fsSL https://mise.run | sh
+		export MISE_AUTO_ENV=true
+	fi
+	ensure_mise_env
 }
 
+mise_bootstrap() {
+	debug "Running mise bootstrap..."
+	mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap
+}
 main() {
-    if [ "$#" -ne 0 ]; then
-        echo "Usage: bootstrap" >&2
-        return 1
-    fi
-    ensure_dotfiles_checkout
-    debug "Bootstrapping development environment..."
+	if [ "$#" -ne 0 ]; then
+		echo "Usage: bootstrap" >&2
+		return 1
+	fi
+	ensure_dotfiles_checkout
+	debug "Bootstrapping development environment..."
 
-    bootstrap_homebrew
-    bootstrap_mise
-    mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap
+	bootstrap_homebrew
+	bootstrap_mise
+	mise_bootstrap
 
-    debug "Bootstrap complete."
+	debug "Bootstrap complete."
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-    main "$@"
+	main "$@"
 fi
