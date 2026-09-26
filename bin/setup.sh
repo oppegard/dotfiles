@@ -15,6 +15,7 @@ done
 SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE_PATH")" && pwd)"
 DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
 export DOTFILES_DIR
+MISE_CONFIG_DIR="$DOTFILES_DIR/files/home/.config/mise"
 # shellcheck source=bin/lib/dotf-common.sh
 source "$SCRIPT_DIR/lib/dotf-common.sh"
 
@@ -23,14 +24,14 @@ ensure_mise_env
 git -C "$DOTFILES_DIR" pull
 
 # Required before the first heading; setup may run from a shell without mise activation.
-mise -C "$DOTFILES_DIR/mise" install gum
+mise -C "$MISE_CONFIG_DIR" install gum
 
 resolve_mise_env() {
   local mise_env="${MISE_ENV:-}"
 
   if [[ -z "$mise_env" ]]; then
     mise_env="$(
-      mise -C "$DOTFILES_DIR/mise" exec -- printenv MISE_ENV 2>/dev/null || :
+      mise -C "$MISE_CONFIG_DIR" exec -- printenv MISE_ENV 2>/dev/null || :
     )"
   fi
 
@@ -41,7 +42,7 @@ resolve_mise_env() {
     fi
 
     if ! mise_env="$(
-      mise -C "$DOTFILES_DIR/mise" exec gum -- \
+      mise -C "$MISE_CONFIG_DIR" exec gum -- \
         gum choose --header "Select the mise environment:" home work
     )"; then
       echo "ERROR: mise environment selection was cancelled." >&2
@@ -61,7 +62,7 @@ MISE_ENV="$(resolve_mise_env)"
 export MISE_ENV
 
 gum_print() {
-  mise -C "$DOTFILES_DIR/mise" exec gum -- gum style --foreground 212 \
+  mise -C "$MISE_CONFIG_DIR" exec gum -- gum style --foreground 212 \
     --border-foreground 212 --border double --align center \
     --margin "1 0" --padding "1 2" --bold --width 72 "$@"
 }
@@ -75,10 +76,10 @@ mkdir -p \
 chmod 700 "$HOME/.ssh"
 
 gum_print "👨‍🍳 👨‍🍳 👨‍🍳  MISE BOOTSTRAP  👨‍🍳 👨‍🍳 👨‍🍳"
-mise -C "$DOTFILES_DIR/mise" bootstrap
+mise -C "$MISE_CONFIG_DIR" bootstrap
 
 gum_print "⬆️ ⬆️ ⬆️  MISE UPGRADE  ⬆️ ⬆️ ⬆️"
-mise -C "$DOTFILES_DIR/mise" upgrade
+mise -C "$MISE_CONFIG_DIR" upgrade
 
 __os="$(uname -s)"
 
@@ -90,7 +91,7 @@ if [ "$__os" = "Darwin" ]; then
   brew cleanup # If lots of warnings, run `brew upgrade`
 
   gum_print "🍎️ 🍎️ 🍎️  MISE Mac Tasks  🍎️ 🍎️ 🍎️"
-  mise run -C "$DOTFILES_DIR/mise" betterdisplay:export
+  mise run -C "$MISE_CONFIG_DIR" betterdisplay:export
 
   # Make sure programs that are installed are run, so that I can configure them to open at login
   open -g -a BetterDisplay

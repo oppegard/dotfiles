@@ -3,6 +3,11 @@
 These are my dotfiles. See @README.md.
 
 ## CI
-Lints enforced on this codebase via `hk`/git hooks:
+`mise run lint` runs these `hk.pkl` checks in CI; `hk` also installs Git hooks:
 
-- `secrets`: Runs `gitleaks` over the working tree with repo config and redacted output.
+- `gitleaks`: Scans for secrets.
+- `newlines`: Checks file endings (excluding Alfred).
+- `shellcheck`: Lints shell scripts (excluding Alfred and vendor files).
+- `shfmt`: Checks shell formatting (excluding Alfred and vendor files).
+- `tombi`: Checks TOML formatting (excluding Tuna's config).
+- `yamlfmt`: Checks YAML formatting.

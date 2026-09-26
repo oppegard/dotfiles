@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Post-packages hook for `mise bootstrap` (see [bootstrap.hooks] in
-# mise/config.toml).
+# files/home/.config/mise/config.toml).
 
 ensure_git_version() {
   local required=2.54.0

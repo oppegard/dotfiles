@@ -298,7 +298,7 @@ class MacosDefaultsAudit
   def toml_candidates(differences)
     candidates = differences.select { |entry| entry["classification"] == "mise_candidate" }
     current_host_candidates = differences.select { |entry| entry["classification"] == "mise_current_host_candidate" }
-    lines = ["# Review each entry before copying it to mise/config.macos.toml.", "# Generated from live preference snapshots; this file is not managed state.", ""]
+    lines = ["# Review each entry before copying it to files/home/.config/mise/config.macos.toml.", "# Generated from live preference snapshots; this file is not managed state.", ""]
     candidates.group_by { |entry| entry["domain"] }.sort.each do |domain, entries|
       lines << "[bootstrap.macos.defaults.#{toml_string(domain)}]"
       entries.sort_by { |entry| entry["key"] }.each do |entry|
