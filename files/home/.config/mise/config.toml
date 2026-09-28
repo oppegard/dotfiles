@@ -106,12 +106,6 @@ builtin = "history-watch"
     { profile = "work" },
   ]
 }
-"~/src/drafthouse/mise.toml"   = {
-  mode     = "track",
-  variants = [
-    { profile = "work" },
-  ]
-}
 
 
 [tools]
