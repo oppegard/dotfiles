@@ -21,6 +21,7 @@ source "$SCRIPT_DIR/lib/dotf-common.sh"
 
 ensure_mise_env
 
+git -C "$DOTFILES_DIR" push
 git -C "$DOTFILES_DIR" pull
 
 # Required before the first heading; setup may run from a shell without mise activation.
