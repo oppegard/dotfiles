@@ -173,7 +173,7 @@ established by the current workflow or PR #8.
 | --- | --- | --- |
 | Plan investigation | Current workflow, `bin/dotf`, mise config, and merged PR #8 | Complete |
 | Baseline and safety contract | [Prior CI run](https://github.com/oppegard/dotfiles/actions/runs/36578026572) completed both bootstrap passes on macOS and Linux. Local preflight skipped bootstrap before any subprocess. | Verified |
-| Go bootstrap and hook suite | Hook passed on macOS and Linux in [first PR run](https://github.com/oppegard/dotfiles/actions/runs/36583012981). A temporary `git commit --no-verify` mutation caused the expected test failure. The first bootstrap attempt failed because its temporary home hid a systemd user unit on Linux and the managed gh credential helper on macOS. The test now uses the disposable runner's home. | Partial |
+| Go bootstrap and hook suite | Hook passed on macOS and Linux in [first PR run](https://github.com/oppegard/dotfiles/actions/runs/36583012981). A temporary `git commit --no-verify` mutation caused the expected test failure. The first bootstrap attempt failed because its temporary home hid a systemd user unit on Linux and the managed gh credential helper on macOS. The [second run](https://github.com/oppegard/dotfiles/actions/runs/36583579896) showed that `mise-action` puts its binary outside `~/.local/bin`; the test now passes its resolved path through `MISE_BIN` for the gh postinstall check. | Partial |
 | Local command | `mise run test:integration` passed the hook test and reported the bootstrap skip on macOS. | Verified for normal host |
 | Final macOS and Linux CI | Pending | Not verified |
 

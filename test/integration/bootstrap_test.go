@@ -20,6 +20,14 @@ func TestDotfBootstrapTwice(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	mise, err := exec.LookPath("mise")
+	if err != nil {
+		t.Fatal(err)
+	}
+	mise, err = filepath.EvalSymlinks(mise)
+	if err != nil {
+		t.Fatal(err)
+	}
 	sourceCommand := exec.CommandContext(t.Context(), git, "rev-parse", "--show-toplevel")
 	source, err := sourceCommand.Output()
 	if err != nil {
@@ -68,6 +76,7 @@ func TestDotfBootstrapTwice(t *testing.T) {
 	}
 	for key, value := range map[string]string{
 		"MISE_AUTO_ENV":  "true",
+		"MISE_BIN":       mise,
 		"MISE_ENV":       "home",
 		"MISE_YES":       "true",
 		"MISE_VERBOSE":   "0",
