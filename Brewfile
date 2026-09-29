@@ -15,28 +15,3 @@ brew "uv"
 brew "watch"
 brew "yt-dlp"
 brew "zoxide"
-
-cask "1password-cli"
-cask "alfred"
-cask "bartender"
-cask "betterdisplay"
-cask "cleanshot"
-cask "claude-code"
-cask "codex"
-cask "forklift"
-cask "hazeover"
-cask "hopper-disassembler"
-cask "iina"
-cask "istat-menus"
-cask "libreoffice-still" # for https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md
-cask "linearmouse"
-cask "orbstack"
-cask "rectangle-pro"
-cask "soundsource"
-cask "tailscale-app"
-cask "tuna"
-cask "typora"
-
-mas "Clocker", id: 1056643111
-mas "iA Writer", id: 775737590
-mas "TripMode", id: 1513400665
