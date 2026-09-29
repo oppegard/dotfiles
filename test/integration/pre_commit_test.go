@@ -1,19 +1,15 @@
-package hooks
+package integration
 
 import (
 	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
 )
 
 func TestPreCommitRejectsSecret(t *testing.T) {
-	if runtime.GOOS != "linux" {
-		t.Skip("hook E2E currently runs on Linux")
-	}
 	git, err := exec.LookPath("git")
 	if err != nil {
 		t.Fatal(err)
@@ -29,7 +25,7 @@ func TestPreCommitRejectsSecret(t *testing.T) {
 	temp := t.TempDir()
 	repo := filepath.Join(temp, "repo")
 	env := []string{
-		"PATH=" + filepath.Dir(mise) + ":/usr/bin:/bin",
+		"PATH=" + filepath.Dir(mise) + ":/usr/bin:/bin:/usr/sbin:/sbin",
 		"HOME=" + filepath.Join(temp, "home"),
 		"XDG_CONFIG_HOME=" + filepath.Join(temp, "config"),
 		"XDG_CACHE_HOME=" + filepath.Join(temp, "cache"),
@@ -67,28 +63,7 @@ func TestPreCommitRejectsSecret(t *testing.T) {
 		return strings.TrimSpace(output)
 	}
 	source := mustRun(".", git, "rev-parse", "--show-toplevel")
-	files := mustRun(source, git, "ls-files", "-z")
-	for _, name := range strings.Split(strings.TrimSuffix(files, "\x00"), "\x00") {
-		from := filepath.Join(source, name)
-		to := filepath.Join(repo, name)
-		info, err := os.Lstat(from)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if !info.Mode().IsRegular() {
-			t.Fatalf("tracked path %q is not a regular file", name)
-		}
-		contents, err := os.ReadFile(from)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := os.MkdirAll(filepath.Dir(to), 0o755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(to, contents, info.Mode().Perm()); err != nil {
-			t.Fatal(err)
-		}
-	}
+	copyTrackedFiles(t, source, repo, mustRun(source, git, "ls-files", "-z"))
 	mustRun(repo, git, "init", "--initial-branch=main")
 	mustRun(repo, git, "config", "user.name", "Hook E2E")
 	mustRun(repo, git, "config", "user.email", "hook-e2e@example.invalid")
