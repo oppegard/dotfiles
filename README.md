@@ -5,7 +5,7 @@
 ## Integration tests
 
 Install mise, then run the suite from the repository root. Mise selects the Go
-version from `test/integration/go.mod`:
+version from the root `go.mod`:
 
 ```sh
 mise run test:integration

@@ -111,10 +111,9 @@ jobs:
         if: needs.detect-changes.outputs.integration_optional == 'false'
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          working_directory: test/integration
           install: true
           cache: true
-          cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'test/integration/mise.toml', 'test/integration/go.mod', 'files/home/.config/mise/**/*.toml*') }}"
+          cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'go.mod', 'files/home/.config/mise/**/*.toml*') }}"
 
       - name: Run integration tests
         if: needs.detect-changes.outputs.integration_optional == 'false'
