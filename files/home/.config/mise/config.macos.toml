@@ -15,6 +15,7 @@ adopt = true
 "brew-cask:claude-code"         = "latest"
 "brew-cask:cleanshot"           = "latest"
 "brew-cask:codex"               = "latest"
+"brew-cask:cursor"              = "latest"
 "brew-cask:fantastical"         = "latest"
 "brew-cask:forklift"            = "latest"
 "brew-cask:ghostty"             = "latest"
