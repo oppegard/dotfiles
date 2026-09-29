@@ -55,7 +55,8 @@ action also reads `toolchain` before `go` when given this module's `go.mod`.
 Use `go 1.27` and `toolchain go1.27.1` in `test/integration/go.mod`. Go 1.27.1
 is the current Go 1.27 patch release on 2026-09-29. Do not declare another
 Go version in root `mise.toml` or the home configuration. Enable mise's Go
-version-file discovery only for the integration task and the CI setup step.
+version-file discovery in `test/integration/mise.toml`, which the local task
+and CI setup both load.
 The owner removed the experimental `#go = "1.27"` line before implementation.
 
 A scratch prototype showed that `dir = "module"` changes a task's working
@@ -74,11 +75,11 @@ download on every platform. Keep the module beside the integration tests and
 use mise's documented directory selection for this one task and CI setup.
 
 For CI, set `working_directory: test/integration` on `jdx/mise-action` and
-enable Go version-file discovery on that action step. Its install reads the
-nested `go.mod` and caches Go together with the existing mise tools. Include
-the `go.mod` hash in its cache key. Remove `actions/setup-go` so CI does not
-install Go twice. The action saves its cache during setup, so installing Go
-later in the test step would miss that cache.
+load the module-local mise configuration. Its install reads the nested
+`go.mod` and caches Go together with the existing mise tools. Include both
+module configuration files in its cache key. Remove `actions/setup-go` so CI
+does not install Go twice. The action saves its cache during setup, so
+installing Go later in the test step would miss that cache.
 
 ## Optional check behavior
 
@@ -121,13 +122,14 @@ runner and executes the full Go suite.
 
 | Check | Result |
 | --- | --- |
-| Mise version resolution | `MISE_IDIOMATIC_VERSION_FILE_ENABLE_TOOLS=go mise -C test/integration exec -- go version` returned `go1.27.1 darwin/arm64` from mise's Go 1.27.1 install. Root mise still resolves the home Go 1.26.8. |
+| Mise version resolution | With `test/integration/mise.toml`, `mise -C test/integration exec -- go version` returned `go1.27.1 darwin/arm64` from mise's Go 1.27.1 install. Root mise still resolves the home Go 1.26.8. No environment override is needed. |
 | Local suite | `GOCACHE=/private/tmp/dotfiles-go-build mise run test:integration` passed with network access. Bootstrap skipped before machine changes on this normal Mac. The isolated fixture installed six tools, including hk and gitleaks, and did not install Go. The installed hook rejected the synthetic secret and preserved `HEAD`; the same staged secret committed with the hook bypassed. |
 | Change classification | The workflow's actual Bash block passed scratch Git cases for empty, allowed-only, schedule, mixed, advanced-base, and docs-to-test rename diffs. The implementation owner also exercised manual, invalid-base, and docs-to-docs cases. |
 | Static checks | `actionlint` passed with the existing `ubuntu-26.04` label-table exception. `mise run lint` and `git diff --check` passed. |
 | Full CI | [Run 36599860370](https://github.com/oppegard/dotfiles/actions/runs/36599860370) passed the detector and both matrix jobs at `255320b`. Both jobs installed Go 1.27.1 through mise, completed the two bootstrap passes, installed six tools in the hook fixture, rejected the synthetic secret, and committed it with the hook bypassed. The paired lint run passed. |
 | Mise cache | [Attempt 2 of run 36599860370](https://github.com/oppegard/dotfiles/actions/runs/36599860370/attempts/2) passed both matrix jobs. Each job restored its platform cache, reported Go 1.27.1 already installed, and still ran the hook fixture's fresh six-tool install. |
 | No-op GitHub path | The classifier's exact Bash block passed scratch Git cases. A docs-only PR cannot trigger this new workflow against `main` before PR #9 merges, because `main` still has the old workflow. Observe the required check names and echo-only steps on the first docs-only PR after merge. |
+| Module-local setting | A scratch module proved that a nested `[settings] idiomatic_version_file_enable_tools = ["go"]` selects the nested module's `toolchain` without changing root Go. The updated local integration task passed, including the isolated gitleaks hook test. |
 
 ## References
 
