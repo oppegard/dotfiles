@@ -33,22 +33,3 @@ jobs:
       - name: Verify installed pre-commit hook
         working-directory: test/hooks
         run: go test -v -count=1 -timeout=12m ./...
-
-      - name: Verify the test detects a bypassed hook
-        working-directory: test/hooks
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          source = Path("pre_commit_test.go")
-          original = source.read_text()
-          before = 'run(repo, git, "commit", "-m", "test: reject synthetic secret")'
-          after = 'run(repo, git, "commit", "--no-verify", "-m", "test: reject synthetic secret")'
-          assert original.count(before) == 1
-          source.write_text(original.replace(before, after))
-          PY
-          if go test -v -count=1 -timeout=12m ./... > "$RUNNER_TEMP/hook-mutation.log" 2>&1; then
-            cat "$RUNNER_TEMP/hook-mutation.log"
-            exit 1
-          fi
-          cat "$RUNNER_TEMP/hook-mutation.log"
-          grep -F 'secret commit succeeded; the installed pre-commit hook did not reject it' "$RUNNER_TEMP/hook-mutation.log"

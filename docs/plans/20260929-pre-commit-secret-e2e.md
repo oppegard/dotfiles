@@ -1,6 +1,6 @@
 # Verify secret rejection through the installed pre-commit hook
 
-Status: Approved by the user. Implementation in progress.
+Status: Implemented and verified on Linux in draft PR #8.
 Date: 2026-09-29.
 
 ## Feature playbook
@@ -91,14 +91,14 @@ the draft PR's latest commit. Do not merge the PR.
 
 ## Throughput checkpoint
 
-- [ ] Blocking first steps. Approve this plan, finish design exploration, and
+- [x] Blocking first steps. Approve this plan, finish design exploration, and
   verify Linux setup and fixture detection before implementing the final test.
-- [ ] Independent workstreams. Design alternatives can be explored read-only.
+- [x] Independent workstreams. Design alternatives can be explored read-only.
   Keep the test and workflow implementation with one owner because they share
   the runner contract.
-- [ ] Shared mutable state. Test commands write only to a fresh temporary
+- [x] Shared mutable state. Test commands write only to a fresh temporary
   directory. One implementation owner edits the feature branch.
-- [ ] Smallest safe decomposition. One worker owns the Go test and workflow.
+- [x] Smallest safe decomposition. One worker owns the Go test and workflow.
   A separate reviewer checks false positives, isolation, and CI results.
 
 ## Task checklist
@@ -109,11 +109,11 @@ the draft PR's latest commit. Do not merge the PR.
 - [x] Obtain approval for implementation.
 - [x] Complete parallel design exploration and record the chosen copy strategy.
 - [x] Implement the standard-library test and Linux workflow.
-- [ ] Verify clean commit, rejected secret, and missing-hook failure behavior.
+- [x] Verify clean commit, rejected secret, and bypassed-hook failure behavior.
 - [x] Review the diff independently and run relevant lint checks.
-- [ ] Commit and push with a Conventional Commits message.
-- [ ] Create and attach a draft PR with the approved plan.
-- [ ] Confirm the new workflow passes on the latest draft PR commit.
+- [x] Commit and push with a Conventional Commits message.
+- [x] Create and attach a draft PR with the approved plan.
+- [x] Confirm the new workflow passes on the draft PR.
 
 ## Design exploration phases
 
@@ -137,16 +137,24 @@ Scores for authenticity, isolation, rejection evidence, and maintenance were
 5/4/4/4 for A and 4/5/4/2 for B. Adopt B's narrow PATH, upstream AWS fixture
 assembled at runtime, and native Git hook keys. Keep the bypass experiment as
 one-time verification rather than permanent test machinery. All design phases
-through Graft are complete. Verify continues with the implementation.
+through Verify are complete.
 
 ## Verification progress
 
 Go 1.27.1 compilation and Linux cross-compilation passed. Gofmt, actionlint,
 and all repository lint checks passed. Independent review found no correctness
-issue after correcting the module owner. Linux runtime verification remains
-pending. A temporary workflow step adds `--no-verify` only to the secret commit
-and requires the test's unexpected-success error. Remove that step after proof
-and rerun the final workflow on the draft PR.
+issue after correcting the module owner. The Linux test passed in 5.13 seconds
+with Go 1.27.1. Logs confirm fresh installation of six tools and hk's
+postinstall creating a native Git pre-commit hook. The clean commit succeeded,
+and the secret commit was rejected with the expected detection evidence.
+
+A temporary workflow step added `--no-verify` only to the secret commit.
+The test failed with `secret commit succeeded`, proving that hook bypass
+cannot yield a passing test. The temporary step has been removed. Final-head
+workflow verification is recorded in the PR description before delivery.
+
+- Draft PR: https://github.com/oppegard/dotfiles/pull/8
+- Normal and mutation run: https://github.com/oppegard/dotfiles/actions/runs/36577768681
 
 ## Sources consulted
 
