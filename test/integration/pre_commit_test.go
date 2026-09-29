@@ -106,4 +106,9 @@ func TestPreCommitRejectsSecret(t *testing.T) {
 		t.Fatalf("rejected secret should remain staged, got %q", staged)
 	}
 	t.Log("The installed hook rejected the synthetic secret and preserved HEAD")
+	mustRun(repo, git, "commit", "--no-verify", "-m", "test: bypass installed hook")
+	if head := mustRun(repo, git, "rev-parse", "HEAD"); head == cleanHead {
+		t.Fatal("bypassed commit did not advance HEAD")
+	}
+	t.Log("The same staged secret committed when Git bypassed the hook")
 }
