@@ -1,6 +1,6 @@
 # Unify integration tests under Go
 
-Status: Approved and in progress on 2026-09-29.
+Status: Implemented and verified on PR #9 on 2026-09-29.
 
 The `Integration Tests` workflow will run one Go test package on macOS and
 Linux. `mise run test:integration` will invoke that same package locally. The
@@ -13,11 +13,11 @@ pre-commit hook. The workflow from PR #8 will then be removed.
 - [x] Phase A: Frame. State a falsifiable definition of done, scope, and risks.
 - [x] Phase B: Design the workflow. Put isolation and verification before the
   port, and split the work into units with a check after each.
-- [ ] Phase C: Run the loop. Implement and verify one unit at a time after this
-  plan is approved. Final CI verification remains open.
+- [x] Phase C: Run the loop. Implement and verify one unit at a time after this
+  plan is approved.
 - [x] Phase D: Keep the audit trail. Record commands, results, and relevant CI
   run links in this plan as each unit lands.
-- [ ] Phase E: Verify and hand back. Check the final workflow and local command
+- [x] Phase E: Verify and hand back. Check the final workflow and local command
   against the definition of done.
 
 ## Definition of done
@@ -39,12 +39,12 @@ commit:
   key makes `git commit` fail with gitleaks detection evidence, leaves `HEAD`
   unchanged, and leaves the file staged. This runs on both macOS and Linux.
 - A deliberate hook bypass in a disposable fixture makes the gitleaks test
-  fail. The normal test must fail when `mise install` does not install a hook.
+  fail. In the permanent test, the same staged secret commits when Git bypasses
+  the hook. The normal test must fail when `mise install` does not install one.
 - The single `Integration Tests` workflow has a macOS and Linux matrix, runs
   the same Go suite as the local task with no skipped tests, and passes on the
   final commit. The `pre-commit-e2e.yml` workflow is gone. The required matrix
-  check names remain
-  stable or the repository's branch protection is updated by its owner.
+  check names remain stable in the repository's CI ruleset.
 
 ## Current state and risks
 
@@ -79,9 +79,10 @@ new production tool declaration to the root `mise.toml` without approval.
 Move the existing hook test into one `test/integration` Go module and package.
 Keep separate named tests for bootstrap idempotence and hook rejection, so a
 failure names its behavior while one `go test` command runs the suite. The
-shared data shape is a test case's temporary checkout, home, environment, and
-captured command result. Keep the bootstrap and hook fixtures separate because
-they have different isolation requirements. Avoid a generic command framework.
+hook test uses a temporary checkout, home, environment, and captured command
+result. The bootstrap test uses the disposable runner's checkout and home
+because user services and package installers depend on that real home. Keep
+the fixtures separate and avoid a generic command framework.
 
 The Go bootstrap test will use the checkout and home of a disposable runner,
 set the runner environment, run `bin/dotf run` twice, and assert both the
@@ -132,14 +133,14 @@ cache disabled because this standard-library-only module has no `go.sum`.
 - [x] Add the bootstrap test with a disposable-runner guard and home checks.
 - [x] Move each current workflow condition into the Go runner or a documented
   CI setting. Assert first-run and second-run results, not just zero exits.
-- [ ] Run the test on disposable Linux and macOS environments. Compare results
+- [x] Run the test on disposable Linux and macOS environments. Compare results
   with the baseline before deleting the shell step.
 
 ### 3. Unify the hook test and local command
 
 - [x] Move the hook test into `test/integration` and make it run on both hosts.
-- [ ] Run the real clean and secret commits on macOS and Linux. Verify the
-  deliberate hook-bypass case fails the test on both hosts.
+- [x] Run the real clean and secret commits on macOS and Linux. Verify the
+  same staged secret commits when Git bypasses the hook on both hosts.
 - [x] Add `mise run test:integration`. Check its discovered task and command on
   both hosts. On a normal host, prove that it runs the hook lane and reports a
   bootstrap skip before any machine change.
@@ -149,13 +150,13 @@ cache disabled because this standard-library-only module has no `go.sum`.
 - [x] Change `integration-tests.yml` to install Go 1.27 and mise, then invoke
   `mise run test:integration` once in each existing matrix leg. Retain runner
   timeouts and make the full suite's timeout cover fresh installs.
-- [ ] Remove the change-detection skip and delete `pre-commit-e2e.yml` after
+- [x] Remove the change-detection skip and delete `pre-commit-e2e.yml` after
   both Go tests pass in the consolidated workflow.
-- [ ] Run `gofmt`, `go test`, `actionlint`, `mise run lint`, and
+- [x] Run `gofmt`, `go test`, `actionlint`, `mise run lint`, and
   `git diff --check`. Inspect the final macOS and Linux job logs for both
   bootstrap passes and gitleaks rejection. Confirm the jobs ran on the final
   commit, rather than accepting a skipped or stale check.
-- [ ] Update this checklist and the PR's collapsed `Implementation Plan` as
+- [x] Update this checklist and the PR's collapsed `Implementation Plan` as
   work proceeds. Do not merge the PR.
 
 ## Open decision for review
@@ -173,13 +174,14 @@ established by the current workflow or PR #8.
 | --- | --- | --- |
 | Plan investigation | Current workflow, `bin/dotf`, mise config, and merged PR #8 | Complete |
 | Baseline and safety contract | [Prior CI run](https://github.com/oppegard/dotfiles/actions/runs/36578026572) completed both bootstrap passes on macOS and Linux. Local preflight skipped bootstrap before any subprocess. | Verified |
-| Go bootstrap and hook suite | Hook passed on macOS and Linux in [first PR run](https://github.com/oppegard/dotfiles/actions/runs/36583012981). A temporary `git commit --no-verify` mutation caused the expected test failure. The first bootstrap attempt failed because its temporary home hid a systemd user unit on Linux and the managed gh credential helper on macOS. The [second run](https://github.com/oppegard/dotfiles/actions/runs/36583579896) showed that `mise-action` puts its binary outside `~/.local/bin`; the test now passes its resolved path through `MISE_BIN` for the gh postinstall check. | Partial |
+| Go bootstrap and hook suite | [CI run](https://github.com/oppegard/dotfiles/actions/runs/36584607465) completed both bootstrap passes and both hook checks on macOS and Linux. The same staged secret committed under `--no-verify` on both hosts. | Verified |
 | Local command | `mise run test:integration` passed the hook test and reported the bootstrap skip on macOS. | Verified for normal host |
-| Final macOS and Linux CI | Pending | Not verified |
+| Final macOS and Linux CI | [Integration run](https://github.com/oppegard/dotfiles/actions/runs/36584607465) and its paired lint run passed. Both mise caches restored. The active CI ruleset requires the unchanged macOS and Linux job names plus lint. | Verified |
 
 ## Sources
 
 - [Merged PR #8](https://github.com/oppegard/dotfiles/pull/8)
 - [mise task documentation](https://mise.jdx.dev/tasks/)
+- [mise-action cache documentation](https://github.com/jdx/mise-action#cache-configuration)
 - Repository workflows, `bin/dotf`, `bin/bootstrap`, root `mise.toml`, user
   mise config, and `test/hooks/pre_commit_test.go` at `main` on 2026-09-29.
