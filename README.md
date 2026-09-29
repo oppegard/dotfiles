@@ -2,6 +2,26 @@
 
 - We do not store secrets on the system in plaintext.
 
+## Integration tests
+
+Install mise, then run the suite from the repository root. Mise selects the Go
+version from the root `go.mod`:
+
+```sh
+mise run test:integration
+```
+
+On a normal machine, this runs the installed pre-commit hook test in an
+isolated repository and reports the bootstrap test as skipped. The bootstrap
+test installs packages and changes machine settings. To run the full suite,
+use a disposable macOS or Linux VM and run:
+
+```sh
+DOTFILES_INTEGRATION_DISPOSABLE=1 mise run test:integration
+```
+
+GitHub Actions runs the full suite on disposable macOS and Linux runners.
+
 ## MacOS Preferences
 
 Managed macOS defaults live in
