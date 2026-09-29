@@ -1,0 +1,54 @@
+name: Pre-commit E2E
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hooks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version: 1.27.x
+          cache: false
+
+      - name: Set up mise without project tools
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        with:
+          install: false
+          cache: false
+
+      - name: Verify installed pre-commit hook
+        working-directory: test/hooks
+        run: go test -v -count=1 -timeout=12m ./...
+
+      - name: Verify the test detects a bypassed hook
+        working-directory: test/hooks
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          source = Path("pre_commit_test.go")
+          original = source.read_text()
+          before = 'run(repo, git, "commit", "-m", "test: reject synthetic secret")'
+          after = 'run(repo, git, "commit", "--no-verify", "-m", "test: reject synthetic secret")'
+          assert original.count(before) == 1
+          source.write_text(original.replace(before, after))
+          PY
+          if go test -v -count=1 -timeout=12m ./... > "$RUNNER_TEMP/hook-mutation.log" 2>&1; then
+            cat "$RUNNER_TEMP/hook-mutation.log"
+            exit 1
+          fi
+          cat "$RUNNER_TEMP/hook-mutation.log"
+          grep -F 'secret commit succeeded; the installed pre-commit hook did not reject it' "$RUNNER_TEMP/hook-mutation.log"
