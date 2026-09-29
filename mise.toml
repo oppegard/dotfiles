@@ -23,4 +23,4 @@ run         = "hk fix --all"
 
 [tasks."test:integration"]
 description = "Run Go integration tests; bootstrap needs a disposable machine"
-run         = "cd test/integration && go test -v -count=1 -timeout=20m ./..."
+run         = "MISE_IDIOMATIC_VERSION_FILE_ENABLE_TOOLS=go mise -C test/integration exec -- go test -v -count=1 -timeout=20m ./..."

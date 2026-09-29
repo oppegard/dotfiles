@@ -4,7 +4,8 @@
 
 ## Integration tests
 
-Install Go 1.27 and mise, then run the suite from the repository root:
+Install mise, then run the suite from the repository root. Mise selects the Go
+version from `test/integration/go.mod`:
 
 ```sh
 mise run test:integration

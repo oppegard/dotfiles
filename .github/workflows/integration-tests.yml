@@ -15,8 +15,61 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      integration_optional: ${{ steps.classify.outputs.integration_optional }}
+
+    steps:
+      - name: Checkout pull request head
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Classify integration changes
+        id: classify
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" != pull_request ]]; then
+            echo 'integration_optional=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          merge_base=$(git merge-base "$BASE_SHA" "$HEAD_SHA")
+          git diff --name-only -z --no-renames "$merge_base" "$HEAD_SHA" -- > "$RUNNER_TEMP/changed-files"
+          mapfile -d '' -t files < "$RUNNER_TEMP/changed-files"
+
+          if (( ${#files[@]} == 0 )); then
+            echo 'integration_optional=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          integration_optional=true
+          for file in "${files[@]}"; do
+            case "$file" in
+              AGENTS.md|README.md|docs/*) ;;
+              *) integration_optional=false; break ;;
+            esac
+          done
+
+          echo "integration_optional=$integration_optional" >> "$GITHUB_OUTPUT"
+          printf 'integration_optional=%s\n' "$integration_optional"
+          printf 'changed files:\n'
+          printf '%s\n' "${files[@]}"
+
   integration-test:
-    runs-on: ${{ matrix.os }}
+    needs: detect-changes
+    if: ${{ !cancelled() }}
+    runs-on: ${{ needs.detect-changes.outputs.integration_optional == 'false' && matrix.os || 'ubuntu-slim' }}
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -30,32 +83,41 @@ jobs:
       MISE_ENV: home
 
     steps:
+      - name: Require successful change detection
+        if: ${{ always() && needs.detect-changes.result != 'success' }}
+        run: exit 1
+
+      - name: Skip integration for prose-only changes
+        if: needs.detect-changes.outputs.integration_optional == 'true'
+        run: echo 'No integration-relevant changes.'
+
       - name: Checkout repository
+        if: needs.detect-changes.outputs.integration_optional == 'false'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - name: Set up Go
-        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
-        with:
-          go-version: 1.27.x
-          cache: false
-
       - name: Exclude Cask and MAS packages in CI
-        if: runner.os == 'macOS'
+        if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
         run: echo 'MISE_SYSTEM_PACKAGES_MANAGERS=brew' >> "$GITHUB_ENV"
 
       - name: Share mise cache with the bootstrap test
+        if: needs.detect-changes.outputs.integration_optional == 'false'
         run: |
           echo "MISE_DATA_DIR=$HOME/.local/share/mise" >> "$GITHUB_ENV"
           echo "MISE_CACHE_DIR=$HOME/.cache/mise" >> "$GITHUB_ENV"
 
       - name: Set up and cache mise tools
+        if: needs.detect-changes.outputs.integration_optional == 'false'
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        env:
+          MISE_IDIOMATIC_VERSION_FILE_ENABLE_TOOLS: go
         with:
+          working_directory: test/integration
           install: true
           cache: true
-          cache_key: "integration-v1-{{platform}}-{{file_hash}}-${{ hashFiles('files/home/.config/mise/**/*.toml*') }}"
+          cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'test/integration/go.mod', 'files/home/.config/mise/**/*.toml*') }}"
 
       - name: Run integration tests
+        if: needs.detect-changes.outputs.integration_optional == 'false'
         run: mise run test:integration
