@@ -1,6 +1,7 @@
 # Restore optional integration checks and pin Go in the module
 
-Status: Approved by the owner on 2026-09-29. Implementation in progress.
+Status: Implemented on PR #9. Full macOS and Linux CI passed on 2026-09-29.
+The no-op GitHub job path can be observed after this workflow reaches `main`.
 
 PR #9 already runs one Go integration suite on macOS and Linux. Restore the
 prose-only shortcut without losing either required matrix check. Make the
@@ -27,11 +28,13 @@ for local runs and CI.
     change classifier, checking each unit.
 - [x] 4. Delegate code-writing using model routing. If nested spawning is
   unavailable, the current agent owns the diff directly. Review every diff.
-- [ ] 5. Verify on the matching surface.
-- [ ] 6. Rebase into small, ordered commits; stack follow-ups.
+- [x] 5. Verify on the matching surface. The full CI path and local Go task
+  passed. The no-op GitHub path awaits a docs-only PR after merge.
+- [x] 6. Rebase into small, ordered commits; stack follow-ups. One scoped
+  implementation commit was pushed to the existing PR.
 - [x] 7. If the design is contested, `interrogate` before shipping.
   Skip: no design disagreement remains after the mise prototypes and review.
-- [ ] 8. Run Opening a PR. PR #9 already exists, so update its description and
+- [x] 8. Run Opening a PR. PR #9 already exists, so update its description and
   checks rather than opening another PR.
 
 ## Current behavior and decision
@@ -111,7 +114,7 @@ runner and executes the full Go suite.
   `git diff --check`. Inspect both full CI matrix jobs for Go 1.27.1,
   bootstrap passes, and gitleaks rejection. Inspect a docs-only PR run to
   confirm both matrix check names succeed through the no-op path.
-- [ ] Update PR #9's collapsed Implementation Plan and record final evidence
+- [x] Update PR #9's collapsed Implementation Plan and record final evidence
   here. Do not merge the PR.
 
 ## Evidence log
@@ -122,7 +125,9 @@ runner and executes the full Go suite.
 | Local suite | `GOCACHE=/private/tmp/dotfiles-go-build mise run test:integration` passed with network access. Bootstrap skipped before machine changes on this normal Mac. The isolated fixture installed six tools, including hk and gitleaks, and did not install Go. The installed hook rejected the synthetic secret and preserved `HEAD`; the same staged secret committed with the hook bypassed. |
 | Change classification | The workflow's actual Bash block passed scratch Git cases for empty, allowed-only, schedule, mixed, advanced-base, and docs-to-test rename diffs. The implementation owner also exercised manual, invalid-base, and docs-to-docs cases. |
 | Static checks | `actionlint` passed with the existing `ubuntu-26.04` label-table exception. `mise run lint` and `git diff --check` passed. |
-| CI | Pending a pushed commit and a docs-only PR run. |
+| Full CI | [Run 36599860370](https://github.com/oppegard/dotfiles/actions/runs/36599860370) passed the detector and both matrix jobs at `255320b`. Both jobs installed Go 1.27.1 through mise, completed the two bootstrap passes, installed six tools in the hook fixture, rejected the synthetic secret, and committed it with the hook bypassed. The paired lint run passed. |
+| Mise cache | [Attempt 2 of run 36599860370](https://github.com/oppegard/dotfiles/actions/runs/36599860370/attempts/2) passed both matrix jobs. Each job restored its platform cache, reported Go 1.27.1 already installed, and still ran the hook fixture's fresh six-tool install. |
+| No-op GitHub path | The classifier's exact Bash block passed scratch Git cases. A docs-only PR cannot trigger this new workflow against `main` before PR #9 merges, because `main` still has the old workflow. Observe the required check names and echo-only steps on the first docs-only PR after merge. |
 
 ## References
 
