@@ -83,10 +83,13 @@ shared data shape is a test case's temporary checkout, home, environment, and
 captured command result. Keep the bootstrap and hook fixtures separate because
 they have different isolation requirements. Avoid a generic command framework.
 
-The Go bootstrap test will create a disposable checkout and home, set the
-runner environment, run `bin/dotf run` twice, and assert both the expected
-first-run state and a clean second run. Preserve the macOS `chsh` stand-in in
-the disposable home and the `MISE_SYSTEM_PACKAGES_MANAGERS=brew` restriction.
+The Go bootstrap test will use the checkout and home of a disposable runner,
+set the runner environment, run `bin/dotf run` twice, and assert both the
+expected first-run state and a clean second run. Preserve the macOS `chsh`
+stand-in in the disposable home and the
+`MISE_SYSTEM_PACKAGES_MANAGERS=brew` restriction. Mise user services and
+installer postinstall checks require the runner's actual home; a temporary
+`HOME` caused the first CI attempt to fail on both platforms.
 Record what a successful bootstrap must leave behind before porting the shell
 commands. Do not use a stubbed `mise bootstrap` as the sole proof of the real
 bootstrap path.
@@ -126,7 +129,7 @@ cache disabled because this standard-library-only module has no `go.sum`.
 
 ### 2. Port bootstrap behavior into Go
 
-- [x] Add the bootstrap test and its isolated checkout and home fixture.
+- [x] Add the bootstrap test with a disposable-runner guard and home checks.
 - [x] Move each current workflow condition into the Go runner or a documented
   CI setting. Assert first-run and second-run results, not just zero exits.
 - [ ] Run the test on disposable Linux and macOS environments. Compare results
@@ -170,7 +173,7 @@ established by the current workflow or PR #8.
 | --- | --- | --- |
 | Plan investigation | Current workflow, `bin/dotf`, mise config, and merged PR #8 | Complete |
 | Baseline and safety contract | [Prior CI run](https://github.com/oppegard/dotfiles/actions/runs/36578026572) completed both bootstrap passes on macOS and Linux. Local preflight skipped bootstrap before any subprocess. | Verified |
-| Go bootstrap and hook suite | Hook passed on macOS. A temporary `git commit --no-verify` mutation caused the expected test failure. Bootstrap awaits disposable CI. | Partial |
+| Go bootstrap and hook suite | Hook passed on macOS and Linux in [first PR run](https://github.com/oppegard/dotfiles/actions/runs/36583012981). A temporary `git commit --no-verify` mutation caused the expected test failure. The first bootstrap attempt failed because its temporary home hid a systemd user unit on Linux and the managed gh credential helper on macOS. The test now uses the disposable runner's home. | Partial |
 | Local command | `mise run test:integration` passed the hook test and reported the bootstrap skip on macOS. | Verified for normal host |
 | Final macOS and Linux CI | Pending | Not verified |
 

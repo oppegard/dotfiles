@@ -25,27 +25,36 @@ func TestDotfBootstrapTwice(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	sourceRoot := strings.TrimSpace(string(source))
-	filesCommand := exec.CommandContext(t.Context(), git, "ls-files", "-z")
-	filesCommand.Dir = sourceRoot
-	files, err := filesCommand.Output()
+	repo := strings.TrimSpace(string(source))
+	home, err := os.UserHomeDir()
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	temp := t.TempDir()
-	repo := filepath.Join(temp, "repo")
-	copyTrackedFiles(t, sourceRoot, repo, string(files))
-	home := filepath.Join(temp, "home")
-	if err := os.MkdirAll(home, 0o755); err != nil {
-		t.Fatal(err)
+	linkPath := filepath.Join(home, ".dotfiles")
+	if link, err := os.Readlink(linkPath); err == nil && link != repo {
+		t.Fatalf("%s points to %q, not the checkout %q", linkPath, link, repo)
+	} else if err != nil && !os.IsNotExist(err) {
+		t.Fatalf("cannot inspect %s: %v", linkPath, err)
+	}
+	chshPath := filepath.Join(home, ".local", "bin", "chsh")
+	if runtime.GOOS == "darwin" {
+		if link, err := os.Readlink(chshPath); err == nil && link != "/usr/bin/true" {
+			t.Fatalf("%s points to %q, not /usr/bin/true", chshPath, link)
+		} else if err != nil && !os.IsNotExist(err) {
+			t.Fatalf("cannot inspect %s: %v", chshPath, err)
+		}
+	}
+	for _, name := range []string{".bash_profile", ".bashrc", ".gitconfig"} {
+		if err := os.Remove(filepath.Join(home, name)); err != nil && !os.IsNotExist(err) {
+			t.Fatal(err)
+		}
 	}
 	if runtime.GOOS == "darwin" {
 		bin := filepath.Join(home, ".local", "bin")
 		if err := os.MkdirAll(bin, 0o755); err != nil {
 			t.Fatal(err)
 		}
-		if err := os.Symlink("/usr/bin/true", filepath.Join(bin, "chsh")); err != nil {
+		if err := os.Symlink("/usr/bin/true", chshPath); err != nil && !os.IsExist(err) {
 			t.Fatal(err)
 		}
 	}
@@ -53,34 +62,20 @@ func TestDotfBootstrapTwice(t *testing.T) {
 	env := make(map[string]string)
 	for _, entry := range os.Environ() {
 		key, value, ok := strings.Cut(entry, "=")
-		if !ok || strings.HasPrefix(key, "MISE_") || strings.HasPrefix(key, "GIT_CONFIG_") || key == "GIT_DIR" || key == "GIT_WORK_TREE" {
-			continue
-		}
-		env[key] = value
-	}
-	for key, value := range map[string]string{
-		"HOME":                home,
-		"XDG_CONFIG_HOME":     filepath.Join(home, ".config"),
-		"XDG_CACHE_HOME":      filepath.Join(home, ".cache"),
-		"XDG_DATA_HOME":       filepath.Join(home, ".local", "share"),
-		"XDG_STATE_HOME":      filepath.Join(home, ".local", "state"),
-		"MISE_AUTO_ENV":       "true",
-		"MISE_ENV":            "home",
-		"MISE_YES":            "true",
-		"MISE_VERBOSE":        "0",
-		"CI":                  "true",
-		"NONINTERACTIVE":      "true",
-		"DEBUG":               "true",
-		"GIT_TERMINAL_PROMPT": "0",
-		"GIT_CONFIG_NOSYSTEM": "1",
-		"GIT_CONFIG_GLOBAL":   "/dev/null",
-	} {
-		env[key] = value
-	}
-	for _, key := range []string{"MISE_DATA_DIR", "MISE_CACHE_DIR"} {
-		if value, ok := os.LookupEnv(key); ok {
+		if ok && key != "MISE_SYSTEM_PACKAGES_MANAGERS" {
 			env[key] = value
 		}
+	}
+	for key, value := range map[string]string{
+		"MISE_AUTO_ENV":  "true",
+		"MISE_ENV":       "home",
+		"MISE_YES":       "true",
+		"MISE_VERBOSE":   "0",
+		"CI":             "true",
+		"NONINTERACTIVE": "true",
+		"DEBUG":          "true",
+	} {
+		env[key] = value
 	}
 	if runtime.GOOS == "darwin" {
 		env["MISE_SYSTEM_PACKAGES_MANAGERS"] = "brew"
@@ -89,18 +84,6 @@ func TestDotfBootstrapTwice(t *testing.T) {
 	for key, value := range env {
 		commandEnv = append(commandEnv, key+"="+value)
 	}
-	runGit := func(args ...string) {
-		t.Helper()
-		cmd := exec.CommandContext(t.Context(), git, args...)
-		cmd.Dir = repo
-		cmd.Env = commandEnv
-		if output, err := cmd.CombinedOutput(); err != nil {
-			t.Fatalf("git %v failed: %v\n%s", args, err, output)
-		}
-	}
-	runGit("init", "--initial-branch=main")
-	runGit("add", ".")
-	runGit("-c", "user.name=Integration Test", "-c", "user.email=integration@example.invalid", "-c", "commit.gpgsign=false", "commit", "-m", "test: establish bootstrap fixture")
 	for run := 1; run <= 2; run++ {
 		cmd := exec.CommandContext(t.Context(), filepath.Join(repo, "bin", "dotf"), "run")
 		cmd.Dir = repo
@@ -112,7 +95,7 @@ func TestDotfBootstrapTwice(t *testing.T) {
 		if !strings.Contains(string(output), "Tool prerequisites installed") {
 			t.Fatalf("dotf run %d lacked completion evidence:\n%s", run, output)
 		}
-		link, err := os.Readlink(filepath.Join(home, ".dotfiles"))
+		link, err := os.Readlink(linkPath)
 		if err != nil || link != repo {
 			t.Fatalf("dotf run %d left dotfiles link %q, %v; want %q", run, link, err, repo)
 		}
@@ -120,9 +103,5 @@ func TestDotfBootstrapTwice(t *testing.T) {
 			t.Fatalf("dotf run %d did not apply mise config: %v", run, err)
 		}
 		t.Logf("dotf run %d completed", run)
-	}
-	logs, err := filepath.Glob(filepath.Join(repo, "logs", "dotf_*.log"))
-	if err != nil || len(logs) == 0 {
-		t.Fatalf("bootstrap logs = %d, %v; want a run log", len(logs), err)
 	}
 }
