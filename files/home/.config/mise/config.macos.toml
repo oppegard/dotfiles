@@ -1,18 +1,47 @@
+[bootstrap.brew]
+adopt = true
+
+
 [bootstrap.packages]
-"brew:git"                     = "latest"
-"brew:bash"                    = "latest"
-"brew:mas"                     = "latest"
-"brew-cask:chatgpt"            = "latest"
-"brew-cask:fantastical"        = "latest"
-"brew-cask:ghostty"            = "latest"
-"brew-cask:google-chrome"      = "latest"
-"brew-cask:jetbrains-toolbox"  = "latest"
-"brew-cask:mimestream"         = "latest"
-"brew-cask:obsidian"           = "latest"
-"brew-cask:slack"              = "latest"
-"brew-cask:sublime-text"       = "latest"
-"brew-cask:visual-studio-code" = "latest"
-"mas:904280696"                = "latest"  # Things 3
+"brew:bash" = "latest"
+"brew:git"  = "latest"
+"brew:mas"  = "latest"
+
+"brew-cask:1password-cli"       = "latest"
+"brew-cask:alfred"              = "latest"
+"brew-cask:bartender"           = "latest"
+"brew-cask:betterdisplay"       = "latest"
+"brew-cask:chatgpt"             = "latest"
+"brew-cask:claude-code"         = "latest"
+"brew-cask:cleanshot"           = "latest"
+"brew-cask:codex"               = "latest"
+"brew-cask:fantastical"         = "latest"
+"brew-cask:forklift"            = "latest"
+"brew-cask:ghostty"             = "latest"
+"brew-cask:google-chrome"       = "latest"
+"brew-cask:hazeover"            = "latest"
+"brew-cask:hopper-disassembler" = "latest"
+"brew-cask:iina"                = "latest"
+"brew-cask:istat-menus"         = "latest"
+"brew-cask:jetbrains-toolbox"   = "latest"
+"brew-cask:libreoffice-still"   = "latest"
+"brew-cask:linearmouse"         = "latest"
+"brew-cask:mimestream"          = "latest"
+"brew-cask:obsidian"            = "latest"
+"brew-cask:orbstack"            = "latest"
+"brew-cask:rectangle-pro"       = "latest"
+"brew-cask:slack"               = "latest"
+"brew-cask:soundsource"         = "latest"
+"brew-cask:sublime-text"        = "latest"
+"brew-cask:tailscale-app"       = "latest"
+"brew-cask:tuna"                = "latest"
+"brew-cask:typora"              = "latest"
+"brew-cask:visual-studio-code"  = "latest"
+
+"mas:1056643111" = "latest"  # Clocker
+"mas:775737590"  = "latest"  # iA Writer
+"mas:904280696"  = "latest"  # Things
+"mas:1513400665" = "latest"  # TripMode
 
 
 [bootstrap.user]
