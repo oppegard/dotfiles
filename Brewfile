@@ -15,3 +15,5 @@ brew "uv"
 brew "watch"
 brew "yt-dlp"
 brew "zoxide"
+
+cask "codex" # terminal CLI/TUI
