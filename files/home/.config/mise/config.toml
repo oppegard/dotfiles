@@ -1,3 +1,6 @@
+min_version = "2026.9.17"
+
+
 [settings]
 auto_update                         = true
 dotfiles.default_mode               = "symlink"
@@ -6,7 +9,7 @@ experimental                        = true
 history.describe_command            = '''
 codex exec --sandbox read-only --ephemeral --color never \
  --skip-git-repo-check --ignore-user-config \
- --model gpt-5.6-luna --config 'model_reasoning_effort="none"' \
+ --model gpt-6.1-luna --config 'model_reasoning_effort="none"' \
  'Describe this change to my configuration files in one line of at most 120 characters, plain text, no quotes.'
 '''
 idiomatic_version_file_enable_tools = ["node", "ruby"]
@@ -22,6 +25,10 @@ post-packages = 'bash "$HOME/.dotfiles/bin/hooks/post-packages-hook.sh"'
 
 [bootstrap.services.mise-history]
 builtin = "history-watch"
+
+
+[history]
+git_email = "mise@{hostname}"
 
 
 [dotfiles]
