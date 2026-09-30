@@ -132,7 +132,7 @@ gum        = "2"
 hk         = { version = "2.0.1", postinstall = "hk install --global --mise" }
 lazydocker = "latest"
 lazygit    = "latest"
-node       = "24"
+node       = "lts"
 ripgrep    = "latest"
 ruby       = "4"
 shellcheck = "latest"
