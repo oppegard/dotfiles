@@ -127,7 +127,7 @@ gh         = {
   postinstall = '"$HOME/.dotfiles/bin/check-gh-credential-helper"'
 }
 git-lfs    = "3.8.0"
-go         = "1.26"
+go         = "1.27"
 gum        = "2"
 hk         = { version = "2.0.1", postinstall = "hk install --global --mise" }
 lazydocker = "latest"
