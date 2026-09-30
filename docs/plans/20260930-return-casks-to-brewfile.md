@@ -2,8 +2,9 @@
 
 ## Status
 
-Approved on 2026-09-30. Implementation and validation complete; PR creation
-is in progress.
+Approved and completed on 2026-09-30.
+
+PR: https://github.com/oppegard/dotfiles/pull/15
 
 ## Goal and reasoning
 
@@ -77,8 +78,8 @@ brew bundle install --file=/Users/glenn/src/dotfiles/Brewfile
 - [x] Verify the cask name sets match exactly and no duplicates remain.
 - [x] Run `mise run lint`, `ruby -c Brewfile`, read-only Bundle listing,
   and `git diff --check`.
-- [ ] Review the scoped diff, commit, and push the implementation.
-- [ ] Open the PR with this plan and current checklist.
+- [x] Review the scoped diff, commit, and push the implementation.
+- [x] Open the PR with this plan and current checklist.
 
 ## Sources
 
