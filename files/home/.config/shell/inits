@@ -17,14 +17,6 @@ if command -v try &>/dev/null; then
   eval "$(try init ~/src/tries)"
 fi
 
-if command -v fzf &>/dev/null; then
-  if [[ "$__shell_name" == "bash" ]]; then
-    eval "$(fzf --bash)"
-  elif [[ "$__shell_name" == "zsh" ]]; then
-    source <(fzf --zsh)
-  fi
-fi
-
 # OrbStack
 source ~/.orbstack/shell/init.bash 2>/dev/null || :
 
@@ -41,6 +33,15 @@ if [ "$__os" = "Darwin" ]; then
 
   eval "$(mise completion bash)"
   complete -F _usage_complete_mise mise ms
+fi
+
+# Load fzf after bash-completion so it can delegate ordinary Tab completion.
+if command -v fzf &>/dev/null; then
+  if [[ "$__shell_name" == "bash" ]]; then
+    eval "$(fzf --bash)"
+  elif [[ "$__shell_name" == "zsh" ]]; then
+    source <(fzf --zsh)
+  fi
 fi
 
 if [[ "$__shell_name" == "bash" ]]; then
