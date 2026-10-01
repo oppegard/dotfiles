@@ -148,6 +148,7 @@ value  = [
 "~/.homebrew/Brewfile"                   = "~/.dotfiles/Brewfile"
 "~/.local/bin/fix-tahoe-focus"           = "~/.dotfiles/files/home/.local/bin/fix-tahoe-focus"
 "~/.local/bin/flush-dns"                 = "~/.dotfiles/files/home/.local/bin/flush-dns"
+"~/.local/bin/mise-history"              = "~/.dotfiles/files/home/.local/bin/mise-history"
 "~/.local/bin/restart-soundsource"       = "~/.dotfiles/files/home/.local/bin/restart-soundsource"
 "~/.local/bin/try"                       = "~/.dotfiles/files/home/.local/bin/try-darwin-aarch64"
 

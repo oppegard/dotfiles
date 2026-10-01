@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+	echo 'Usage: mise-history {show|restart}'
+}
+
+if [[ $# -ne 1 ]]; then
+	usage >&2
+	exit 2
+fi
+
+case "$1" in
+show | restart) ;;
+-h | --help)
+	usage
+	exit 0
+	;;
+*)
+	usage >&2
+	exit 2
+	;;
+esac
+
+if [[ "$(uname -s)" != Darwin ]]; then
+	echo 'mise-history is only supported on macOS' >&2
+	exit 1
+fi
+
+service="gui/$(id -u)/dev.mise.mise-history"
+case "$1" in
+show) exec launchctl print "$service" ;;
+restart) exec launchctl kickstart -k "$service" ;;
+esac

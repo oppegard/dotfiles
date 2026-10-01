@@ -77,6 +77,7 @@ git_email = "mise@{hostname}"
   exclude = [
     "fix-tahoe-focus",
     "flush-dns",
+    "mise-history",
     "restart-soundsource",
     "screen-5.0.1",
     "try-darwin-aarch64",
