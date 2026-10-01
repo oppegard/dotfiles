@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# shellcheck disable=SC1091
+if [[ -r "$HOME/.bash_profile" ]]; then
+	source "$HOME/.bash_profile" >/dev/null
+elif [[ -r "$HOME/.bashrc" ]]; then
+	source "$HOME/.bashrc" >/dev/null
+fi
+
+set -euo pipefail
+
+export PATH="$HOME/.local/bin:$PATH"
+
+exec codex exec --sandbox read-only --ephemeral --color never \
+	--skip-git-repo-check --ignore-user-config \
+	--model gpt-6-luna --config 'model_reasoning_effort="low"' \
+	'Describe the supplied configuration diff in one line of at most 120 characters. Plain text only; do not use tools.'
