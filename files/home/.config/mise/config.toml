@@ -6,12 +6,7 @@ auto_update                         = true
 dotfiles.default_mode               = "symlink"
 dotfiles.root                       = "~/.dotfiles"
 experimental                        = true
-history.describe_command            = '''
-codex exec --sandbox read-only --ephemeral --color never \
- --skip-git-repo-check --ignore-user-config \
- --model gpt-6.1-luna --config 'model_reasoning_effort="none"' \
- 'Describe this change to my configuration files in one line of at most 120 characters, plain text, no quotes.'
-'''
+history.describe_command            = 'bash "$HOME/.dotfiles/bin/mise-history-describe"'
 idiomatic_version_file_enable_tools = ["node", "ruby"]
 
 
