@@ -1,6 +1,6 @@
 # Git Tab completion regression test
 
-Status: complete. Approved on 2026-10-01. CI prerequisite repair verified.
+Status: Brewfile follow-up in progress. Approved on 2026-10-01.
 PR: https://github.com/oppegard/dotfiles/pull/21
 
 ## Workflow
@@ -27,8 +27,8 @@ refers to the installed [model-routing reference](/Users/glenn/.codex/plugins/ca
 
 Add a macOS-only Git completion check to the existing Go integration suite.
 Run it after bootstrap prepares the managed Bash, Git, and shell files.
-Install the existing Brewfile declarations `fzf` and `bash-completion@2` in
-macOS CI before the suite. Keep the existing Linux bootstrap checks.
+Install the formula declarations from `Brewfile` in macOS CI before the
+suite. Cache Homebrew downloads and preserve the existing cask exclusion. Keep the existing Linux bootstrap checks.
 
 The data shape is a terminal transcript. The test sends literal keystrokes
 to a fresh interactive Bash login shell and checks the resulting completion
@@ -148,3 +148,33 @@ The repaired code passed [macOS integration CI](https://github.com/oppegard/dotf
 Both `git_completion_after_run_1` and `git_completion_after_run_2` passed,
 including startup-file source checks. Linux integration CI and lint passed.
 The PR watcher reported `READY` with merge state `CLEAN`. The PR remains open.
+
+## Brewfile follow-up
+
+The user requested replacing the package-specific install with the existing
+Brewfile. GitHub macOS runners already provide Homebrew. Use `brew bundle
+install --file=Brewfile --no-upgrade` and derive `HOMEBREW_BUNDLE_CASK_SKIP`
+from `brew bundle list --cask --file=Brewfile`, preserving the current CI
+policy that excludes desktop apps. No package names are duplicated in CI.
+
+Cache the directory returned by `brew --cache` with GitHub's pinned
+`actions/cache` action. Scope the key to the runner OS, architecture, image,
+and Brewfile hash. Continue running bundle install on cache hits because
+the cache stores downloads, not installed packages.
+
+Homebrew's prefix-cache action supports Brewfile, but requires removing
+preinstalled formulas on these runners. Download caching avoids replacing
+the runner's Homebrew prefix. Architect skipped because this changes only
+workflow package preparation and adds no interface. One workflow writer
+and a separate reviewer keep the diff bounded.
+
+- [x] Confirm hosted-runner and Homebrew cache support from official sources.
+- [x] Record the user-requested Brewfile change in this approved plan.
+- [x] Replace explicit package installation and add download caching.
+- [x] Run workflow lint and independent review.
+- [ ] Push to PR #21 and verify the Brewfile install and both Tab checks.
+
+Actionlint, repository lint, and diff checks passed. Independent review
+found that the Actions `env` context omits inherited runner variables.
+The cache setup now exports the image identity through a step output.
+GitHub CI verification remains pending.
