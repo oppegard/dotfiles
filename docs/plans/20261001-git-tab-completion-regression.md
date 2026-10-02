@@ -1,7 +1,7 @@
 # Git Tab completion regression test
 
-Status: approved on 2026-10-01. Implementation and local verification complete.
-PR preparation in progress.
+Status: complete. Approved on 2026-10-01.
+PR: https://github.com/oppegard/dotfiles/pull/21
 
 ## Workflow
 
@@ -90,8 +90,8 @@ test, rather than skip it.
 - [x] Verify timeout cleanup and transcript diagnostics.
 - [x] Run targeted Go tests and repository lint.
 - [x] Complete independent correctness and comment review.
-- [ ] Commit and push the branch.
-- [ ] Open a PR with this plan and its current checklist in a collapsed
+- [x] Commit and push the branch.
+- [x] Open a PR with this plan and its current checklist in a collapsed
       Implementation Plan section.
 
 ## Acceptance
