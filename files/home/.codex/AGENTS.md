@@ -16,6 +16,16 @@
   - `gh` for GitHub and `actionlint` for GH Actions
   - `mise` - query https://mise.jdx.dev/ for latest docs, as the featureset changes weekly. For examples of advanced usage of mise itself, check https://github.com/jdx/mise, https://github.com/jdx/fnox, and https://github.com/jdx/hk.
 
+## Explanations
+
+- Write explanations 80% of the way to ASD-STE100 (Simplified Technical
+  English): short sentences, one idea per sentence, active voice, the same
+  word for the same thing.
+- Lead with a diagram when the answer has structure: architecture, data or
+  control flow, state, sequence, or dependencies. Use ASCII in the terminal
+  and Mermaid in Markdown files and PRs. Add prose only for what the diagram
+  cannot show.
+
 ## Planning Mode Workflow
 - Before implementing any significant change, always create a `YYYMMDD-kebab-case-topic.md` file in the project's `doc{s}/plans/` directory using the local date; create the directory if needed and never overwrite an existing file.
 - If you request user input to execute the plan but "execution" means writing the markdown file, specifically ask for user input with a prompt "Execute writing of plan to markdown at <path>?". I don't want ambiguity of when "execute" means writing the markdown file, or actually executing the work described by a plan.

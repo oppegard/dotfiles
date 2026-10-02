@@ -27,6 +27,11 @@ git_email = "mise@{hostname}"
 
 
 [dotfiles]
+"~/.claude/CLAUDE.md" = {
+  source = "~/.dotfiles/files/home/.codex/AGENTS.md",
+  mode   = "symlink"
+}
+
 "~/.config/mise/config.home.toml"  = "~/.dotfiles/files/home/.config/mise/config.home.toml"
 "~/.config/mise/config.linux.toml" = "~/.dotfiles/files/home/.config/mise/config.linux.toml"
 "~/.config/mise/config.macos.toml" = "~/.dotfiles/files/home/.config/mise/config.macos.toml"
@@ -112,9 +117,6 @@ git_email = "mise@{hostname}"
 
 
 [tools]
-"aqua:hashicorp/terraform"      = "1.16"
-"aqua:terraform-linters/tflint" = "latest"
-
 actionlint = "1"
 age        = "1"
 bun        = "1"
@@ -132,3 +134,10 @@ node       = "lts"
 ripgrep    = "latest"
 ruby       = "4"
 shellcheck = "latest"
+
+"aqua:hashicorp/terraform"      = "1.16"
+"aqua:terraform-linters/tflint" = "latest"
+"npm:@mermaid-js/mermaid-cli"   = {
+  version     = "11",
+  postinstall = '''env -u PUPPETEER_CACHE_DIR node "$(find "$MISE_TOOL_INSTALL_PATH/node_modules" -path '*/puppeteer/install.mjs' -print -quit)"'''
+}
