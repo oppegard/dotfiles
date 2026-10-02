@@ -1,6 +1,7 @@
 package integration
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -110,6 +111,13 @@ func TestDotfBootstrapTwice(t *testing.T) {
 		}
 		if _, err := os.Lstat(filepath.Join(home, ".config", "mise", "config.toml")); err != nil {
 			t.Fatalf("dotf run %d did not apply mise config: %v", run, err)
+		}
+		if runtime.GOOS == "darwin" {
+			t.Run(fmt.Sprintf("git_completion_after_run_%d", run), func(t *testing.T) {
+				if err := checkGitCompletion(t.Context(), t.TempDir(), commandEnv); err != nil {
+					t.Fatal(err)
+				}
+			})
 		}
 		t.Logf("dotf run %d completed", run)
 	}
