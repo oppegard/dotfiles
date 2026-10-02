@@ -1,6 +1,7 @@
 package integration
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -110,6 +111,28 @@ func TestDotfBootstrapTwice(t *testing.T) {
 		}
 		if _, err := os.Lstat(filepath.Join(home, ".config", "mise", "config.toml")); err != nil {
 			t.Fatalf("dotf run %d did not apply mise config: %v", run, err)
+		}
+		if runtime.GOOS == "darwin" {
+			t.Run(fmt.Sprintf("git_completion_after_run_%d", run), func(t *testing.T) {
+				for _, name := range []string{".bash_profile", ".bashrc", ".inputrc", ".config/shell/inits"} {
+					installedPath := filepath.Join(home, name)
+					installed, err := os.Stat(installedPath)
+					if err != nil {
+						t.Fatalf("cannot inspect installed shell file %s: %v", installedPath, err)
+					}
+					sourcePath := filepath.Join(repo, "files", "home", name)
+					source, err := os.Stat(sourcePath)
+					if err != nil {
+						t.Fatalf("cannot inspect checkout shell file %s: %v", sourcePath, err)
+					}
+					if !os.SameFile(installed, source) {
+						t.Fatalf("installed shell file %s does not resolve to checkout source %s", installedPath, sourcePath)
+					}
+				}
+				if err := checkGitCompletion(t.Context(), t.TempDir(), commandEnv); err != nil {
+					t.Fatal(err)
+				}
+			})
 		}
 		t.Logf("dotf run %d completed", run)
 	}

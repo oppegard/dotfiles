@@ -115,6 +115,13 @@ jobs:
           cache: true
           cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'go.mod', 'files/home/.config/mise/**/*.toml*') }}"
 
+      - name: Install Brewfile packages
+        if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
+        run: |
+          HOMEBREW_BUNDLE_CASK_SKIP=$(brew bundle list --cask --file=Brewfile)
+          export HOMEBREW_BUNDLE_CASK_SKIP
+          brew bundle install --file=Brewfile --no-upgrade
+
       - name: Run integration tests
         if: needs.detect-changes.outputs.integration_optional == 'false'
         run: mise run test:integration
