@@ -1,6 +1,6 @@
 # Git Tab completion regression test
 
-Status: CI prerequisite repair in progress. Approved on 2026-10-01.
+Status: complete. Approved on 2026-10-01. CI prerequisite repair verified.
 PR: https://github.com/oppegard/dotfiles/pull/21
 
 ## Workflow
@@ -142,4 +142,9 @@ the original one-Tab assertion, timeout, and transcript diagnostics.
 - [x] Add explicit macOS completion prerequisites to CI.
 - [x] Verify shell source identity before terminal interaction.
 - [x] Validate the repair locally and complete independent review.
-- [ ] Push the repair to PR #21 and verify macOS integration CI.
+- [x] Push the repair to PR #21 and verify macOS integration CI.
+
+The repaired code passed [macOS integration CI](https://github.com/oppegard/dotfiles/actions/runs/36945135894/job/110645434910).
+Both `git_completion_after_run_1` and `git_completion_after_run_2` passed,
+including startup-file source checks. Linux integration CI and lint passed.
+The PR watcher reported `READY` with merge state `CLEAN`. The PR remains open.
