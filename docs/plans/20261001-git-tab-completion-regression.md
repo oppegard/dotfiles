@@ -1,6 +1,6 @@
 # Git Tab completion regression test
 
-Status: Brewfile follow-up in progress. Approved on 2026-10-01.
+Status: complete. Approved on 2026-10-01. Brewfile CI verified.
 PR: https://github.com/oppegard/dotfiles/pull/21
 
 ## Workflow
@@ -172,9 +172,13 @@ and a separate reviewer keep the diff bounded.
 - [x] Record the user-requested Brewfile change in this approved plan.
 - [x] Replace explicit package installation and add download caching.
 - [x] Run workflow lint and independent review.
-- [ ] Push to PR #21 and verify the Brewfile install and both Tab checks.
+- [x] Push to PR #21 and verify the Brewfile install and both Tab checks.
 
 Actionlint, repository lint, and diff checks passed. Independent review
 found that the Actions `env` context omits inherited runner variables.
 The cache setup now exports the image identity through a step output.
-GitHub CI verification remains pending.
+[The cold-cache macOS run](https://github.com/oppegard/dotfiles/actions/runs/36947486516/job/110652803429)
+installed all 17 Brewfile formula declarations, skipped the desktop casks,
+and passed both Git completion subtests. The download cache was saved with
+the expected OS, architecture, image, and Brewfile key. Linux integration
+and lint passed. A final documentation push will also exercise cache restore.
