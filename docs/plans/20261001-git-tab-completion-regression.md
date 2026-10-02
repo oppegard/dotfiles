@@ -28,7 +28,7 @@ refers to the installed [model-routing reference](/Users/glenn/.codex/plugins/ca
 Add a macOS-only Git completion check to the existing Go integration suite.
 Run it after bootstrap prepares the managed Bash, Git, and shell files.
 Install the formula declarations from `Brewfile` in macOS CI before the
-suite. Cache Homebrew downloads and preserve the existing cask exclusion. Keep the existing Linux bootstrap checks.
+suite. Preserve the existing cask exclusion. Keep the existing Linux bootstrap checks.
 
 The data shape is a terminal transcript. The test sends literal keystrokes
 to a fresh interactive Bash login shell and checks the resulting completion
@@ -182,3 +182,19 @@ installed all 17 Brewfile formula declarations, skipped the desktop casks,
 and passed both Git completion subtests. The download cache was saved with
 the expected OS, architecture, image, and Brewfile key. Linux integration
 and lint passed. A final documentation push will also exercise cache restore.
+
+## Remove Homebrew download caching
+
+The user requested removing the download cache after comparing run times.
+The cold Brewfile install took 27 seconds. Cached installs took 27 and 32
+seconds, plus cache restoration. Successful restoration did not demonstrate
+a net speed improvement. Delete the two Homebrew cache steps and keep the
+Brewfile install. Existing mise caching belongs to the bootstrap tool setup
+and is unchanged by this reversal.
+
+- [x] Record the requested reversal and its measured reason.
+- [x] Remove Homebrew cache discovery and restore/save steps.
+- [x] Run Actionlint, repository lint, and independent review.
+- [x] Prepare PR #21 update for GitHub verification.
+
+The PR verification section records the GitHub result for this reversal.

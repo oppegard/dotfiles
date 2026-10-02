@@ -115,22 +115,6 @@ jobs:
           cache: true
           cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'go.mod', 'files/home/.config/mise/**/*.toml*') }}"
 
-      - name: Locate Homebrew download cache
-        if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
-        id: homebrew-cache
-        run: |
-          echo "path=$(brew --cache)" >> "$GITHUB_OUTPUT"
-          echo "image=$ImageOS-$ImageVersion" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Homebrew downloads
-        if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ steps.homebrew-cache.outputs.path }}
-          key: homebrew-${{ runner.os }}-${{ runner.arch }}-${{ steps.homebrew-cache.outputs.image }}-${{ hashFiles('Brewfile') }}
-          restore-keys: |
-            homebrew-${{ runner.os }}-${{ runner.arch }}-${{ steps.homebrew-cache.outputs.image }}-
-
       - name: Install Brewfile packages
         if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
         run: |
