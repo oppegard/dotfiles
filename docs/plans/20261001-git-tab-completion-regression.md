@@ -1,6 +1,6 @@
 # Git Tab completion regression test
 
-Status: complete. Approved on 2026-10-01.
+Status: CI prerequisite repair in progress. Approved on 2026-10-01.
 PR: https://github.com/oppegard/dotfiles/pull/21
 
 ## Workflow
@@ -26,8 +26,9 @@ refers to the installed [model-routing reference](/Users/glenn/.codex/plugins/ca
 ## Proposed change
 
 Add a macOS-only Git completion check to the existing Go integration suite.
-Run it after bootstrap has installed the managed Bash, Git, fzf, and
-bash-completion packages. Keep the existing Linux bootstrap checks.
+Run it after bootstrap prepares the managed Bash, Git, and shell files.
+Install the existing Brewfile declarations `fzf` and `bash-completion@2` in
+macOS CI before the suite. Keep the existing Linux bootstrap checks.
 
 The data shape is a terminal transcript. The test sends literal keystrokes
 to a fresh interactive Bash login shell and checks the resulting completion
@@ -123,3 +124,22 @@ production shell configuration. The final deliverable is an open PR.
 - Full bootstrap and the new post-bootstrap subtests have not run locally.
   The existing macOS integration CI will exercise that path on a disposable
   runner.
+
+## CI prerequisite repair
+
+The first GitHub macOS run timed out during both completion subtests.
+`dotf run` invokes mise bootstrap, but `fzf` and `bash-completion@2` are
+Brewfile packages installed by `setup.sh`. The original test assumed those
+prerequisites were already installed. The default Bash prompt does not prove
+that shell files were missing, because Starship is also a Brewfile package.
+
+The repair installs only those two existing formulas on disposable macOS CI.
+Before each terminal check, the test verifies that `.bash_profile`, `.bashrc`,
+`.inputrc`, and `.config/shell/inits` resolve to the checkout sources. It keeps
+the original one-Tab assertion, timeout, and transcript diagnostics.
+
+- [x] Read the failed job transcript and trace package ownership.
+- [x] Add explicit macOS completion prerequisites to CI.
+- [x] Verify shell source identity before terminal interaction.
+- [x] Validate the repair locally and complete independent review.
+- [ ] Push the repair to PR #21 and verify macOS integration CI.

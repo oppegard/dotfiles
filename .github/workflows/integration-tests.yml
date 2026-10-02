@@ -115,6 +115,10 @@ jobs:
           cache: true
           cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'go.mod', 'files/home/.config/mise/**/*.toml*') }}"
 
+      - name: Install macOS completion prerequisites
+        if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
+        run: brew install bash-completion@2 fzf
+
       - name: Run integration tests
         if: needs.detect-changes.outputs.integration_optional == 'false'
         run: mise run test:integration
