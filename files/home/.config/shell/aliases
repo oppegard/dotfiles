@@ -2,6 +2,8 @@
 
 alias ll='ls -la'
 alias ms='mise'
+alias ..='cd ..'
+alias ...='cd ../..'
 
 if [ "$__os" = "Darwin" ]; then
   alias cat='bat'
