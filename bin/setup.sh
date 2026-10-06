@@ -78,7 +78,7 @@ chmod 700 "$HOME/.ssh"
 
 gum_print "👨‍🍳 👨‍🍳 👨‍🍳  MISE BOOTSTRAP  👨‍🍳 👨‍🍳 👨‍🍳"
 mise -C "$MISE_CONFIG_DIR" bootstrap
-mise -C "$MISE_CONFIG_DIR" bootstrap packages upgrade
+mise -C "$MISE_CONFIG_DIR" bootstrap packages upgrade --yes
 
 gum_print "⬆️ ⬆️ ⬆️  MISE UPGRADE  ⬆️ ⬆️ ⬆️"
 mise -C "$MISE_CONFIG_DIR" upgrade
