@@ -3,7 +3,8 @@
 # - https://www.brantonboehm.com/code/conditional-git-config/
 # - 
 [alias]
-	br = branch
+	# branches by recency
+	brr = for-each-ref --sort=-committerdate refs/heads/ refs/remotes/ --format='%(if)%(HEAD)%(then)*%(else)%(if)%(worktreepath)%(then)+%(else) %(end)%(end) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 	ci = commit
 	co = checkout
 	df = diff
@@ -17,8 +18,8 @@
 	blog = log origin/main... --left-right
 	adp = add -p
     default-br = "!git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'"
-		# Safe branch cleanup command. Use `git tidy -n` for a dry-run preview.
-		# Implementation lives in ~/.local/bin/git-tidy.
+    # Safe branch cleanup command. Use `git tidy -n` for a dry-run preview.
+    # Implementation lives in ~/.local/bin/git-tidy.
     tidy = "!git-tidy"
     drop = restore --source=HEAD --staged --worktree --
 
@@ -47,6 +48,8 @@
 	path = ~/.config/git/local
 [merge]
 	conflictStyle = zdiff3
+[pager]
+    brr = true
 [pull]
 	rebase = true
 [push]
