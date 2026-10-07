@@ -66,6 +66,8 @@ git_email = "mise@{hostname}"
 "~/.codex/.ignore"   = "~/.dotfiles/files/home/.codex/.ignore"
 "~/.codex/AGENTS.md" = "~/.dotfiles/files/home/.codex/AGENTS.md"
 
+"~/.agents/skills/pr-description-skill-cursor" = "~/.dotfiles/files/home/.agents/skills/pr-description-skill-cursor"
+
 "~/.bash_profile" = "~/.dotfiles/files/home/.bash_profile"
 "~/.bashrc"       = "~/.dotfiles/files/home/.bashrc"
 "~/.bunfig.toml"  = "~/.dotfiles/files/home/.bunfig.toml"
