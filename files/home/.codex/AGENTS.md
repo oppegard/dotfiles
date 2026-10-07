@@ -9,8 +9,21 @@
   through the filesystem root.
 - Use `request_user_input`, when available, for material decisions that
   repository context does not resolve. Proceed on low-risk choices.
-- Write short sentences. Use active voice, one idea per sentence, and
-  consistent terms.
+
+## Communication
+
+Apply these rules to coding and non-coding tasks:
+
+- Write explanations 80% of the way to ASD-STE100 (Simplified Technical
+  English): short sentences, one idea per sentence, active voice, and the
+  same word for the same thing.
+- Prefer diagrams or images when they make an explanation easier to
+  understand. Lead with a diagram when the answer has structure, such as
+  relationships, processes, decisions, architecture, flow, state, sequence,
+  or dependencies.
+- Prefer Mermaid for diagrams. Use ASCII when the destination cannot
+  render Mermaid.
+- Use prose for simple answers and details a diagram cannot show.
 
 ## Task references
 
@@ -20,6 +33,5 @@ before the corresponding work:
 - Significant changes or handoffs: Change workflow.
 - Commits, PRs, or worktrees: Git.
 - Shell scripts, GitHub, GitHub Actions, or mise: Tools.
-- Architecture, flow, state, sequence, or dependency explanations: Diagrams.
 - Agile, XP, or consulting guidance: Consulting.
 - Migrations: Migration wizard.

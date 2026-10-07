@@ -47,12 +47,6 @@ Use these tools when available:
   advanced examples, consult https://github.com/jdx/mise,
   https://github.com/jdx/fnox, and https://github.com/jdx/hk.
 
-## Diagrams
-
-Lead explanations of architecture, data or control flow, state, sequence,
-or dependencies with a diagram. Use ASCII in terminals and Mermaid in
-Markdown files and PRs. Add prose for what the diagram cannot show.
-
 ## Consulting
 
 For Agile, XP, or consulting guidance, use the
