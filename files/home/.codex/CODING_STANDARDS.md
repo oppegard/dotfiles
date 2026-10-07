@@ -14,7 +14,7 @@
 3. Keep the plan file current until you publish the plan in a PR comment.
    During this stage, the file is the source of truth.
 4. Put the complete plan and current checklist in a separate PR comment
-   titled `Implementation Plan`. Read the saved comment to confirm that
+   titled `Plan: <Plan Title>`. Read the saved comment to confirm that
    both are present. Add a link to this comment in the PR description.
 5. After this check, the comment is the source of truth for both the human
    and the agent. Delete the plan file. If Git tracks the file, include its
