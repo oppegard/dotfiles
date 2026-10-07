@@ -27,10 +27,11 @@ git_email = "mise@{hostname}"
 
 
 [dotfiles]
-"~/.claude/CLAUDE.md" = {
+"~/.claude/CLAUDE.md"           = {
   source = "~/.dotfiles/files/home/.codex/AGENTS.md",
   mode   = "symlink"
 }
+"~/.claude/CODING_STANDARDS.md" = "~/.dotfiles/files/home/.codex/CODING_STANDARDS.md"
 
 "~/.config/mise/config.home.toml"  = "~/.dotfiles/files/home/.config/mise/config.home.toml"
 "~/.config/mise/config.linux.toml" = "~/.dotfiles/files/home/.config/mise/config.linux.toml"
@@ -63,8 +64,9 @@ git_email = "mise@{hostname}"
 "~/.config/tmux"          = "~/.dotfiles/files/home/.config/tmux"
 "~/.config/uv"            = "~/.dotfiles/files/home/.config/uv"
 
-"~/.codex/.ignore"   = "~/.dotfiles/files/home/.codex/.ignore"
-"~/.codex/AGENTS.md" = "~/.dotfiles/files/home/.codex/AGENTS.md"
+"~/.codex/.ignore"             = "~/.dotfiles/files/home/.codex/.ignore"
+"~/.codex/AGENTS.md"           = "~/.dotfiles/files/home/.codex/AGENTS.md"
+"~/.codex/CODING_STANDARDS.md" = "~/.dotfiles/files/home/.codex/CODING_STANDARDS.md"
 
 "~/.bash_profile" = "~/.dotfiles/files/home/.bash_profile"
 "~/.bashrc"       = "~/.dotfiles/files/home/.bashrc"
