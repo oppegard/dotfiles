@@ -24,9 +24,6 @@ If neither exists, create `docs/handoffs/`. Use
 Use Conventional Commits 1.0.0. Limit titles to 50 characters and wrap
 bodies at 72 characters. Explain what changed and why in the body.
 
-For an approved PR merge, include the PR number in the commit title:
-`feat(topic): descriptive (#7)`.
-
 For a planned change, end the PR description with a collapsed `<details>`
 section titled `Implementation Plan`. Include the approved plan and current
 checklist. Keep the main description concise. Update the section as work

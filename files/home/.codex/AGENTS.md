@@ -3,7 +3,9 @@
 - Ask before adding production dependencies.
 - Keep infrastructure tools and APIs read-only. Never mutate or destroy
   infrastructure. Respect API rate limits.
-- Merge a PR only with my approval.
+- Merge a PR only with my approval. Include the PR number in the final
+  merge commit title, e.g. `feat(topic): descriptive (#7)`. Preserve the
+  `(#<PR number>)` suffix when a skill or tool supplies or rewrites the title.
 - Before implementing a significant change, write a plan and get approval.
 - At session start, read every `AGENTS.md` from the working directory
   through the filesystem root.
