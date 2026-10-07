@@ -2,14 +2,30 @@
 
 ## Change workflow
 
-Before implementing a significant change:
+### Plan lifecycle
 
-1. Create `YYYYMMDD-<kebab-case-topic>.md` in the project's existing
-   `docs/plans/` or `doc/plans/` directory. If neither exists, create
-   `docs/plans/`. Use the local date. Preserve existing files.
-2. Describe the proposed changes, their reasons, and a task checklist.
-3. Present the plan for review. Wait for approval before implementation.
-4. Update the plan and checklist as work progresses.
+1. Write each plan to a Markdown file before you present it.
+   Use the project's existing `docs/plans/` or `doc/plans/` directory.
+   If neither exists, create `docs/plans/`.
+   Name the file `YYYYMMDD-<kebab-case-topic>.md`.
+   Use the local date. Do not overwrite an existing file.
+2. Include the proposed changes, the reasons, and a task checklist.
+   Get approval before you implement a significant change.
+3. Keep the plan file current until you publish the plan in a PR comment.
+   During this stage, the file is the source of truth.
+4. Put the complete plan and current checklist in a separate PR comment
+   titled `Implementation Plan`. Read the saved comment to confirm that
+   both are present. Add a link to this comment in the PR description.
+5. After this check, the comment is the source of truth for both the human
+   and the agent. Delete the plan file. If Git tracks the file, include its
+   deletion in the PR.
+6. Read the comment before you continue work. Edit that same comment when
+   the plan, decisions, or progress change. Update the main PR description
+   when the scope changes.
+
+If publication fails, keep the plan file current until you can verify the
+saved comment. If the file was deleted before publication, recover its
+latest contents from Git history.
 
 When asking permission only to write the plan, use:
 “Execute writing of plan to markdown at <path>?”
@@ -24,11 +40,8 @@ If neither exists, create `docs/handoffs/`. Use
 Use Conventional Commits 1.0.0. Limit titles to 50 characters and wrap
 bodies at 72 characters. Explain what changed and why in the body.
 
-For a planned change, end the PR description with a collapsed `<details>`
-section titled `Implementation Plan`. Include the approved plan and current
-checklist. Keep the main description concise. Update the section as work
-progresses. If the plan file was deleted from Git, recover its latest
-contents from Git history for that section.
+Keep the main PR description concise. For planned changes, follow the
+Plan lifecycle in Change workflow.
 
 You may create worktrees under `~/src/worktrees/<repo>/YYYYMMDD-<topic>`.
 Report the exact path when creating one.
