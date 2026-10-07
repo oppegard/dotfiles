@@ -1,60 +1,39 @@
-# My User-Level AGENTS.md
+# Working agreements
 
-## Working agreements
+- Ask before adding production dependencies.
+- Keep infrastructure tools and APIs read-only. Never mutate or destroy
+  infrastructure. Respect API rate limits.
+- Merge a PR only with my approval. Include the PR number in the final
+  merge commit title, e.g. `feat(topic): descriptive (#7)`. Preserve the
+  `(#<PR number>)` suffix when a skill or tool supplies or rewrites the title.
+- Before implementing a significant change, write a plan and get approval.
+- At session start, read every `AGENTS.md` from the working directory
+  through the filesystem root.
+- Use `request_user_input`, when available, for material decisions that
+  repository context does not resolve. Proceed on low-risk choices.
 
-- Ask for confirmation before adding new production dependencies.
-- When writing commit messages:
-  - Limit title <= 50 chars and wrap body at 72 chars.
-  - Use the "Conventional Commits 1.0.0" spec.
-  - Use the body to explain what and why vs. how. Assume the code explains the how; the message must explain the context and reasoning.
-- Do NOT under ANY circumstances destroy or mutate infrastructucture by invoking tools or APIs (e.g. `aws rds delete-db-instance`, `terraform apply`, `npx wrangler delete`, `curl -X POST`).  Make full use of tools/MCPs/APIs to query in a read-only manner (e.g. `terraform show`, `aws ec2 describe-instances`); be mindful of rate-limiting.
-- Do not ever merge a PR without my approval. If you do, the commit title should include the PR #, e.g. "feat(topic): descriptive (#7)".
-- You may create worktrees under `~/src/worktrees/<repo>/YYYYMMDD-<topic>`. If created, report the exact path back to me.
-- When asked for guidance regarding Agile, XP, or Consulting, use the [Pivotal Alumni Codex](https://github.com/alumni-codex/alumni-codex.github.io) as a resource.
-- Tools to use when available:
-  - `shellcheck`
-  - `gh` for GitHub and `actionlint` for GH Actions
-  - `mise` - query https://mise.jdx.dev/ for latest docs, as the featureset changes weekly. For examples of advanced usage of mise itself, check https://github.com/jdx/mise, https://github.com/jdx/fnox, and https://github.com/jdx/hk.
+## Communication
 
-## Explanations
+Apply these rules to coding and non-coding tasks:
 
 - Write explanations 80% of the way to ASD-STE100 (Simplified Technical
-  English): short sentences, one idea per sentence, active voice, the same
-  word for the same thing.
-- Lead with a diagram when the answer has structure: architecture, data or
-  control flow, state, sequence, or dependencies. Use ASCII in the terminal
-  and Mermaid in Markdown files and PRs. Add prose only for what the diagram
-  cannot show.
+  English): short sentences, one idea per sentence, active voice, and the
+  same word for the same thing.
+- Prefer diagrams or images when they make an explanation easier to
+  understand. Lead with a diagram when the answer has structure, such as
+  relationships, processes, decisions, architecture, flow, state, sequence,
+  or dependencies.
+- Prefer Mermaid for diagrams. Use ASCII when the destination cannot
+  render Mermaid.
+- Use prose for simple answers and details a diagram cannot show.
 
-## Planning Mode Workflow
-- Before implementing any significant change, always create a `YYYMMDD-kebab-case-topic.md` file in the project's `doc{s}/plans/` directory using the local date; create the directory if needed and never overwrite an existing file.
-- If you request user input to execute the plan but "execution" means writing the markdown file, specifically ask for user input with a prompt "Execute writing of plan to markdown at <path>?". I don't want ambiguity of when "execute" means writing the markdown file, or actually executing the work described by a plan.
-- The plan must outline the proposed changes, the reasoning behind them, and a checklist of tasks to be completed.
-- Update the markdown file as progress is made.
-- Do not begin coding until the plan has been reviewed and approved.
-- If creating a "handoff" doc, save it to `doc{s}/handoffs/YYYYMMDD-<kebab-case-topic>.md` using the local date; create the directory if needed and never overwrite an existing file.
-- PRs:
-  - When creating or updating a PR for a planned change, include the approved plan and current task checklist at the end of the PR description in a collapsed `<details>` section titled "Implementation Plan".
-  - Keep the main PR description concise and update the collapsed plan as work progresses.
-  - If the plan file was deleted for git, recover its latest contents git history and post/update the PR's "Implementation Plan".
+## Task references
 
-## Instruction Discovery
+Read the relevant sections of [CODING_STANDARDS.md](CODING_STANDARDS.md)
+before the corresponding work:
 
-At session start find every `AGENTS.md` from current working directory up to
-filesystem root, including this file. Read all found files. Apply broadest
-first, then narrower files. Deeper instructions add to or override parent
-instructions.
-
-## User Input
-
-When available, use `request_user_input` for material decisions unresolved by
-repository context. Ask 1–3 concise questions with explicit options. Proceed
-autonomously on low-risk choices.
-
-## Migration Wizard Choice
-
-When the user brings up a migration, offer a choice with `request_user_input`
-when available: **Create a wizard for manual steps** (invoke `$wizard`)
-or **Continue without a wizard**. If the user has already chosen either path,
-follow that choice without asking again. For a wizard, read and follow the
-`$wizard` skill and include only steps the human must perform.
+- Significant changes or handoffs: Change workflow.
+- Commits, PRs, or worktrees: Git.
+- Shell scripts, GitHub, GitHub Actions, or mise: Tools.
+- Agile, XP, or consulting guidance: Consulting.
+- Migrations: Migration wizard.
