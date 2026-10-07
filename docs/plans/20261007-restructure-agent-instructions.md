@@ -1,6 +1,6 @@
 # Restructure user-level agent instructions
 
-Status: Approved by the user on 2026-10-07. Implementation in progress.
+Status: Approved by the user on 2026-10-07. Implemented in PR #25.
 
 ## Goal
 
@@ -206,7 +206,7 @@ clarifications, not hidden preference removals.
 - [x] Restructure AGENTS.md and add CODING_STANDARDS.md.
 - [x] Add both standards deployment mappings.
 - [x] Check rule coverage, pointer layout, and repository lint.
-- [ ] Create one PR with the approved plan and current checklist.
+- [x] Create one PR with the approved plan and current checklist.
 
 ## Validation results
 
