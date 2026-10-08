@@ -67,6 +67,7 @@ git_email = "mise@{hostname}"
 "~/.codex/.ignore"             = "~/.dotfiles/files/home/.codex/.ignore"
 "~/.codex/AGENTS.md"           = "~/.dotfiles/files/home/.codex/AGENTS.md"
 "~/.codex/CODING_STANDARDS.md" = "~/.dotfiles/files/home/.codex/CODING_STANDARDS.md"
+"~/.codex/pstack-models.md"    = "~/.dotfiles/files/home/.codex/pstack-models.md"
 
 "~/.bash_profile" = "~/.dotfiles/files/home/.bash_profile"
 "~/.bashrc"       = "~/.dotfiles/files/home/.bashrc"
