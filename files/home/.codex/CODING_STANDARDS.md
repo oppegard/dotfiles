@@ -52,7 +52,7 @@ Use these tools when available:
 
 - Shell scripts: `shellcheck`.
 - GitHub: `gh`.
-- GitHub Actions: `actionlint`.
+- GitHub Actions: `jactionlint`.
 - mise: consult https://mise.jdx.dev/ for current documentation. For
   advanced examples, consult https://github.com/jdx/mise,
   https://github.com/jdx/fnox, and https://github.com/jdx/hk.
