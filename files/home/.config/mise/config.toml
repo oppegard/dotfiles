@@ -2,11 +2,11 @@ min_version = "2026.9.17"
 
 
 [settings]
-auto_update                         = true
-dotfiles.default_mode               = "symlink"
-dotfiles.root                       = "~/.dotfiles"
-experimental                        = true
-history.describe_command            = 'bash "$HOME/.dotfiles/bin/mise-history-describe"'
+auto_update = true
+dotfiles.default_mode = "symlink"
+dotfiles.root = "~/.dotfiles"
+experimental = true
+history.describe_command = 'bash "$HOME/.dotfiles/bin/mise-history-describe"'
 idiomatic_version_file_enable_tools = ["node", "ruby"]
 
 
@@ -27,61 +27,61 @@ git_email = "mise@{hostname}"
 
 
 [dotfiles]
-"~/.claude/CLAUDE.md"           = {
+"~/.claude/CLAUDE.md" = {
   source = "~/.dotfiles/files/home/.codex/AGENTS.md",
-  mode   = "symlink"
+  mode = "symlink"
 }
 "~/.claude/CODING_STANDARDS.md" = "~/.dotfiles/files/home/.codex/CODING_STANDARDS.md"
 
-"~/.config/mise/config.home.toml"  = "~/.dotfiles/files/home/.config/mise/config.home.toml"
+"~/.config/mise/config.home.toml" = "~/.dotfiles/files/home/.config/mise/config.home.toml"
 "~/.config/mise/config.linux.toml" = "~/.dotfiles/files/home/.config/mise/config.linux.toml"
 "~/.config/mise/config.macos.toml" = "~/.dotfiles/files/home/.config/mise/config.macos.toml"
-"~/.config/mise/config.toml"       = "~/.dotfiles/files/home/.config/mise/config.toml"
-"~/.config/mise/miserc.toml"       = {
+"~/.config/mise/config.toml" = "~/.dotfiles/files/home/.config/mise/config.toml"
+"~/.config/mise/miserc.toml" = {
   source = "~/.dotfiles/files/home/.config/mise/miserc.toml.tera",
-  mode   = "template"
+  mode = "template"
 }
 
 "~/.config/mise/conf.d/macos-menubar-spacing.toml" = {
   source = "~/.dotfiles/files/home/.config/mise/conf.d/macos-menubar-spacing.toml.tera",
-  mode   = "template"
+  mode = "template"
 }
 
-"~/.config/btop"          = "~/.dotfiles/files/home/.config/btop"
-"~/.config/curlrc"        = "~/.dotfiles/files/home/.config/curlrc"
-"~/.config/ghostty"       = "~/.dotfiles/files/home/.config/ghostty"
-"~/.config/git"           = {
-  source   = "~/.dotfiles/files/home/.config/git",
-  mode     = "symlink-each",
+"~/.config/btop" = "~/.dotfiles/files/home/.config/btop"
+"~/.config/curlrc" = "~/.dotfiles/files/home/.config/curlrc"
+"~/.config/ghostty" = "~/.dotfiles/files/home/.config/ghostty"
+"~/.config/git" = {
+  source = "~/.dotfiles/files/home/.config/git",
+  mode = "symlink-each",
   manifest = "git"
 }
-"~/.config/ripgreprc"     = "~/.dotfiles/files/home/.config/ripgreprc"
-"~/.config/shell"         = {
+"~/.config/ripgreprc" = "~/.dotfiles/files/home/.config/ripgreprc"
+"~/.config/shell" = {
   source = "~/.dotfiles/files/home/.config/shell",
-  mode   = "symlink-each"
+  mode = "symlink-each"
 }
 "~/.config/starship.toml" = "~/.dotfiles/files/home/.config/starship.toml"
-"~/.config/tmux"          = "~/.dotfiles/files/home/.config/tmux"
-"~/.config/uv"            = "~/.dotfiles/files/home/.config/uv"
+"~/.config/tmux" = "~/.dotfiles/files/home/.config/tmux"
+"~/.config/uv" = "~/.dotfiles/files/home/.config/uv"
 
-"~/.codex/.ignore"             = "~/.dotfiles/files/home/.codex/.ignore"
-"~/.codex/AGENTS.md"           = "~/.dotfiles/files/home/.codex/AGENTS.md"
+"~/.codex/.ignore" = "~/.dotfiles/files/home/.codex/.ignore"
+"~/.codex/AGENTS.md" = "~/.dotfiles/files/home/.codex/AGENTS.md"
 "~/.codex/CODING_STANDARDS.md" = "~/.dotfiles/files/home/.codex/CODING_STANDARDS.md"
-"~/.codex/pstack-models.md"    = "~/.dotfiles/files/home/.codex/pstack-models.md"
+"~/.codex/pstack-models.md" = "~/.dotfiles/files/home/.codex/pstack-models.md"
 
 "~/.bash_profile" = "~/.dotfiles/files/home/.bash_profile"
-"~/.bashrc"       = "~/.dotfiles/files/home/.bashrc"
-"~/.bunfig.toml"  = "~/.dotfiles/files/home/.bunfig.toml"
-"~/.digrc"        = "~/.dotfiles/files/home/.digrc"
-"~/.gitconfig"    = "~/.dotfiles/files/home/.gitconfig"
-"~/.inputrc"      = "~/.dotfiles/files/home/.inputrc"
-"~/.npmrc"        = "~/.dotfiles/files/home/.npmrc"
-"~/.screenrc"     = "~/.dotfiles/files/home/.screenrc"
-"~/.ssh/config"   = "~/.dotfiles/files/home/.ssh/config"
+"~/.bashrc" = "~/.dotfiles/files/home/.bashrc"
+"~/.bunfig.toml" = "~/.dotfiles/files/home/.bunfig.toml"
+"~/.digrc" = "~/.dotfiles/files/home/.digrc"
+"~/.gitconfig" = "~/.dotfiles/files/home/.gitconfig"
+"~/.inputrc" = "~/.dotfiles/files/home/.inputrc"
+"~/.npmrc" = "~/.dotfiles/files/home/.npmrc"
+"~/.screenrc" = "~/.dotfiles/files/home/.screenrc"
+"~/.ssh/config" = "~/.dotfiles/files/home/.ssh/config"
 
 "~/.local/bin" = {
-  source  = "~/.dotfiles/files/home/.local/bin",
-  mode    = "symlink-each",
+  source = "~/.dotfiles/files/home/.local/bin",
+  mode = "symlink-each",
   exclude = [
     "fix-tahoe-focus",
     "flush-dns",
@@ -94,24 +94,21 @@ git_email = "mise@{hostname}"
 }
 
 # Tracked configs
-"~/.aws/config"           = {
-  mode     = "track",
-  variants = [{ profile = "work" }]
-}
+"~/.aws/config" = { mode = "track", variants = [{ profile = "work" }] }
 "~/.claude/settings.json" = {
-  mode     = "track",
+  mode = "track",
   variants = [{ profile = "work" }]
 }
 
-"~/.codex/config.toml"         = {
-  mode     = "track",
+"~/.codex/config.toml" = {
+  mode = "track",
   variants = [
     { profile = "home" },
     { profile = "work" },
   ]
 }
 "~/.codex/rules/default.rules" = {
-  mode     = "track",
+  mode = "track",
   variants = [
     { profile = "home" },
     { profile = "work" },
@@ -121,26 +118,26 @@ git_email = "mise@{hostname}"
 
 [tools]
 jactionlint = "1"
-age         = "1"
-bun         = "1"
-gh          = {
-  version     = "2",
+age = "1"
+bun = "1"
+gh = {
+  version = "2",
   postinstall = '"$HOME/.dotfiles/bin/check-gh-credential-helper"'
 }
-git-lfs     = "3.8.0"
-go          = "1.27"
-gum         = "2"
-hk          = { version = "2.0.1", postinstall = "hk install --global --mise" }
-lazydocker  = "latest"
-lazygit     = "latest"
-node        = "lts"
-ripgrep     = "latest"
-ruby        = "4"
-shellcheck  = "latest"
+git-lfs = "3.8.0"
+go = "1.27"
+gum = "2"
+hk = { version = "2.0.1", postinstall = "hk install --global --mise" }
+lazydocker = "latest"
+lazygit = "latest"
+node = "lts"
+ripgrep = "latest"
+ruby = "4"
+shellcheck = "latest"
 
-"aqua:hashicorp/terraform"      = "1.16"
+"aqua:hashicorp/terraform" = "1.16"
 "aqua:terraform-linters/tflint" = "latest"
-"npm:@mermaid-js/mermaid-cli"   = {
-  version     = "11",
+"npm:@mermaid-js/mermaid-cli" = {
+  version = "11",
   postinstall = '''env -u PUPPETEER_CACHE_DIR node "$(find "$MISE_TOOL_INSTALL_PATH/node_modules" -path '*/puppeteer/install.mjs' -print -quit)"'''
 }

@@ -8,5 +8,5 @@
 [dotfiles]
 "~/.agents/skills/financial-planning" = {
   source = "~/src/skills/matt-w-horn-skills/skills/financial-planning",
-  mode   = "symlink"
+  mode = "symlink"
 }
