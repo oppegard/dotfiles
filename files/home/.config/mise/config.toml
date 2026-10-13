@@ -139,5 +139,9 @@ shellcheck = "latest"
 "aqua:terraform-linters/tflint" = "latest"
 "npm:@mermaid-js/mermaid-cli" = {
   version = "11",
+  # puppeteer 25.13.0 pins chromium-bidi@157.0.8090-0, published by
+  # chrome-devtools-npm@google.com without npm provenance. aube's no-downgrade
+  # policy rejects it because earlier 10.x/17.x releases were GitHub-attested.
+  trust_policy_excludes = ["chromium-bidi@157.0.8090-0"],
   postinstall = '''env -u PUPPETEER_CACHE_DIR node "$(find "$MISE_TOOL_INSTALL_PATH/node_modules" -path '*/puppeteer/install.mjs' -print -quit)"'''
 }
