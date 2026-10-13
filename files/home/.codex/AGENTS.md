@@ -47,15 +47,15 @@ feature, refactoring: codex:gpt-6.1-sol@high
 bug-fix: codex:gpt-6.1-sol@high
 perf-issue: codex:gpt-6.1-sol@high
 hillclimb: codex:gpt-6.1-sol@high
-judgment and prose: codex:gpt-6.1-sol@high
-hardest tasks: codex:gpt-6.1-sol@high
+judgment and prose: inherit-parent
+hardest tasks: inherit-parent
 how explorer: codex:gpt-6.1-sol@high
-how explainer: codex:gpt-6.1-sol@high
+how explainer: inherit-parent
 why investigators, synthesizer: inherit-parent
 reflect tooling, judgment, divergent, synthesizer: inherit-parent
-arena runners: codex:gpt-6.1-sol@high, codex:gpt-6.1-sol@high, codex:gpt-6.1-sol@high
-arena cross-judge pool: codex:gpt-6.1-sol@high, codex:gpt-6.1-sol@high, codex:gpt-6.1-sol@high
+arena runners: inherit-parent, codex:gpt-6.1-sol@high
+arena cross-judge pool: inherit-parent, codex:gpt-6.1-sol@high
 swarm workers: codex:gpt-6.1-sol@high
-architect runners: codex:gpt-6.1-sol@high, codex:gpt-6.1-sol@high, codex:gpt-6.1-sol@high
-interrogate reviewers: codex:gpt-6.1-sol@high, codex:gpt-6.1-sol@high, codex:gpt-6.1-sol@high
+architect runners: inherit-parent, codex:gpt-6.1-sol@high
+interrogate reviewers: inherit-parent, codex:gpt-6.1-sol@high
 <!-- pstack:models:end -->
