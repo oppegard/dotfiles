@@ -98,5 +98,5 @@ if [ "$__os" = "Darwin" ]; then
   # Make sure programs that are installed are run, so that I can configure them to open at login
   open -g -a BetterDisplay
   open -g -a Clocker
-  open -g -a SoundSource
+  # open -g -a SoundSource
 fi
