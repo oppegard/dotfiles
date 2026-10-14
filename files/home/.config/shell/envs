@@ -12,6 +12,7 @@ shopt -s histappend
 
 export HOMEBREW_NO_ENV_HINTS=1
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
+export BAT_STYLE="-numbers"
 
 if [ "$__os" = "Darwin" ]; then
   export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
