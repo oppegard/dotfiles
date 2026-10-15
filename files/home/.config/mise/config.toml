@@ -27,6 +27,11 @@ git_email = "mise@{hostname}"
 
 
 [dotfiles]
+"~/.agents/*" = {
+  source = "~/.dotfiles/files/home/.agents/*",
+  mode = "symlink-each"
+}
+
 "~/.claude/CLAUDE.md" = {
   source = "~/.dotfiles/files/home/.codex/AGENTS.md",
   mode = "symlink"
