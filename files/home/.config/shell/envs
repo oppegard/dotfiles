@@ -11,6 +11,7 @@ export HISTCONTROL="ignoreboth:ignoredups"
 shopt -s histappend
 
 export HOMEBREW_NO_ENV_HINTS=1
+export HOMEBREW_AUTO_UPDATE_QUIET=1
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 export BAT_STYLE="-numbers"
 
