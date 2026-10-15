@@ -5,6 +5,21 @@ import "package://github.com/jdx/hk/releases/download/v2.6.0/hk@2.6.0#/Builtins.
 local bash_exclude = List("Alfred/**/**", "vendor/**/**")
 steps {
   ["gitleaks"] = Builtins.gitleaks
+  ["jactionlint"] = (Builtins.jactionlint) {
+    diagnostic_format = "sarif"
+    check = new CommandSpec {
+      command = "jactionlint --format sarif {{ files }}"
+      effect = "read"
+    }
+    check_diff = new CommandSpec {
+      command = "hk util sarif-diff -- jactionlint --format sarif {{ files }}"
+      effect = "read"
+    }
+    fix = new CommandSpec {
+      command = "jactionlint --fix {{ files }}"
+      effect = "write"
+    }
+  }
   ["newlines"] = (Builtins.newlines) {
     exclude = List("Alfred/**/**")
   }

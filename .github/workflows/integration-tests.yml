@@ -9,19 +9,25 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    shell: bash
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   detect-changes:
-    runs-on: ubuntu-latest
+    name: Detect changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
     outputs:
       integration_optional: ${{ steps.classify.outputs.integration_optional }}
 
     steps:
       - name: Checkout pull request head
-        if: github.event_name == 'pull_request'
+        if: ${{ github.event_name == 'pull_request' }}
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -66,6 +72,7 @@ jobs:
           printf '%s\n' "${files[@]}"
 
   integration-test:
+    name: Integration test (${{ matrix.os }})
     needs: detect-changes
     if: ${{ !cancelled() }}
     runs-on: ${{ needs.detect-changes.outputs.integration_optional == 'false' && matrix.os || 'ubuntu-slim' }}
@@ -87,27 +94,27 @@ jobs:
         run: exit 1
 
       - name: Skip integration for prose-only changes
-        if: needs.detect-changes.outputs.integration_optional == 'true'
+        if: ${{ needs.detect-changes.outputs.integration_optional == 'true' }}
         run: echo 'No integration-relevant changes.'
 
       - name: Checkout repository
-        if: needs.detect-changes.outputs.integration_optional == 'false'
+        if: ${{ needs.detect-changes.outputs.integration_optional == 'false' }}
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Exclude Cask and MAS packages in CI
-        if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
+        if: ${{ needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS' }}
         run: echo 'MISE_SYSTEM_PACKAGES_MANAGERS=brew' >> "$GITHUB_ENV"
 
       - name: Share mise cache with the bootstrap test
-        if: needs.detect-changes.outputs.integration_optional == 'false'
+        if: ${{ needs.detect-changes.outputs.integration_optional == 'false' }}
         run: |
           echo "MISE_DATA_DIR=$HOME/.local/share/mise" >> "$GITHUB_ENV"
           echo "MISE_CACHE_DIR=$HOME/.cache/mise" >> "$GITHUB_ENV"
 
       - name: Set up and cache mise tools
-        if: needs.detect-changes.outputs.integration_optional == 'false'
+        if: ${{ needs.detect-changes.outputs.integration_optional == 'false' }}
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
           install: true
@@ -115,12 +122,12 @@ jobs:
           cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'go.mod', 'files/home/.config/mise/**/*.toml*', 'files/home/.config/mise/mise.lock', 'files/home/.config/mise/locks/**') }}"
 
       - name: Install Brewfile packages
-        if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
+        if: ${{ needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS' }}
         run: |
           HOMEBREW_BUNDLE_CASK_SKIP=$(brew bundle list --cask --file=Brewfile)
           export HOMEBREW_BUNDLE_CASK_SKIP
           brew bundle install --file=Brewfile --no-upgrade
 
       - name: Run integration tests
-        if: needs.detect-changes.outputs.integration_optional == 'false'
+        if: ${{ needs.detect-changes.outputs.integration_optional == 'false' }}
         run: mise run test:integration
