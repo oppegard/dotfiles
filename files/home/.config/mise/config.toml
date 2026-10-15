@@ -1,4 +1,4 @@
-min_version = "2026.9.17"
+min_version = "2026.10.3"
 
 
 [settings]
@@ -26,12 +26,13 @@ builtin = "history-watch"
 git_email = "mise@{hostname}"
 
 
-[dotfiles]
-"~/.agents/*" = {
-  source = "~/.dotfiles/files/home/.agents/*",
-  mode = "symlink-each"
-}
+[dotfile_groups.agents]
+root = "files/home/.agents"
+target = "~/.agents"
+mode = "symlink-each"
 
+
+[dotfiles]
 "~/.claude/CLAUDE.md" = {
   source = "~/.dotfiles/files/home/.codex/AGENTS.md",
   mode = "symlink"
