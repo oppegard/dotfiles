@@ -93,9 +93,7 @@ mode = "symlink-each"
     "flush-dns",
     "mise-history",
     "restart-soundsource",
-    "screen-5.0.1",
     "try-darwin-aarch64",
-    "try-linux-x86_64",
   ]
 }
 

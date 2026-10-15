@@ -2,6 +2,18 @@
 
 - We do not store secrets on the system in plaintext.
 
+## Linux / Omarchy
+
+Omarchy owns the Linux desktop configuration. The only retained Linux-specific
+customization is the lappy386 screensaver, linked as a single branding file.
+The old Hyprland, keyd, UWSM, Walker, Waybar, alternate branding, and bundled
+Linux binaries have been retired.
+
+Shared dotfiles still need an ownership pass before using the full bootstrap on
+Omarchy: they currently replace Bash startup files, terminal config, and other
+Omarchy defaults. See the [coexistence and migration plan](docs/plans/20261013-omarchy-dotfiles.md)
+before applying this checkout to an existing Linux installation.
+
 ## Integration tests
 
 Install mise, then run the suite from the repository root. Mise selects the Go
