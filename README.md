@@ -26,6 +26,28 @@ The lock covers Linux x64 and macOS arm64. Mise reads the Go version from
 `go.mod`; after changing that version or a tool request, run `mise lock` again.
 Commit `mise.toml`, `go.mod`, and `mise.lock` changes together when applicable.
 
+## Update global tools
+
+Bootstrap installs the versions in
+`files/home/.config/mise/mise.lock` with `--locked`. The lock covers Linux x64
+and macOS arm64. Mise links it to `~/.config/mise/mise.lock`; native dependency
+sidecars in the adjacent `locks/` directory stay in the checkout.
+
+After bootstrap, update one global tool within its `config.toml` request:
+
+```sh
+mise lock --global --bump shellcheck
+mise -C ~ install --locked
+mise run lint
+mise run test:integration
+git diff -- files/home/.config/mise/config.toml files/home/.config/mise/mise.lock files/home/.config/mise/locks
+```
+
+Use `mise lock --global` to refresh metadata without changing locked versions.
+Commit the global config, lock, and generated sidecars together when applicable.
+Keep sidecars as generated; the lock verifies their content digest.
+`bin/setup.sh` still performs deliberate tool upgrades.
+
 ## Integration tests
 
 Install mise, then run the suite from the repository root. Mise selects the Go

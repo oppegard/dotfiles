@@ -1,6 +1,7 @@
 package integration
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
@@ -35,6 +36,27 @@ func TestDotfBootstrapTwice(t *testing.T) {
 		t.Fatal(err)
 	}
 	repo := strings.TrimSpace(string(source))
+	globalConfig := filepath.Join(repo, "files", "home", ".config", "mise")
+	sourceLock := filepath.Join(globalConfig, "mise.lock")
+	lockFilesCommand := exec.CommandContext(t.Context(), git, "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--",
+		"files/home/.config/mise/mise.lock", "files/home/.config/mise/locks")
+	lockFilesCommand.Dir = repo
+	lockFiles, err := lockFilesCommand.Output()
+	if err != nil {
+		t.Fatal(err)
+	}
+	globalLocks := make(map[string][]byte)
+	for _, name := range strings.Split(strings.TrimSuffix(string(lockFiles), "\x00"), "\x00") {
+		path := filepath.Join(repo, name)
+		content, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		globalLocks[path] = content
+	}
+	if _, ok := globalLocks[sourceLock]; !ok {
+		t.Fatalf("global lock %s is missing", sourceLock)
+	}
 	home, err := os.UserHomeDir()
 	if err != nil {
 		t.Fatal(err)
@@ -111,6 +133,20 @@ func TestDotfBootstrapTwice(t *testing.T) {
 		}
 		if _, err := os.Lstat(filepath.Join(home, ".config", "mise", "config.toml")); err != nil {
 			t.Fatalf("dotf run %d did not apply mise config: %v", run, err)
+		}
+		installedLock := filepath.Join(home, ".config", "mise", "mise.lock")
+		resolvedLock, err := filepath.EvalSymlinks(installedLock)
+		if err != nil || resolvedLock != sourceLock {
+			t.Fatalf("dotf run %d left global lock resolving to %q, %v; want %q", run, resolvedLock, err, sourceLock)
+		}
+		for path, before := range globalLocks {
+			after, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatalf("dotf run %d removed global lock file %s: %v", run, path, err)
+			}
+			if !bytes.Equal(before, after) {
+				t.Fatalf("dotf run %d changed global lock file %s", run, path)
+			}
 		}
 		if runtime.GOOS == "darwin" {
 			t.Run(fmt.Sprintf("git_completion_after_run_%d", run), func(t *testing.T) {

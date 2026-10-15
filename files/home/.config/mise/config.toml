@@ -8,6 +8,8 @@ dotfiles.root = "~/.dotfiles"
 experimental = true
 history.describe_command = 'bash "$HOME/.dotfiles/bin/mise-history-describe"'
 idiomatic_version_file_enable_tools = ["node", "ruby"]
+lockfile = true
+lockfile_platforms = ["linux-x64", "macos-arm64"]
 
 
 [settings.ruby]
@@ -43,6 +45,7 @@ mode = "symlink-each"
 "~/.config/mise/config.linux.toml" = "~/.dotfiles/files/home/.config/mise/config.linux.toml"
 "~/.config/mise/config.macos.toml" = "~/.dotfiles/files/home/.config/mise/config.macos.toml"
 "~/.config/mise/config.toml" = "~/.dotfiles/files/home/.config/mise/config.toml"
+"~/.config/mise/mise.lock" = "~/.dotfiles/files/home/.config/mise/mise.lock"
 "~/.config/mise/miserc.toml" = {
   source = "~/.dotfiles/files/home/.config/mise/miserc.toml.tera",
   mode = "template"

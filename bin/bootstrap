@@ -87,7 +87,7 @@ bootstrap_mise() {
 
 mise_bootstrap() {
 	debug "Running mise bootstrap..."
-	mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap
+	mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap --locked
 }
 main() {
 	if [ "$#" -ne 0 ]; then
