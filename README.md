@@ -2,6 +2,30 @@
 
 - We do not store secrets on the system in plaintext.
 
+## Update project tools
+
+Run these commands from the repository root. Install the versions in `mise.lock`:
+
+```sh
+mise install --locked
+```
+
+To update a tool within its `mise.toml` request, regenerate the lock, then check
+and review the changes:
+
+```sh
+mise lock --bump shellcheck
+mise install --locked
+mise run lint
+mise run test:integration
+git diff -- mise.toml mise.lock
+```
+
+Use `mise lock` to refresh lock metadata without changing the locked versions.
+The lock covers Linux x64 and macOS arm64. Mise reads the Go version from
+`go.mod`; after changing that version or a tool request, run `mise lock` again.
+Commit `mise.toml`, `go.mod`, and `mise.lock` changes together when applicable.
+
 ## Integration tests
 
 Install mise, then run the suite from the repository root. Mise selects the Go
