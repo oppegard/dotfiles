@@ -112,7 +112,7 @@ jobs:
         with:
           install: true
           cache: true
-          cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'go.mod', 'files/home/.config/mise/**/*.toml*') }}"
+          cache_key: "integration-v2-{{platform}}-{{file_hash}}-${{ hashFiles('mise.toml', 'go.mod', 'files/home/.config/mise/**/*.toml*', 'files/home/.config/mise/mise.lock', 'files/home/.config/mise/locks/**') }}"
 
       - name: Install Brewfile packages
         if: needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'macOS'
