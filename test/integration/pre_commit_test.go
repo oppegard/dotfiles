@@ -72,7 +72,7 @@ func TestPreCommitRejectsSecret(t *testing.T) {
 	mustRun(repo, git, "commit", "-m", "test: establish clean baseline")
 	mustRun(repo, mise, "trust")
 	t.Log("Installing project tools and hooks into the isolated repository")
-	t.Log(mustRun(repo, mise, "install"))
+	t.Log(mustRun(repo, mise, "install", "--locked"))
 
 	fixture := "hook-e2e-fixture.txt"
 	if err := os.WriteFile(filepath.Join(repo, fixture), []byte("Harmless test content.\n"), 0o644); err != nil {
