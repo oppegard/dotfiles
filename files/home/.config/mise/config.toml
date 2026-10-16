@@ -126,7 +126,7 @@ mode = "symlink-each"
 
 
 [tools]
-jactionlint = "1"
+jactionlint = "2"
 age = "1"
 bun = "1"
 gh = {

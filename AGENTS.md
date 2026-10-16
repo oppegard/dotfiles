@@ -6,6 +6,7 @@ These are my dotfiles. See @README.md.
 `mise run lint` runs these `hk.pkl` checks in CI; `hk` also installs Git hooks:
 
 - `gitleaks`: Scans for secrets.
+- `jactionlint`: Checks GitHub Actions workflows with the pedantic profile.
 - `newlines`: Checks file endings (excluding Alfred).
 - `shellcheck`: Lints shell scripts (excluding Alfred and vendor files).
 - `shfmt`: Checks shell formatting (excluding Alfred and vendor files).
