@@ -136,7 +136,7 @@ gh = {
 git-lfs = "3.8.0"
 go = "1.27"
 gum = "2"
-hk = { version = "2.0.1", postinstall = "hk install --global --mise" }
+hk = { version = "latest", postinstall = "hk install --global --mise" }
 lazydocker = "latest"
 lazygit = "latest"
 node = "lts"
