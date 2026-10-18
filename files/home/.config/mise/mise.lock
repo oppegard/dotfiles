@@ -19,6 +19,21 @@ url = "https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-da
 url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/535541897"
 provenance = "github-attestations"
 
+[[tools."aqua:Latias94/merman"]]
+version = "0.9.0"
+backend = "aqua:Latias94/merman"
+specifiers = ["0.9"]
+
+[tools."aqua:Latias94/merman"."platforms.linux-x64"]
+checksum = "sha256:73942e12b5a38b37e1a7d8b1d6d2436fc9ac1acbab7e666060c81755f270578e"
+url = "https://github.com/Latias94/merman/releases/download/v0.9.0/merman-cli-x86_64-unknown-linux-gnu.tar.xz"
+url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/633831670"
+
+[tools."aqua:Latias94/merman"."platforms.macos-arm64"]
+checksum = "sha256:cb15bf651f1cd46ff942fecd971fa1dab8430dd8e670d13d2ec04881c293a02e"
+url = "https://github.com/Latias94/merman/releases/download/v0.9.0/merman-cli-aarch64-apple-darwin.tar.xz"
+url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/633831766"
+
 [[tools."aqua:hashicorp/terraform"]]
 version = "1.16.6"
 backend = "aqua:hashicorp/terraform"
@@ -213,15 +228,6 @@ url = "https://nodejs.org/dist/v24.22.0/node-v24.22.0-linux-x64.tar.gz"
 [tools.node."platforms.macos-arm64"]
 checksum = "sha256:6a9724d9b50a5f22b4816cded441b5a8d9ddae546191a5e5b7efa5a5e2ee26d5"
 url = "https://nodejs.org/dist/v24.22.0/node-v24.22.0-darwin-arm64.tar.gz"
-
-[[tools."npm:@mermaid-js/mermaid-cli"]]
-version = "11.17.0"
-aube = { path = "locks/npm-mermaid-js-mermaid-cli/11.17.0~4d3a2c1e", digest = "sha256:afa31937b5756a73a62d4427178bb931fac4fc70f9b01888708eb866650bc461" }
-backend = "npm:@mermaid-js/mermaid-cli"
-specifiers = ["11"]
-
-[tools."npm:@mermaid-js/mermaid-cli".options]
-trust_policy_excludes = '["chromium-bidi@157.0.8090-0"]'
 
 [[tools.ripgrep]]
 version = "15.2.0"

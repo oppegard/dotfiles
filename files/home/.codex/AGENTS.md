@@ -25,6 +25,8 @@ Apply these rules to coding and non-coding tasks:
   or dependencies.
 - Prefer Mermaid for diagrams. Use ASCII when the destination cannot
   render Mermaid.
+- `merman-cli` is installed. Validate each Mermaid diagram with
+  `merman-cli lint diagram.mmd` before you present it.
 - Use prose for simple answers and details a diagram cannot show.
 
 ## Task references
