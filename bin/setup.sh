@@ -83,6 +83,9 @@ mise -C "$MISE_CONFIG_DIR" bootstrap packages upgrade --yes
 gum_print "⬆️ ⬆️ ⬆️  MISE UPGRADE  ⬆️ ⬆️ ⬆️"
 mise -C "$MISE_CONFIG_DIR" upgrade
 
+gum_print "🧹 🧹 🧹  MISE PRUNE  🧹 🧹 🧹"
+mise -C "$MISE_CONFIG_DIR" prune --tools --yes
+
 __os="$(uname -s)"
 
 ### Mac Setup ###
