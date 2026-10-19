@@ -175,12 +175,12 @@ if [ "$__os" = "Linux" ]; then
       local locale="${LC_ALL:-${LC_MESSAGES:-$LANG}}"
       local lang_full="${locale%%[.@]*}"     # e.g. en_US
       local lang_base="${lang_full%%_*}"     # e.g. en
-    
+
       local -a roots=("$xdh/applications")
       local IFS=:
       for d in $xds; do roots+=("$d/applications"); done
       unset IFS
-    
+
       {
         for root in "${roots[@]}"; do
           [ -d "$root" ] || continue

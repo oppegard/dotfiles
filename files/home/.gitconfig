@@ -1,7 +1,7 @@
 # resources:
 # - https://jvns.ca/blog/2024/02/16/popular-git-config-options/
 # - https://www.brantonboehm.com/code/conditional-git-config/
-# - 
+# -
 [alias]
 	# branches by recency
 	brr = for-each-ref --sort=-committerdate refs/heads/ refs/remotes/ --format='%(if)%(HEAD)%(then)*%(else)%(if)%(worktreepath)%(then)+%(else) %(end)%(end) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
@@ -82,10 +82,10 @@
 # Do not run `gh auth setup-git`: it records gh's resolved executable path, which becomes stale after mise upgrades gh.
 # Source: https://github.com/cli/cli/blob/trunk/pkg/cmd/auth/shared/gitcredentials/helper_config.go#L20-L64
 [credential "https://github.com"]
-	helper = 
+	helper =
 	helper = !MISE_EXEC_AUTO_INSTALL=0 $HOME/.local/bin/mise exec --quiet gh -- gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
+	helper =
 	helper = !MISE_EXEC_AUTO_INSTALL=0 $HOME/.local/bin/mise exec --quiet gh -- gh auth git-credential
 [hook "hk-pre-commit"]
 	command = test \"${HK:-1}\" = \"0\" || ~/.local/bin/mise x hk -- hk run pre-commit --from-hook --staged
