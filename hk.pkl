@@ -39,6 +39,8 @@ steps {
   ["tombi"] = (Builtins.tombi_format) {
     exclude = List("**/Tuna/config.toml")
   }
-  ["trailing_whitespace"] = Builtins.trailing_whitespace
+  ["trailing_whitespace"] = (Builtins.trailing_whitespace) {
+    exclude = List("files/home/.config/omarchy/branding/**/**")
+  }
   ["yamlfmt"] = Builtins.yamlfmt
 }
