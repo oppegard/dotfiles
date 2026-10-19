@@ -133,8 +133,8 @@ runner and executes the full Go suite.
 
 ## References
 
-- Mise Go version files: https://mise.jdx.dev/lang/go.html#go-version-files
-- Mise minimum-version deprecation: https://mise.jdx.dev/configuration.html#which-fields-mise-reads
-- Go toolchain selection: https://go.dev/doc/toolchain
-- `setup-go` version-file behavior: https://github.com/actions/setup-go/blob/main/docs/advanced-usage.md#using-the-go-version-file-input
-- `mise-action` CI setup: https://mise.jdx.dev/continuous-integration.html
+- Mise Go version files: <https://mise.jdx.dev/lang/go.html#go-version-files>
+- Mise minimum-version deprecation: <https://mise.jdx.dev/configuration.html#which-fields-mise-reads>
+- Go toolchain selection: <https://go.dev/doc/toolchain>
+- `setup-go` version-file behavior: <https://github.com/actions/setup-go/blob/main/docs/advanced-usage.md#using-the-go-version-file-input>
+- `mise-action` CI setup: <https://mise.jdx.dev/continuous-integration.html>

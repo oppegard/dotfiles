@@ -3,6 +3,7 @@
 These are my dotfiles. See @README.md.
 
 ## CI
+
 `mise run lint` runs these `hk.pkl` checks in CI; `hk` also installs Git hooks:
 
 - `gitleaks`: Scans for secrets.

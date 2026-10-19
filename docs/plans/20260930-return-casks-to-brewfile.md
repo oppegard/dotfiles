@@ -4,7 +4,7 @@
 
 Approved and completed on 2026-09-30.
 
-PR: https://github.com/oppegard/dotfiles/pull/15
+PR: <https://github.com/oppegard/dotfiles/pull/15>
 
 ## Goal and reasoning
 
@@ -84,7 +84,7 @@ brew bundle install --file=/Users/glenn/src/dotfiles/Brewfile
 ## Sources
 
 - Homebrew install/adoption behavior:
-  https://docs.brew.sh/Manpage.html#install-options-formulacask-
+  <https://docs.brew.sh/Manpage.html#install-options-formulacask->
 - Local Homebrew `cask/artifact/moved.rb`: self-updating apps can be adopted
   without replacing their live bundle.
 - Installed Caskroom metadata and mise receipts inspected on 2026-09-30.

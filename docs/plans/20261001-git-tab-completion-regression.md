@@ -1,7 +1,7 @@
 # Git Tab completion regression test
 
 Status: complete. Approved on 2026-10-01. Brewfile CI verified.
-PR: https://github.com/oppegard/dotfiles/pull/21
+PR: <https://github.com/oppegard/dotfiles/pull/21>
 
 ## Workflow
 
@@ -21,7 +21,6 @@ refers to the installed [model-routing reference](/Users/glenn/.codex/plugins/ca
    Use the **sequence-verifiable-units** principle skill, building, verifying, and committing each small unit before the next.
 7. If the design is contested, `interrogate` before shipping.
 8. Run **Opening a PR**.
-
 
 ## Proposed change
 
