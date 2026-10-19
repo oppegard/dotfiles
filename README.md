@@ -6,7 +6,8 @@
 
 Run `mise run lint` to check all files. Run `mise run lint-fix` to apply safe
 fixes. Both commands use `hk.pkl`. GitHub Actions workflows use jactionlint
-with the pedantic profile in `.github/jactionlint.yaml`.
+with the pedantic profile in `.github/jactionlint.yaml`. Markdown uses rumdl.
+`.rumdl.toml` turns off line-length checks.
 
 ## Update project tools
 

@@ -8,6 +8,7 @@ These are my dotfiles. See @README.md.
 - `gitleaks`: Scans for secrets.
 - `jactionlint`: Checks GitHub Actions workflows with the pedantic profile.
 - `newlines`: Checks file endings (excluding Alfred).
+- `rumdl`: Checks Markdown, excluding vendor files. `.rumdl.toml` disables line-length checks.
 - `shellcheck`: Lints shell scripts (excluding Alfred and vendor files).
 - `shfmt`: Checks shell formatting (excluding Alfred and vendor files).
 - `tombi`: Checks TOML formatting (excluding Tuna's config).
