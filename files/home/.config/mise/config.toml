@@ -152,4 +152,5 @@ shellcheck = "latest"
 [tasks."claude:check"]
 description = "Check Claude CLI readiness with one small request"
 shell = "bash -c"
+timeout = "45s"
 run = '"{{ env.HOME }}/.dotfiles/bin/check-claude"'

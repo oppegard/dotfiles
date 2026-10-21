@@ -1,98 +1,26 @@
-#!/usr/bin/env node
+#!/usr/bin/env bash
 
-const { spawn } = require('node:child_process');
+if (($# != 0)); then
+	echo 'Usage: check-claude' >&2
+	exit 2
+fi
 
-if (process.argv.length !== 2) {
-  console.error('Usage: check-claude');
-  process.exit(2);
-}
+if reply=$(claude --print --safe-mode --tools '' \
+	--strict-mcp-config --mcp-config '{"mcpServers":{}}' \
+	--no-session-persistence --effort low --max-turns 1 \
+	--output-format text --system-prompt 'Reply with exactly OK.' \
+	'Reply with exactly OK.' </dev/null); then
+	if [[ $reply == OK ]]; then
+		echo 'Claude is ready.'
+		exit 0
+	fi
+	echo 'Claude readiness check failed: expected OK.' >&2
+else
+	status=$?
+	echo "Claude readiness check failed: claude exited with status $status." >&2
+fi
 
-function runClaude() {
-  return new Promise((resolve) => {
-    const child = spawn('claude', [
-      '--print', '--safe-mode', '--tools', '',
-      '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}',
-      '--no-session-persistence', '--effort', 'low', '--max-turns', '1',
-      '--output-format', 'json', '--system-prompt', 'Reply with exactly OK.',
-      'Reply with exactly OK.',
-    ], { stdio: ['ignore', 'pipe', 'pipe'] });
-    const limit = 65536;
-    let stdout = '';
-    let stderr = '';
-    let stdoutTruncated = false;
-    let stderrTruncated = false;
-    let settled = false;
-
-    child.stdout.setEncoding('utf8');
-    child.stderr.setEncoding('utf8');
-    child.stdout.on('data', (chunk) => {
-      stdoutTruncated ||= stdout.length + chunk.length > limit;
-      stdout = (stdout + chunk).slice(0, limit);
-    });
-    child.stderr.on('data', (chunk) => {
-      stderrTruncated ||= stderr.length + chunk.length > limit;
-      stderr = (stderr + chunk).slice(0, limit);
-    });
-
-    function finish(outcome) {
-      if (settled) return;
-      settled = true;
-      clearTimeout(deadline);
-      child.stdout.destroy();
-      child.stderr.destroy();
-      resolve({ ...outcome, stdout, stderr, stdoutTruncated, stderrTruncated });
-    }
-
-    const deadline = setTimeout(() => {
-      child.kill('SIGKILL');
-      finish({ kind: 'timeout' });
-    }, 45000);
-    child.once('error', (error) => finish({ kind: 'error', error }));
-    child.once('close', (code, signal) => finish({ kind: 'closed', code, signal }));
-  });
-}
-
-function fail(reason, outcome) {
-  console.error(`Claude readiness check failed: ${reason}`);
-  if (outcome.stdout.trim()) console.error(outcome.stdout.trim());
-  if (outcome.stdoutTruncated) console.error('[Claude stdout truncated]');
-  if (outcome.stderr.trim()) console.error(outcome.stderr.trim());
-  if (outcome.stderrTruncated) console.error('[Claude stderr truncated]');
-  process.exitCode = 1;
-}
-
-runClaude().then((outcome) => {
-  if (outcome.kind === 'error') {
-    fail(`could not start claude (${outcome.error.code}).`, outcome);
-    return;
-  }
-  if (outcome.kind === 'timeout') {
-    fail('claude exceeded the 45-second deadline.', outcome);
-    return;
-  }
-  if (outcome.signal || outcome.code !== 0) {
-    fail(outcome.signal
-      ? `claude exited from ${outcome.signal}.`
-      : `claude exited with status ${outcome.code}.`, outcome);
-    return;
-  }
-  if (outcome.stdoutTruncated) {
-    fail('claude returned too much output.', outcome);
-    return;
-  }
-
-  let result;
-  try {
-    result = JSON.parse(outcome.stdout);
-  } catch {
-    fail('claude did not return valid JSON.', outcome);
-    return;
-  }
-  if (!result || Array.isArray(result) || result.type !== 'result'
-    || result.subtype !== 'success' || result.is_error !== false
-    || typeof result.result !== 'string' || result.result.trim() !== 'OK') {
-    fail('claude did not return a successful OK result.', outcome);
-    return;
-  }
-  console.log('Claude is ready.');
-});
+if [[ -n $reply ]]; then
+	printf '%s\n' "$reply" >&2
+fi
+exit 1

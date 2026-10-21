@@ -63,10 +63,10 @@ version from the root `go.mod`:
 mise run test:integration
 ```
 
-On a normal machine, this runs the installed pre-commit hook test in an
-isolated repository and reports the bootstrap test as skipped. The bootstrap
-test installs packages and changes machine settings. To run the full suite,
-use a disposable macOS or Linux VM and run:
+On a normal machine, this runs the Claude readiness tests and the installed
+pre-commit hook test in isolated environments. It reports the bootstrap test
+as skipped. The bootstrap test installs packages and changes machine settings.
+To run the full suite, use a disposable macOS or Linux VM and run:
 
 ```sh
 DOTFILES_INTEGRATION_DISPOSABLE=1 mise run test:integration
@@ -83,7 +83,8 @@ Claude check fails `daily`.
 The check makes one small request with the caller's authentication environment,
 Claude configuration directory, and normal model selection. Claude can refresh
 its saved login during the request. Each run counts toward normal Claude usage.
-The check exits with a failure if Claude cannot return `OK` within 45 seconds.
+The check requires a successful exit and the reply `OK`. Mise stops the task
+after 45 seconds and reports a failure.
 
 The check uses `--safe-mode` to skip customizations and disables tools, MCP
 servers, and session persistence. It does not check project hooks, plugins, MCP
@@ -93,8 +94,11 @@ at that time. It does not guarantee that a later request works.
 Run the focused tests without a live Claude request:
 
 ```sh
-node --test test/check-claude_test.cjs
+go test -v -count=1 -run TestClaude ./test/integration
 ```
+
+These tests use temporary Claude and audio stubs. They run in GitHub Actions
+on macOS and Linux as part of the integration suite.
 
 ## MacOS Preferences
 
