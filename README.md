@@ -74,6 +74,28 @@ DOTFILES_INTEGRATION_DISPOSABLE=1 mise run test:integration
 
 GitHub Actions runs the full suite on disposable macOS and Linux runners.
 
+## Check Claude readiness
+
+Run `mise run claude:check` before an unattended agent needs Claude. On macOS,
+`mise run daily` runs this check before the Google Meet audio check. A failed
+Claude check fails `daily`.
+
+The check makes one small request with the caller's authentication environment,
+Claude configuration directory, and normal model selection. Claude can refresh
+its saved login during the request. Each run counts toward normal Claude usage.
+The check exits with a failure if Claude cannot return `OK` within 45 seconds.
+
+The check uses `--safe-mode` to skip customizations and disables tools, MCP
+servers, and session persistence. It does not check project hooks, plugins, MCP
+servers, or another agent's distinct environment. Success establishes readiness
+at that time. It does not guarantee that a later request works.
+
+Run the focused tests without a live Claude request:
+
+```sh
+node --test test/check-claude_test.cjs
+```
+
 ## MacOS Preferences
 
 Managed macOS defaults live in

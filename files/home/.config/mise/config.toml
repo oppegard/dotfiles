@@ -147,3 +147,9 @@ shellcheck = "latest"
 "aqua:Latias94/merman" = "0.9"
 "aqua:hashicorp/terraform" = "1.16"
 "aqua:terraform-linters/tflint" = "latest"
+
+
+[tasks."claude:check"]
+description = "Check Claude CLI readiness with one small request"
+shell = "bash -c"
+run = '"{{ env.HOME }}/.dotfiles/bin/check-claude"'
