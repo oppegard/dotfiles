@@ -12,4 +12,8 @@ source "$HOME/.config/shell/aliases"
 source "$HOME/.config/shell/functions"
 source "$HOME/.config/shell/inits"
 
+if [ -n "${REX_BIN_DIR:-}" ]; then
+	export PATH="$REX_BIN_DIR:$PATH"
+fi
+
 unset __os
