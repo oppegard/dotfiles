@@ -42,6 +42,15 @@ ensure_full_disk_access() {
 	case "${TERM_PROGRAM:-}" in
 	Apple_Terminal) terminal_app="Terminal.app" ;;
 	ghostty | Ghostty) terminal_app="Ghostty.app" ;;
+	rex | Rex)
+		terminal_app="Rex.app"
+		case "${REX_BIN_DIR:-}" in
+		*.app/*)
+			terminal_app="${REX_BIN_DIR%%.app/*}.app"
+			terminal_app="${terminal_app##*/}"
+			;;
+		esac
+		;;
 	*) terminal_app="${TERM_PROGRAM:-the terminal app running this bootstrap}" ;;
 	esac
 
