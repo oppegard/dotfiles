@@ -1,10 +1,12 @@
-amends "package://github.com/jdx/hk/releases/download/v2.6.0/hk@2.6.0#/Config.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.7.0/hk@2.7.0#/Config.pkl"
 
-import "package://github.com/jdx/hk/releases/download/v2.6.0/hk@2.6.0#/Builtins.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.7.0/hk@2.7.0#/Builtins.pkl"
 
 local bash_exclude = List("Alfred/**/**", "vendor/**/**")
 steps {
   ["gitleaks"] = Builtins.gitleaks
+  ["go_fmt"] = Builtins.go_fmt
+  ["go_vet"] = Builtins.go_vet
   ["jactionlint"] = (Builtins.jactionlint) {
     diagnostic_format = "sarif"
     check = new CommandSpec {
@@ -20,6 +22,7 @@ steps {
       effect = "write"
     }
   }
+  ["mise"] = Builtins.mise
   ["newlines"] = (Builtins.newlines) {
     exclude = List("Alfred/**/**")
   }
@@ -35,6 +38,9 @@ steps {
   }
   ["tombi"] = (Builtins.tombi_format) {
     exclude = List("**/Tuna/config.toml")
+  }
+  ["trailing_whitespace"] = (Builtins.trailing_whitespace) {
+    exclude = List("files/home/.config/omarchy/branding/**/**")
   }
   ["yamlfmt"] = Builtins.yamlfmt
 }

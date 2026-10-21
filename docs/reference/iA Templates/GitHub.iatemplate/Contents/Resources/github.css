@@ -77,12 +77,12 @@ html {
   .markdown-body h4,
   .markdown-body h5,
   .markdown-body h6 {
-    /* this should be simple but due to WebKit bug https://bugs.webkit.org/show_bug.cgi?id=5097 it isn't: 
-         page-break-after: avoid;   /* old syntax, not working in webkit 
-         break-after: avoid-page;   /* new syntax, not implemented in webkit 
+    /* this should be simple but due to WebKit bug https://bugs.webkit.org/show_bug.cgi?id=5097 it isn't:
+         page-break-after: avoid;   /* old syntax, not working in webkit
+         break-after: avoid-page;   /* new syntax, not implemented in webkit
        instead, increase the calculated height of headlines by using an invisible element and forbid breaks within: */
-    page-break-inside: avoid;    
-  }  
+    page-break-inside: avoid;
+  }
   .markdown-body h1::after,
   .markdown-body h2::after,
   .markdown-body h3::after,
@@ -92,9 +92,9 @@ html {
     content: "";
     display: block;
     height: 50px;
-    margin-bottom: -50px;  
+    margin-bottom: -50px;
   }
-  /* github-markdown.css does define bottom padding and border for h1 / h2 which conflicts with this hack 
+  /* github-markdown.css does define bottom padding and border for h1 / h2 which conflicts with this hack
      remove these and define them top of the workaround instead */
   .markdown-body h1,
   .markdown-body h2 {
@@ -106,7 +106,7 @@ html {
     margin-top: 0.3em;
     border-top: 1px solid #eaecef;
   }
-}  
+}
 
 /* Fix for paragraph list items. GitHub embeds input into the first paragraph, iA Writer doesn’t. */
 .markdown-body .task-list-item {
