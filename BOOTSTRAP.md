@@ -390,13 +390,18 @@ tools from Step 2 provide Git for the clone.
   The script performs these phases:
 
   1. Pulls the latest dotfiles commit over SSH.
-  2. Installs mise-managed Gum for setup output.
-  3. Reapplies mise bootstrap, including dotfiles, the history watcher,
-     privileged files, macOS defaults, the login shell, and tools.
-  4. Upgrades mise-managed tools within their declared version requests.
+  2. Installs mise-managed Gum from the committed lockfile for setup output.
+  3. Reapplies mise bootstrap with `--locked`, including dotfiles, the history
+     watcher, privileged files, macOS defaults, the login shell, and tools.
+  4. Upgrades system packages and prunes unused mise-managed tools.
   5. Runs `brew bundle install` and then `brew cleanup`.
   6. Exports the live BetterDisplay portable keys back into the repository.
-  7. Opens BetterDisplay, Clocker, and SoundSource in the background.
+  7. Opens BetterDisplay and Clocker in the background.
+
+  Mise-managed tool versions come from the committed locks. A nightly workflow
+  proposes lock updates in a pull request and runs lint and the full integration
+  suite on its branch. Setup fails if a required locked download is missing;
+  review the locks before retrying.
 
   Expect password, confirmation, application, and macOS permission prompts.
   Most phases are convergent, so after fixing a failed prerequisite, rerun the
