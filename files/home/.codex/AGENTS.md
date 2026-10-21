@@ -1,6 +1,7 @@
 # Working agreements
 
 - Ask before adding production dependencies.
+- Create or edit README files only when I explicitly request it.
 - Keep infrastructure tools and APIs read-only. Never mutate or destroy
   infrastructure. Respect API rate limits.
 - Merge a PR only with my approval. Include the PR number in the final

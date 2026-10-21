@@ -69,7 +69,7 @@ html {
 }
 
 @media print {
-  html {    
+  html {
     --line-height-base: 170.0;
   }
 }
