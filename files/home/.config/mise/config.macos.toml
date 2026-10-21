@@ -161,7 +161,8 @@ value = [
 
 
 [tasks.daily]
-description = "Run morning readiness checks for Google Meet audio"
+description = "Run morning readiness checks for Claude and Google Meet audio"
+depends = ["claude:check"]
 shell = "bash -c"
 run = '"{{ env.HOME }}/.dotfiles/bin/check-meet-system-audio.command"'
 
