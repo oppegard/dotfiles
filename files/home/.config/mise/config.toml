@@ -93,7 +93,7 @@ mode = "symlink-each"
   mode = "symlink-each",
   exclude = [
     "fix-tahoe-focus",
-    "flush-dns",
+    "dns-flush",
     "mise-history",
     "restart-soundsource",
     "screen-5.0.1",
