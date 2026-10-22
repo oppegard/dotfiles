@@ -26,9 +26,7 @@ steps {
   ["newlines"] = (Builtins.newlines) {
     exclude = List("Alfred/**/**")
   }
-  ["rumdl"] = (Builtins.rumdl) {
-    exclude = List("vendor/**/**")
-  }
+  ["rumdl"] = Builtins.rumdl
   ["shellcheck"] = (Builtins.shellcheck) {
     exclude = bash_exclude
     check = new CommandSpec {
