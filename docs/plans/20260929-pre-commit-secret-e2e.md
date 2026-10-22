@@ -152,14 +152,14 @@ The test failed with `secret commit succeeded`, proving that hook bypass
 cannot yield a passing test. The temporary step has been removed. Final-head
 workflow verification is recorded in the PR description before delivery.
 
-- Draft PR: <https://github.com/oppegard/dotfiles/pull/8>
-- Normal and mutation run: <https://github.com/oppegard/dotfiles/actions/runs/36577768681>
+- Draft PR: https://github.com/oppegard/dotfiles/pull/8
+- Normal and mutation run: https://github.com/oppegard/dotfiles/actions/runs/36577768681
 
 ## Sources consulted
 
 - Repository `mise.toml`, `hk.pkl`, `.gitleaks.toml`, and existing workflows.
-- <https://mise.jdx.dev/configuration.html>
-- <https://go.dev/dl/?mode=json>
+- https://mise.jdx.dev/configuration.html
+- https://go.dev/dl/?mode=json
 
 ## Principles used
 

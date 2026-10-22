@@ -1,7 +1,7 @@
 # Git Tab completion regression test
 
 Status: complete. Approved on 2026-10-01. Brewfile CI verified.
-PR: <https://github.com/oppegard/dotfiles/pull/21>
+PR: https://github.com/oppegard/dotfiles/pull/21
 
 ## Workflow
 

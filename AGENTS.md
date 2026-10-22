@@ -12,7 +12,7 @@ These are my dotfiles. See @README.md.
 - `jactionlint`: Checks GitHub Actions workflows with the pedantic profile.
 - `mise`: Checks project mise config formatting.
 - `newlines`: Checks file endings (excluding Alfred).
-- `rumdl`: Checks Markdown as GitHub-flavored markdown, excluding vendor files. `.rumdl.toml` disables line-length checks.
+- `rumdl`: Checks Markdown as GitHub-flavored markdown, excluding vendor files. `.rumdl.toml` disables line-length checks and leaves bare URLs as written.
 - `shellcheck`: Lints shell scripts (excluding Alfred and vendor files).
 - `shfmt`: Checks shell formatting (excluding Alfred and vendor files).
 - `tombi`: Checks TOML formatting (excluding Tuna's config).

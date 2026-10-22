@@ -91,6 +91,6 @@ abstraction is needed.
 
 ## References
 
-- Mise Go version files: <https://mise.jdx.dev/lang/go.html#go-version-files>
-- Mise directory selection: <https://mise.jdx.dev/dev-tools/>
-- Go toolchain selection: <https://go.dev/doc/toolchain>
+- Mise Go version files: https://mise.jdx.dev/lang/go.html#go-version-files
+- Mise directory selection: https://mise.jdx.dev/dev-tools/
+- Go toolchain selection: https://go.dev/doc/toolchain

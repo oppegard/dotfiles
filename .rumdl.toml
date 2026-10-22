@@ -3,6 +3,9 @@
 # MD013 (line length) is off. Plan and research notes use long sentences, and
 # reflow would rewrite them.
 #
+# MD034 (bare URLs) is off. GitHub-flavored markdown already autolinks a bare
+# https URL, so rumdl does not wrap one in angle brackets.
+#
 # Remaining per-file ignores are ones rumdl cannot fix, or should not rewrite:
 # MD025 on files/home/.codex/AGENTS.md (generated pstack heading) and MD057 on
 # the listed plan and research notes (links to paths outside this repository).
@@ -10,7 +13,7 @@
 
 [global]
 cache = false
-disable = ["MD013"]
+disable = ["MD013", "MD034"]
 exclude = ["vendor/**"]
 # GitHub-flavored markdown. rumdl accepts "gfm" as that flavor.
 flavor = "gfm"
