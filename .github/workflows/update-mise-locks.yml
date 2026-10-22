@@ -1,0 +1,82 @@
+name: Update mise locks
+
+on:
+  schedule:
+    - cron: "41 7 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: update-mise-locks
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Update mise locks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write # Push the lock update branch.
+      pull-requests: write # Create or update its pull request.
+      actions: write # Dispatch CI against the update branch.
+    env:
+      PR_BRANCH: automation/mise-locks
+    steps:
+      - name: Check out default branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up mise without installing tools
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
+        with:
+          install: false
+
+      - name: Update project and global locks
+        run: |
+          bash .github/scripts/update-mise-locks.sh
+          # git add must receive existing paths even when no tool needs sidecars.
+          mkdir -p .mise/locks files/home/.config/mise/locks
+
+      - name: Create or update lock pull request
+        id: pull-request
+        # Keep branch reconciliation and active PR outputs for dispatch retries.
+        # jactionlint ignore=superfluous-actions
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ github.token }}
+          branch: ${{ env.PR_BRANCH }}
+          base: ${{ github.event.repository.default_branch }}
+          commit-message: "chore(mise): update tool locks"
+          title: "chore(mise): update tool locks"
+          body: |
+            Refresh project and global mise locks within the configured version requests.
+
+            The updater dispatches lint and the full macOS and Linux integration suite against this branch.
+          add-paths: |
+            mise.lock
+            .mise/locks/
+            files/home/.config/mise/mise.lock
+            files/home/.config/mise/locks/
+
+      - name: Run CI on the active pull request head
+        if: ${{ steps.pull-request.outputs.pull-request-number != '' && steps.pull-request.outputs.pull-request-head-sha != '' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_HEAD_SHA: ${{ steps.pull-request.outputs.pull-request-head-sha }}
+        run: |
+          set -euo pipefail
+          branch_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$PR_BRANCH" --jq '.object.sha')
+          if [[ "$branch_sha" != "$PR_HEAD_SHA" ]]; then
+            echo "::error::Update branch no longer matches pull request head $PR_HEAD_SHA"
+            exit 1
+          fi
+          gh workflow run lint.yml --repo "$GITHUB_REPOSITORY" --ref "$PR_BRANCH"
+          gh workflow run integration-tests.yml --repo "$GITHUB_REPOSITORY" --ref "$PR_BRANCH"

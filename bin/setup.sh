@@ -25,7 +25,7 @@ git -C "$DOTFILES_DIR" push
 git -C "$DOTFILES_DIR" pull
 
 # Required before the first heading; setup may run from a shell without mise activation.
-mise -C "$MISE_CONFIG_DIR" install gum
+mise -C "$MISE_CONFIG_DIR" install --locked gum
 
 resolve_mise_env() {
   local mise_env="${MISE_ENV:-}"
@@ -77,11 +77,8 @@ mkdir -p \
 chmod 700 "$HOME/.ssh"
 
 gum_print "👨‍🍳 👨‍🍳 👨‍🍳  MISE BOOTSTRAP  👨‍🍳 👨‍🍳 👨‍🍳"
-mise -C "$MISE_CONFIG_DIR" bootstrap
+mise -C "$MISE_CONFIG_DIR" bootstrap --locked
 mise -C "$MISE_CONFIG_DIR" bootstrap packages upgrade --yes
-
-gum_print "⬆️ ⬆️ ⬆️  MISE UPGRADE  ⬆️ ⬆️ ⬆️"
-mise -C "$MISE_CONFIG_DIR" upgrade
 
 gum_print "🧹 🧹 🧹  MISE PRUNE  🧹 🧹 🧹"
 mise -C "$MISE_CONFIG_DIR" prune --tools --yes
