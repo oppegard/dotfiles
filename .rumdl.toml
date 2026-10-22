@@ -3,17 +3,17 @@
 # MD013 (line length) is off. Plan and research notes use long sentences, and
 # reflow would rewrite them.
 #
-# [per-file-ignores] is a baseline so the current tree passes without edits.
-# A follow-up should drop the fixable ignores and run `mise run lint-fix`:
-# MD012, MD022, MD034, and MD025 on README.md.
-# Keep MD025 on files/home/.codex/AGENTS.md. That second heading is the
-# generated pstack block. Keep MD057 on the listed plan and research notes.
-# Those links point outside this repository, and rumdl cannot fix them.
+# MD034 (bare URLs) is off. GitHub-flavored markdown already autolinks a bare
+# https URL, so rumdl does not wrap one in angle brackets.
+#
+# Remaining per-file ignores are ones rumdl cannot fix, or should not rewrite:
+# MD025 on files/home/.codex/AGENTS.md (generated pstack heading) and MD057 on
+# the listed plan and research notes (links to paths outside this repository).
 # Skill files satisfy MD041 through front-matter-title-pattern below.
 
 [global]
 cache = false
-disable = ["MD013"]
+disable = ["MD013", "MD034"]
 exclude = ["vendor/**"]
 # GitHub-flavored markdown. rumdl accepts "gfm" as that flavor.
 flavor = "gfm"
@@ -24,17 +24,7 @@ front-matter-title-pattern = "^(name|title):"
 
 
 [per-file-ignores]
-"AGENTS.md" = ["MD022"]
-"README.md" = ["MD025"]
-"docs/plans/20260929-pre-commit-secret-e2e.md" = ["MD012", "MD034", "MD057"]
-"docs/plans/20260929-promote-integration-go-module.md" = ["MD034"]
-"docs/plans/20260929-restore-integration-optional-and-pin-go.md" = ["MD034"]
-"docs/plans/20260930-return-casks-to-brewfile.md" = ["MD034"]
-"docs/plans/20261001-git-tab-completion-regression.md" = [
-  "MD012",
-  "MD034",
-  "MD057",
-]
+"docs/plans/20260929-pre-commit-secret-e2e.md" = ["MD057"]
+"docs/plans/20261001-git-tab-completion-regression.md" = ["MD057"]
 "docs/research/20260917-macos-27-menu-bar-order-automation.md" = ["MD057"]
 "files/home/.codex/AGENTS.md" = ["MD025"]
-"files/home/.codex/CODING_STANDARDS.md" = ["MD034"]

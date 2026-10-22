@@ -133,16 +133,16 @@ or `mise run betterdisplay:import` to apply it. Import asks for confirmation,
 saves the current full preferences to `/tmp`, preserves local display-specific
 preferences, and restarts BetterDisplay.
 
-# Resources
+## Resources
 
-## launchd
+### launchd
 
 Website explaining launchd, LaunchAgents, and LaunchDaemons: [https://www.launchd.info](https://www.launchd.info)
 
 [LaunchControl](https://www.soma-zone.com/LaunchControl/)
 > LaunchControl is a fully-featured launchd GUI allowing you to create, manage and debug system- and user services on your Mac
 
-## Third-Party Sites
+### Third-Party Sites
 
 - [Hard to discover tips and apps for making macOS pleasant](https://thume.ca/2020/09/04/macos-tips/)
 - [https://sourabhbajaj.com/mac-setup/](https://sourabhbajaj.com/mac-setup/)

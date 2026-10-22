@@ -22,7 +22,6 @@ refers to the installed [model-routing reference](/Users/glenn/.codex/plugins/ca
 7. If the design is contested, `interrogate` before shipping.
 8. Run **Opening a PR**.
 
-
 ## Proposed change
 
 Add a macOS-only Git completion check to the existing Go integration suite.

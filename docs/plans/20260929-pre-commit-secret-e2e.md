@@ -19,7 +19,6 @@ Date: 2026-09-29.
 7. If the design is contested, `interrogate` before shipping.
 8. Run **Opening a PR**.
 
-
 ## Outcome and scope
 
 Add a Linux GitHub Actions workflow that runs a Go 1.27 end-to-end test.
