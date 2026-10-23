@@ -5,6 +5,7 @@ min_version = "2026.10.17"
 idiomatic_version_file_enable_tools = ["go"]
 lockfile = true
 lockfile_platforms = ["linux-x64", "macos-arm64"]
+minimum_release_age = "7d"
 
 
 [tools]
@@ -12,6 +13,7 @@ gitleaks = "8.30.1"
 hk = { version = "latest", postinstall = "hk install --mise" }
 jactionlint = "2"
 rumdl = "latest"
+ruby = "4"
 shellcheck = "latest"
 shfmt = "latest"
 tombi = "latest"

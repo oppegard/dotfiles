@@ -18,7 +18,8 @@ mise install --locked
 ```
 
 To update a tool within its `mise.toml` request, regenerate the lock, then check
-and review the changes:
+and review the changes. The wait is `minimum_release_age` in `mise.toml`.
+A version locked inside that wait can move backward.
 
 ```sh
 mise lock --bump shellcheck
@@ -40,7 +41,9 @@ Bootstrap installs the versions in
 and macOS arm64. Mise links it to `~/.config/mise/mise.lock`; native dependency
 sidecars in the adjacent `locks/` directory stay in the checkout.
 
-After bootstrap, update one global tool within its `config.toml` request:
+After bootstrap, update one global tool within its `config.toml` request. The
+wait is `minimum_release_age` in that file. A version locked inside that wait
+can move backward. The same key is the global mise setting after bootstrap.
 
 ```sh
 mise lock --global --bump shellcheck
@@ -54,6 +57,35 @@ Use `mise lock --global` to refresh metadata without changing locked versions.
 Commit the global config, lock, and generated sidecars together when applicable.
 Keep sidecars as generated; the lock verifies their content digest.
 `bin/setup.sh` still performs deliberate tool upgrades.
+
+## Update locks on a schedule
+
+The `Update mise locks` workflow opens a pull request for `mise.lock` and
+`files/home/.config/mise/mise.lock`. It reads `minimum_release_age` from each
+config and locks a version only when that resolution is newer than the
+committed lock. A prefix request such as `2` or `1.27` stays
+inside that prefix. Mise does not refuse a major bump of a `latest` or `lts`
+request, and this workflow does not add a filter for one. The workflow sets
+`MISE_SAFE=1`. Safe mode hides the Go version read from `go.mod`, so the job
+does not bump that pin. After changing `go.mod`, run `mise lock` yourself. A
+run that only finds versions inside the age window does not open a pull
+request, because no lock file changes. The table lists a tool only when its
+locked version changes. Pending is a newer release still inside the age
+window on that same row, and the column is omitted when no row has one.
+
+Set repository secrets `MISE_LOCKS_APP_ID` and `MISE_LOCKS_APP_PRIVATE_KEY`
+when pull request checks should start on their own. The workflow passes the
+app id to `actions/create-github-app-token`. That input is deprecated in favor
+of `client-id`. Without the secrets, the workflow uses `GITHUB_TOKEN` and
+dispatches `lint.yml` and `integration-tests.yml`.
+
+Set repository variable `MISE_LOCKS_AUTOMERGE` to `true` to turn on auto-merge
+for the lock pull request. Leave the variable unset to keep auto-merge off.
+Auto-merge cannot skip a major bump of a `latest` or `lts` tool. Allow
+auto-merge in the repository settings, and require the checks `Lint`,
+`Integration test (macos-latest)`, and `Integration test (ubuntu-26.04)`.
+If more than one merge method is allowed, `gh pr merge --auto` will not pick
+one, so allow a single method before turning the variable on.
 
 ## Integration tests
 

@@ -18,3 +18,7 @@ These are my dotfiles. See @README.md.
 - `tombi`: Checks TOML formatting (excluding Tuna's config).
 - `trailing_whitespace`: Checks trailing whitespace.
 - `yamlfmt`: Checks YAML formatting.
+
+## Mise Use
+
+Mise evolves quickly: check for the latest features and options at https://mise.jdx.dev/. Whenever possible, encode mise's own settings into its `config.toml` ([reference](https://mise.jdx.dev/configuration/settings.html)); reserve the use of `MISE_` env vars for special case override scenarios.
