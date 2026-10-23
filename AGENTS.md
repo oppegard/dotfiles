@@ -19,24 +19,6 @@ These are my dotfiles. See @README.md.
 - `trailing_whitespace`: Checks trailing whitespace.
 - `yamlfmt`: Checks YAML formatting.
 
-## Mise lock age
+## Mise Use
 
-`minimum_release_age = "7d"` in `mise.toml` and
-`files/home/.config/mise/config.toml` is the wait before a new release can be
-locked. Change the wait in those files. The GitHub workflow does not have its
-own age.
-
-`mise install --locked` keeps versions already in the lock. `mise lock --bump`
-and `mise upgrade` use the wait. A tool option named `minimum_release_age`
-overrides the setting for that tool.
-
-The nightly job sets `MISE_SAFE=1`. Safe mode ignores project settings, so the
-job reads `settings.minimum_release_age` from each file and exports
-`MISE_MINIMUM_RELEASE_AGE` for that lock. The pending probe and
-`emergency_tool` pass `--minimum-release-age 0s`, which overrides the setting
-and any tool option.
-
-A local `mise lock --bump` can move a locked version backward when that
-version is still inside the wait. The nightly job refuses that move. Review
-the diff. The key in `files/home/.config/mise/config.toml` is the global mise
-setting after bootstrap. Other projects inherit it unless they set their own.
+Mise evolves quickly: check for the latest features and options at https://mise.jdx.dev/. Whenever possible, encode mise's own settings into its `config.toml` ([reference](https://mise.jdx.dev/configuration/settings.html)); reserve the use of `MISE_` env vars for special case override scenarios.
