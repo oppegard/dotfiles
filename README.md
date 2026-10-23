@@ -63,7 +63,11 @@ The `Update mise locks` workflow opens a pull request for `mise.lock` and
 `--minimum-release-age 7d` and locks a version only when that resolution is
 newer than the committed lock. A prefix request such as `2` or `1.27` stays
 inside that prefix. Mise does not refuse a major bump of a `latest` or `lts`
-request, and this workflow does not add a filter for one.
+request, and this workflow does not add a filter for one. The workflow sets
+`MISE_SAFE=1`. Safe mode hides the Go version read from `go.mod`, so the job
+does not bump that pin. After changing `go.mod`, run `mise lock` yourself. A
+run that only finds versions inside the age window does not open a pull
+request, because no lock file changes.
 
 To bypass the age window for one tool, run the workflow and set
 `emergency_tool` to that tool's name. The run passes

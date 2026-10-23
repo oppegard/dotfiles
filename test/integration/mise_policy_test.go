@@ -294,6 +294,7 @@ fi
 				"Mise does not refuse a major bump of a `latest` or `lts` request.",
 				"This job does not add a major filter.",
 				"The updater does not roll a locked version backward when that version is still inside the age window.",
+				"MISE_SAFE=1 hides an idiomatic Go pin, so this job does not bump it.",
 				"https://github.com/jdx/hk/releases",
 				"https://github.com/rhysd/actionlint/releases",
 			} {

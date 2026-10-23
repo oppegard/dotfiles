@@ -216,6 +216,7 @@ def render(plans, age, emergency_tool):
             "This job does not add a major filter.",
             "",
             "The updater does not roll a locked version backward when that version is still inside the age window.",
+            "MISE_SAFE=1 hides an idiomatic Go pin, so this job does not bump it.",
         ]
     )
     if emergency_tool:
