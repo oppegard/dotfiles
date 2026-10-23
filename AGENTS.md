@@ -35,3 +35,8 @@ job reads `settings.minimum_release_age` from each file and exports
 `MISE_MINIMUM_RELEASE_AGE` for that lock. The pending probe and
 `emergency_tool` pass `--minimum-release-age 0s`, which overrides the setting
 and any tool option.
+
+A local `mise lock --bump` can move a locked version backward when that
+version is still inside the wait. The nightly job refuses that move. Review
+the diff. The key in `files/home/.config/mise/config.toml` is the global mise
+setting after bootstrap. Other projects inherit it unless they set their own.

@@ -19,6 +19,7 @@ mise install --locked
 
 To update a tool within its `mise.toml` request, regenerate the lock, then check
 and review the changes. The wait is `minimum_release_age` in `mise.toml`.
+A version locked inside that wait can move backward.
 
 ```sh
 mise lock --bump shellcheck
@@ -41,7 +42,8 @@ and macOS arm64. Mise links it to `~/.config/mise/mise.lock`; native dependency
 sidecars in the adjacent `locks/` directory stay in the checkout.
 
 After bootstrap, update one global tool within its `config.toml` request. The
-wait is `minimum_release_age` in that file.
+wait is `minimum_release_age` in that file. A version locked inside that wait
+can move backward. The same key is the global mise setting after bootstrap.
 
 ```sh
 mise lock --global --bump shellcheck
