@@ -234,13 +234,15 @@ fi
   {"name":"go","backend":"core:go","old_versions":["1.27.1"],"new_versions":[]},
   {"name":"ref","backend":"core:ref","old_versions":["main"],"new_versions":["next"]},
   {"name":"bun","backend":"core:bun","old_versions":["1.4.3"],"new_versions":["1.4.4"]},
-  {"name":"ruby","backend":"core:ruby","old_versions":["3.4.1"],"new_versions":["4.0.0"]}
+  {"name":"ruby","backend":"core:ruby","old_versions":["3.4.1"],"new_versions":["4.0.0"]},
+  {"name":"shellcheck","backend":"github:koalaman/shellcheck","old_versions":["0.10.0"],"new_versions":["0.11.0"]}
 ]`,
 		"project-0s.json": `[
   {"name":"bun","backend":"core:bun","old_versions":["1.4.3"],"new_versions":["1.4.5"]},
   {"name":"hk","backend":"github:jdx/hk","old_versions":["2.7.0"],"new_versions":["2.8.1"]},
   {"name":"ruby","backend":"core:ruby","old_versions":["3.4.1"],"new_versions":["4.0.0"]},
-  {"name":"jactionlint","backend":"github:rhysd/actionlint","old_versions":["2.2.0"],"new_versions":["2.3.0"]}
+  {"name":"jactionlint","backend":"github:rhysd/actionlint","old_versions":["2.2.0"],"new_versions":["2.3.0"]},
+  {"name":"shellcheck","backend":"github:koalaman/shellcheck","old_versions":["0.10.0"],"new_versions":["0.11.1"]}
 ]`,
 		"global-7d.json": `[
   {"name":"node","backend":"core:node","old_versions":["24.22.1"],"new_versions":["24.22.0"]}
@@ -281,7 +283,8 @@ fi
 				"global lock --global --bump --dry-run --json\n" +
 				"global lock --global --bump --dry-run --json --minimum-release-age 0s\n" +
 				"project lock --bump --json bun\n" +
-				"project lock --bump --json ruby\n"
+				"project lock --bump --json ruby\n" +
+				"project lock --bump --json shellcheck\n"
 			if emergency == "hk" {
 				want += "project lock --bump --json --minimum-release-age 0s hk\n"
 				want += "global lock --global --bump --json --minimum-release-age 0s hk\n"
@@ -292,7 +295,7 @@ fi
 			titleText := readPolicyLog(t, title)
 			bodyText := readPolicyLog(t, body)
 			if emergency == "hk" {
-				if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0 (+1)\n" {
+				if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0 (+2)\n" {
 					t.Fatalf("title = %q", titleText)
 				}
 				if !strings.Contains(bodyText, "Emergency bump for `hk` uses `--minimum-release-age 0s`.") {
@@ -307,13 +310,16 @@ fi
 				if !strings.Contains(bodyText, "- [hk 2.8.1](https://github.com/jdx/hk/releases) (Project, Global)") {
 					t.Fatalf("body omitted the adopted hk release:\n%s", bodyText)
 				}
-			} else if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0\n" {
+			} else if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0 (+1)\n" {
 				t.Fatalf("title = %q", titleText)
 			}
+			if !strings.Contains(bodyText, "| [shellcheck](https://github.com/koalaman/shellcheck) | tools | minor | `0.10.0` → `0.11.0` | `0.11.1` | Project |") {
+				t.Fatalf("body omitted the shellcheck row:\n%s", bodyText)
+			}
+			if !strings.Contains(bodyText, "- [shellcheck 0.11.0](https://github.com/koalaman/shellcheck/releases) (Project)") {
+				t.Fatalf("body linked the pending shellcheck release:\n%s", bodyText)
+			}
 			if emergency == "" {
-				if strings.Contains(bodyText, "### Release notes") {
-					t.Fatalf("body linked a pending release:\n%s", bodyText)
-				}
 				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.0` | `2.8.1` | Project |") {
 					t.Fatalf("body merged hk rows that differ:\n%s", bodyText)
 				}
@@ -338,7 +344,7 @@ fi
 					t.Fatalf("body omitted %q:\n%s", want, bodyText)
 				}
 			}
-			for _, absent := range []string{"| rumdl |", "| go |", "| node |", "| ref |", "https://github.com/rhysd/actionlint/releases"} {
+			for _, absent := range []string{"| rumdl |", "| go |", "| node |", "| ref |", "https://github.com/rhysd/actionlint/releases", "shellcheck 0.11.1"} {
 				if strings.Contains(bodyText, absent) {
 					t.Fatalf("body kept %q:\n%s", absent, bodyText)
 				}
