@@ -79,6 +79,9 @@ mode = "symlink-each"
 "~/.codex/CODING_STANDARDS.md" = "~/.dotfiles/files/home/.codex/CODING_STANDARDS.md"
 "~/.codex/pstack-models.md" = "~/.dotfiles/files/home/.codex/pstack-models.md"
 
+"~/.agents/skills/pr-description-skill-claude" = "~/.dotfiles/files/home/.agents/skills/pr-description-skill-claude"
+"~/.claude/skills/pr-description-skill-claude" = "~/.dotfiles/files/home/.agents/skills/pr-description-skill-claude"
+
 "~/.bash_profile" = "~/.dotfiles/files/home/.bash_profile"
 "~/.bashrc" = "~/.dotfiles/files/home/.bashrc"
 "~/.bunfig.toml" = "~/.dotfiles/files/home/.bunfig.toml"
