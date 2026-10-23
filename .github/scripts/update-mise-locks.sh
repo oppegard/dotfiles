@@ -17,12 +17,7 @@ export MISE_AUTO_ENV=false
 export MISE_ENV=home
 export MISE_SAFE=1
 
-emergency="${MISE_LOCK_EMERGENCY_TOOL:-}"
 planner="$REPO_DIR/.github/scripts/mise_lock_plan.rb"
-if [[ -n "$emergency" && ! "$emergency" =~ ^[A-Za-z0-9._:@/-]+$ ]]; then
-  echo "updater refused emergency tool name" >&2
-  exit 2
-fi
 
 config_age() {
   local file=$1
@@ -64,8 +59,6 @@ detect_scope() {
     --scope "$scope" \
     --aged "$aged" \
     --fresh "$fresh" \
-    --age "$release_age" \
-    --emergency-tool "$emergency" \
     --out "$plan" >"$writes"
 }
 
@@ -75,27 +68,18 @@ apply_scope() {
   local global_flag=$3
   local release_age=$4
   local writes="$TEMP_DIR/$scope-writes.txt"
-  local line tool write_age
+  local tool
 
   if [[ "${MISE_LOCK_DRY_RUN:-}" == 1 ]]; then
     return
   fi
-  while IFS= read -r line; do
-    [[ -n "$line" ]] || continue
-    tool="${line%% *}"
-    write_age="${line#* }"
-    if [[ "$tool" == "$line" || ! "$tool" =~ ^[A-Za-z0-9._:@/-]+$ ]]; then
+  while IFS= read -r tool; do
+    [[ -n "$tool" ]] || continue
+    if [[ ! "$tool" =~ ^[A-Za-z0-9._:@/-]+$ ]]; then
       echo "updater refused tool name" >&2
       exit 2
     fi
-    if [[ "$write_age" == 0s ]]; then
-      mise_lock "$config_dir" "$global_flag" "$release_age" --bump --json --minimum-release-age 0s "$tool"
-    elif [[ "$write_age" == "$release_age" ]]; then
-      mise_lock "$config_dir" "$global_flag" "$release_age" --bump --json "$tool"
-    else
-      echo "updater refused release age" >&2
-      exit 2
-    fi
+    mise_lock "$config_dir" "$global_flag" "$release_age" --bump --json "$tool"
   done <"$writes"
 }
 
@@ -104,10 +88,6 @@ project_age="$(config_age "$REPO_DIR/mise.toml")" || exit
 global_age="$(config_age "$REPO_DIR/files/home/.config/mise/config.toml")" || exit
 detect_scope project "$TEMP_DIR/global" "" "$project_age"
 detect_scope global "$REPO_DIR/files/home/.config/mise" --global "$global_age"
-if [[ -n "$emergency" ]] && ! grep -F -x -q -- "$emergency 0s" "$TEMP_DIR/project-writes.txt" "$TEMP_DIR/global-writes.txt"; then
-  echo "updater did not adopt emergency tool $emergency" >&2
-  exit 2
-fi
 apply_scope project "$TEMP_DIR/global" "" "$project_age"
 apply_scope global "$REPO_DIR/files/home/.config/mise" --global "$global_age"
 
@@ -123,7 +103,6 @@ ruby "$planner" render \
   --plan "$TEMP_DIR/project-plan.json" \
   --plan "$TEMP_DIR/global-plan.json" \
   --age "$report_age" \
-  --emergency-tool "$emergency" \
   --title-file "$title_file" \
   --body-file "$body_file"
 cat "$title_file" "$body_file"

@@ -252,102 +252,70 @@ fi
   {"name":"jactionlint","backend":"github:rhysd/actionlint","old_versions":["2.2.0"],"new_versions":["2.3.0"]}
 ]`,
 	}
-	for _, emergency := range []string{"", "hk"} {
-		name := "adopt"
-		if emergency != "" {
-			name = "emergency"
+	t.Run("adopt", func(t *testing.T) {
+		temp, repo, bin := prepareLockUpdate(t, stub)
+		for file, contents := range fixtures {
+			writePolicyFixture(t, filepath.Join(temp, file), contents)
 		}
-		t.Run(name, func(t *testing.T) {
-			temp, repo, bin := prepareLockUpdate(t, stub)
-			for file, contents := range fixtures {
-				writePolicyFixture(t, filepath.Join(temp, file), contents)
+		title := filepath.Join(temp, "title.txt")
+		body := filepath.Join(temp, "body.md")
+		extra := []string{
+			"FIXTURE_DIR=" + temp,
+			"MISE_LOCK_PR_TITLE_FILE=" + title,
+			"MISE_LOCK_PR_BODY_FILE=" + body,
+		}
+		cmd := lockUpdateCommand(t, temp, repo, bin, extra...)
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			t.Fatalf("updater failed: %v\n%s", err, output)
+		}
+		want := "" +
+			"project lock --bump --dry-run --json\n" +
+			"project lock --bump --dry-run --json --minimum-release-age 0s\n" +
+			"global lock --global --bump --dry-run --json\n" +
+			"global lock --global --bump --dry-run --json --minimum-release-age 0s\n" +
+			"project lock --bump --json bun\n" +
+			"project lock --bump --json ruby\n" +
+			"project lock --bump --json shellcheck\n"
+		if commands := readPolicyLog(t, filepath.Join(temp, "commands")); commands != want {
+			t.Fatalf("lock commands = %q, want %q:\n%s", commands, want, output)
+		}
+		titleText := readPolicyLog(t, title)
+		bodyText := readPolicyLog(t, body)
+		if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0 (+1)\n" {
+			t.Fatalf("title = %q", titleText)
+		}
+		if !strings.Contains(bodyText, "| [shellcheck](https://github.com/koalaman/shellcheck) | tools | minor | `0.10.0` → `0.11.0` | `0.11.1` | Project |") {
+			t.Fatalf("body omitted the shellcheck row:\n%s", bodyText)
+		}
+		if !strings.Contains(bodyText, "- [shellcheck 0.11.0](https://github.com/koalaman/shellcheck/releases) (Project)") {
+			t.Fatalf("body linked the pending shellcheck release:\n%s", bodyText)
+		}
+		for _, want := range []string{
+			"| Package | Type | Update | Change | Pending | Scope |",
+			"|---|---|---|---|---|---|",
+			"| bun | tools | patch | `1.4.3` → `1.4.4` | `1.4.5` | Project |",
+			"| ruby | tools | major | `3.4.1` → `4.0.0` |  | Project |",
+			"| [shellcheck](https://github.com/koalaman/shellcheck) | tools | minor | `0.10.0` → `0.11.0` | `0.11.1` | Project |",
+			"Mise does not refuse a major bump of a `latest` or `lts` request.",
+			"This job does not add a major filter.",
+			"The updater does not roll a locked version backward when that version is still inside the age window.",
+			"MISE_SAFE=1 hides an idiomatic Go pin, so this job does not bump it.",
+			"The age window is `7d` from `minimum_release_age`.",
+			"Release notes name the version this pull request locks.",
+		} {
+			if !strings.Contains(bodyText, want) {
+				t.Fatalf("body omitted %q:\n%s", want, bodyText)
 			}
-			title := filepath.Join(temp, "title.txt")
-			body := filepath.Join(temp, "body.md")
-			extra := []string{
-				"FIXTURE_DIR=" + temp,
-				"MISE_LOCK_PR_TITLE_FILE=" + title,
-				"MISE_LOCK_PR_BODY_FILE=" + body,
+		}
+		absent := []string{"| rumdl |", "| go |", "| node |", "| ref |", "| [jactionlint]", "| [hk]", "https://github.com/rhysd/actionlint/releases", "shellcheck 0.11.1"}
+		for _, absent := range absent {
+			if strings.Contains(bodyText, absent) {
+				t.Fatalf("body kept %q:\n%s", absent, bodyText)
 			}
-			if emergency != "" {
-				extra = append(extra, "MISE_LOCK_EMERGENCY_TOOL="+emergency)
-			}
-			cmd := lockUpdateCommand(t, temp, repo, bin, extra...)
-			output, err := cmd.CombinedOutput()
-			if err != nil {
-				t.Fatalf("updater failed: %v\n%s", err, output)
-			}
-			want := "" +
-				"project lock --bump --dry-run --json\n" +
-				"project lock --bump --dry-run --json --minimum-release-age 0s\n" +
-				"global lock --global --bump --dry-run --json\n" +
-				"global lock --global --bump --dry-run --json --minimum-release-age 0s\n" +
-				"project lock --bump --json bun\n" +
-				"project lock --bump --json ruby\n" +
-				"project lock --bump --json shellcheck\n"
-			if emergency == "hk" {
-				want += "project lock --bump --json --minimum-release-age 0s hk\n"
-				want += "global lock --global --bump --json --minimum-release-age 0s hk\n"
-			}
-			if commands := readPolicyLog(t, filepath.Join(temp, "commands")); commands != want {
-				t.Fatalf("lock commands = %q, want %q:\n%s", commands, want, output)
-			}
-			titleText := readPolicyLog(t, title)
-			bodyText := readPolicyLog(t, body)
-			if emergency == "hk" {
-				if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0 (+2)\n" {
-					t.Fatalf("title = %q", titleText)
-				}
-				if !strings.Contains(bodyText, "Emergency bump for `hk` uses `--minimum-release-age 0s`.") {
-					t.Fatalf("body omitted the emergency line:\n%s", bodyText)
-				}
-				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.0` → `2.8.1` |  | Project |") {
-					t.Fatalf("body omitted the emergency hk row:\n%s", bodyText)
-				}
-				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.1` → `2.8.1` |  | Global |") {
-					t.Fatalf("body omitted the global emergency hk row:\n%s", bodyText)
-				}
-				if !strings.Contains(bodyText, "- [hk 2.8.1](https://github.com/jdx/hk/releases) (Project, Global)") {
-					t.Fatalf("body omitted the adopted hk release:\n%s", bodyText)
-				}
-			} else if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0 (+1)\n" {
-				t.Fatalf("title = %q", titleText)
-			}
-			if !strings.Contains(bodyText, "| [shellcheck](https://github.com/koalaman/shellcheck) | tools | minor | `0.10.0` → `0.11.0` | `0.11.1` | Project |") {
-				t.Fatalf("body omitted the shellcheck row:\n%s", bodyText)
-			}
-			if !strings.Contains(bodyText, "- [shellcheck 0.11.0](https://github.com/koalaman/shellcheck/releases) (Project)") {
-				t.Fatalf("body linked the pending shellcheck release:\n%s", bodyText)
-			}
-			for _, want := range []string{
-				"| Package | Type | Update | Change | Pending | Scope |",
-				"|---|---|---|---|---|---|",
-				"| bun | tools | patch | `1.4.3` → `1.4.4` | `1.4.5` | Project |",
-				"| ruby | tools | major | `3.4.1` → `4.0.0` |  | Project |",
-				"| [shellcheck](https://github.com/koalaman/shellcheck) | tools | minor | `0.10.0` → `0.11.0` | `0.11.1` | Project |",
-				"Mise does not refuse a major bump of a `latest` or `lts` request.",
-				"This job does not add a major filter.",
-				"The updater does not roll a locked version backward when that version is still inside the age window.",
-				"MISE_SAFE=1 hides an idiomatic Go pin, so this job does not bump it.",
-				"The age window is `7d` from `minimum_release_age`.",
-				"Release notes name the version this pull request locks.",
-			} {
-				if !strings.Contains(bodyText, want) {
-					t.Fatalf("body omitted %q:\n%s", want, bodyText)
-				}
-			}
-			absent := []string{"| rumdl |", "| go |", "| node |", "| ref |", "| [jactionlint]", "https://github.com/rhysd/actionlint/releases", "shellcheck 0.11.1"}
-			if emergency == "" {
-				absent = append(absent, "| [hk]")
-			}
-			for _, absent := range absent {
-				if strings.Contains(bodyText, absent) {
-					t.Fatalf("body kept %q:\n%s", absent, bodyText)
-				}
-			}
-			assertLockTempCleaned(t, temp)
-		})
-	}
+		}
+		assertLockTempCleaned(t, temp)
+	})
 
 	t.Run("dry-run", func(t *testing.T) {
 		temp, repo, bin := prepareLockUpdate(t, stub)
@@ -405,40 +373,4 @@ fi
 		}
 		assertLockTempCleaned(t, temp)
 	})
-
-	t.Run("missing-emergency", func(t *testing.T) {
-		temp, repo, bin := prepareLockUpdate(t, stub)
-		for file, contents := range fixtures {
-			writePolicyFixture(t, filepath.Join(temp, file), contents)
-		}
-		cmd := lockUpdateCommand(t, temp, repo, bin, "FIXTURE_DIR="+temp, "MISE_LOCK_EMERGENCY_TOOL=not-a-tool")
-		output, err := cmd.CombinedOutput()
-		if err == nil {
-			t.Fatalf("updater adopted a missing emergency tool:\n%s", output)
-		}
-		if !strings.Contains(string(output), "updater did not adopt emergency tool not-a-tool") {
-			t.Fatalf("updater failure was not the missing tool:\n%s", output)
-		}
-		for _, line := range strings.Split(readPolicyLog(t, filepath.Join(temp, "commands")), "\n") {
-			if line != "" && !strings.Contains(line, "--dry-run") {
-				t.Fatalf("missed emergency tool still wrote a lock: %q\n%s", line, output)
-			}
-		}
-		assertLockTempCleaned(t, temp)
-	})
-}
-
-func TestMiseLockUpdateRejectsEmergencyName(t *testing.T) {
-	temp, repo, bin := prepareLockUpdate(t, miseLockStubPrefix+"exit 1\n")
-	cmd := lockUpdateCommand(t, temp, repo, bin, "MISE_LOCK_EMERGENCY_TOOL=hk;touch")
-	output, err := cmd.CombinedOutput()
-	if err == nil {
-		t.Fatalf("updater accepted an emergency tool name:\n%s", output)
-	}
-	if !strings.Contains(string(output), "updater refused emergency tool name") {
-		t.Fatalf("updater failure was not the name check:\n%s", output)
-	}
-	if _, err := os.Stat(filepath.Join(temp, "commands")); !os.IsNotExist(err) {
-		t.Fatalf("rejected emergency tool still invoked mise: %v", err)
-	}
 }

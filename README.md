@@ -73,11 +73,6 @@ request, because no lock file changes. The table lists a tool only when its
 locked version changes. Pending is a newer release still inside the age
 window on that same row, and the column is omitted when no row has one.
 
-To bypass the age window for one tool, run the workflow and set
-`emergency_tool` to that tool's name. The run passes
-`--minimum-release-age 0s` for that name only. If that name is not adopted,
-the run fails before it writes a lock.
-
 Set repository secrets `MISE_LOCKS_APP_ID` and `MISE_LOCKS_APP_PRIVATE_KEY`
 when pull request checks should start on their own. The workflow passes the
 app id to `actions/create-github-app-token`. That input is deprecated in favor

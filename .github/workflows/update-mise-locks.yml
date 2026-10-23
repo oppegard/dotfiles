@@ -4,11 +4,6 @@ on:
   schedule:
     - cron: "41 7 * * *"
   workflow_dispatch:
-    inputs:
-      emergency_tool:
-        description: Tool name that bypasses minimum_release_age
-        required: false
-        type: string
 
 permissions: {}
 
@@ -66,7 +61,6 @@ jobs:
 
       - name: Update project and global locks
         env:
-          MISE_LOCK_EMERGENCY_TOOL: ${{ github.event_name == 'workflow_dispatch' && inputs.emergency_tool || '' }}
           MISE_LOCK_PR_TITLE_FILE: ${{ runner.temp }}/mise-lock-title.txt
           MISE_LOCK_PR_BODY_FILE: ${{ runner.temp }}/mise-lock-body.md
         run: |

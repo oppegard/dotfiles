@@ -88,35 +88,21 @@ def index_changes(changes)
   indexed
 end
 
-def plan_scope(scope, aged, fresh, emergency_tool, age)
+def plan_scope(scope, aged, fresh)
   aged_by_name = index_changes(aged)
   fresh_by_name = index_changes(fresh)
-  names = aged_by_name.keys
-  if !emergency_tool.empty? && fresh_by_name[emergency_tool] && !aged_by_name[emergency_tool]
-    names += [emergency_tool]
-  end
   rows = []
-  names.each do |name|
+  aged_by_name.each_key do |name|
     aged_change = aged_by_name[name]
     fresh_change = fresh_by_name[name]
-    source = aged_change || fresh_change
-    old = source["old"]
-    backend = source["backend"]
+    old = aged_change["old"]
+    backend = aged_change["backend"]
     fresh_new = fresh_change && fresh_change["new"]
-    aged_new = aged_change && aged_change["new"]
-    adopted = nil
-    write_age = ""
-    if !emergency_tool.empty? && name == emergency_tool && fresh_new && list_is_forward(old, fresh_new) == true
-      adopted = fresh_new
-      write_age = "0s"
-    elsif aged_new && list_is_forward(old, aged_new) == true
-      adopted = aged_new
-      write_age = age
-    end
-    next if adopted.nil?
+    aged_new = aged_change["new"]
+    next unless aged_new && list_is_forward(old, aged_new) == true
 
     pending = nil
-    if fresh_new && fresh_new != adopted && list_is_forward(adopted, fresh_new) == true
+    if fresh_new && fresh_new != aged_new && list_is_forward(aged_new, fresh_new) == true
       pending = fresh_new
     end
     rows << {
@@ -124,10 +110,9 @@ def plan_scope(scope, aged, fresh, emergency_tool, age)
       "name" => name,
       "backend" => backend,
       "old" => old,
-      "adopted" => adopted,
+      "adopted" => aged_new,
       "pending" => pending || [],
-      "update" => update_kind(old, adopted),
-      "age" => write_age,
+      "update" => update_kind(old, aged_new),
     }
   end
   { "scope" => scope, "rows" => rows }
@@ -221,7 +206,7 @@ def table_row(row, show_pending)
   "| #{cells.join(" | ")} |"
 end
 
-def render(plans, age, emergency_tool)
+def render(plans, age)
   rows = combine_rows(plans.flat_map { |plan| plan["rows"] })
   show_pending = rows.any? { |row| !row["pending"].empty? }
   if show_pending
@@ -255,12 +240,6 @@ def render(plans, age, emergency_tool)
     "The updater does not roll a locked version backward when that version is still inside the age window.",
     "MISE_SAFE=1 hides an idiomatic Go pin, so this job does not bump it.",
   ]
-  unless emergency_tool.empty?
-    lines += [
-      "",
-      "Emergency bump for `#{emergency_tool}` uses `--minimum-release-age 0s`.",
-    ]
-  end
   entries = []
   seen = {}
   rows.each do |row|
@@ -309,36 +288,31 @@ def require_option(options, key)
 end
 
 def command_plan(argv)
-  options = { emergency_tool: "" }
+  options = {}
   parser = OptionParser.new do |opts|
     opts.on("--scope SCOPE") { |value| options[:scope] = value }
     opts.on("--aged PATH") { |value| options[:aged] = value }
     opts.on("--fresh PATH") { |value| options[:fresh] = value }
-    opts.on("--age AGE") { |value| options[:age] = value }
-    opts.on("--emergency-tool TOOL") { |value| options[:emergency_tool] = value }
     opts.on("--out PATH") { |value| options[:out] = value }
   end
   parser.parse!(argv)
-  %i[scope aged fresh age out].each { |key| require_option(options, key) }
+  %i[scope aged fresh out].each { |key| require_option(options, key) }
   plan = plan_scope(
     options[:scope],
     read_changes(options[:aged]),
-    read_changes(options[:fresh]),
-    options[:emergency_tool],
-    options[:age]
+    read_changes(options[:fresh])
   )
   File.write(options[:out], JSON.generate(plan))
   plan["rows"].each do |row|
-    puts "#{row["name"]} #{row["age"]}"
+    puts row["name"]
   end
 end
 
 def command_render(argv)
-  options = { plans: [], emergency_tool: "" }
+  options = { plans: [] }
   parser = OptionParser.new do |opts|
     opts.on("--plan PATH") { |value| options[:plans] << value }
     opts.on("--age AGE") { |value| options[:age] = value }
-    opts.on("--emergency-tool TOOL") { |value| options[:emergency_tool] = value }
     opts.on("--title-file PATH") { |value| options[:title_file] = value }
     opts.on("--body-file PATH") { |value| options[:body_file] = value }
   end
@@ -346,7 +320,7 @@ def command_render(argv)
   abort "missing --plan" if options[:plans].empty?
   %i[age title_file body_file].each { |key| require_option(options, key) }
   plans = options[:plans].map { |path| JSON.parse(File.read(path)) }
-  title, body = render(plans, options[:age], options[:emergency_tool])
+  title, body = render(plans, options[:age])
   File.write(options[:title_file], "#{title}\n")
   File.write(options[:body_file], body)
 end
