@@ -18,7 +18,7 @@ export MISE_ENV=home
 export MISE_SAFE=1
 
 emergency="${MISE_LOCK_EMERGENCY_TOOL:-}"
-planner="$REPO_DIR/.github/scripts/mise_lock_plan.py"
+planner="$REPO_DIR/.github/scripts/mise_lock_plan.rb"
 if [[ -n "$emergency" && ! "$emergency" =~ ^[A-Za-z0-9._:@/-]+$ ]]; then
   echo "updater refused emergency tool name" >&2
   exit 2
@@ -60,7 +60,7 @@ detect_scope() {
 
   mise_lock "$config_dir" "$global_flag" "$release_age" --bump --dry-run --json >"$aged"
   mise_lock "$config_dir" "$global_flag" "$release_age" --bump --dry-run --json --minimum-release-age 0s >"$fresh"
-  python3 "$planner" plan \
+  ruby "$planner" plan \
     --scope "$scope" \
     --aged "$aged" \
     --fresh "$fresh" \
@@ -119,7 +119,7 @@ fi
 
 title_file="${MISE_LOCK_PR_TITLE_FILE:-$TEMP_DIR/title.txt}"
 body_file="${MISE_LOCK_PR_BODY_FILE:-$TEMP_DIR/body.md}"
-python3 "$planner" render \
+ruby "$planner" render \
   --plan "$TEMP_DIR/project-plan.json" \
   --plan "$TEMP_DIR/global-plan.json" \
   --age "$report_age" \

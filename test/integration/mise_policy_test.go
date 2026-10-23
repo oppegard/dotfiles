@@ -77,7 +77,7 @@ printf 'mise %s\n' "$*" >> "$HOME/commands"
 	}
 }
 
-const miseLockUpdateFiles = ".github/scripts/update-mise-locks.sh\x00.github/scripts/mise_lock_plan.py\x00mise.toml\x00files/home/.config/mise/config.toml\x00files/home/.config/mise/config.home.toml\x00"
+const miseLockUpdateFiles = ".github/scripts/update-mise-locks.sh\x00.github/scripts/mise_lock_plan.rb\x00mise.toml\x00files/home/.config/mise/config.toml\x00files/home/.config/mise/config.home.toml\x00"
 
 const miseLockStubPrefix = `#!/bin/bash
 set -euo pipefail
@@ -295,16 +295,18 @@ fi
 				if !strings.Contains(bodyText, "Emergency bump for `hk` uses `--minimum-release-age 0s`.") {
 					t.Fatalf("body omitted the emergency line:\n%s", bodyText)
 				}
-				if !strings.Contains(bodyText, "| hk | tools | minor | `2.7.0` → `2.8.1` |  | project |") {
+				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.0` → `2.8.1` |  |") {
 					t.Fatalf("body omitted the emergency hk row:\n%s", bodyText)
 				}
 			} else if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0\n" {
 				t.Fatalf("title = %q", titleText)
 			}
 			for _, want := range []string{
-				"| bun | tools | patch | `1.4.3` → `1.4.4` | `1.4.5` | project |",
-				"| ruby | tools | major | `3.4.1` → `4.0.0` |  | project |",
-				"| jactionlint | tools | minor | `2.2.0` | `2.3.0` | global |",
+				"| Package | Type | Update | Change | Pending |",
+				"|---|---|---|---|---|",
+				"| bun | tools | patch | `1.4.3` → `1.4.4` | `1.4.5` |",
+				"| ruby | tools | major | `3.4.1` → `4.0.0` |  |",
+				"| [jactionlint](https://github.com/rhysd/actionlint) | tools | minor | `2.2.0` | `2.3.0` |",
 				"Mise does not refuse a major bump of a `latest` or `lts` request.",
 				"This job does not add a major filter.",
 				"The updater does not roll a locked version backward when that version is still inside the age window.",
@@ -317,7 +319,7 @@ fi
 					t.Fatalf("body omitted %q:\n%s", want, bodyText)
 				}
 			}
-			for _, absent := range []string{"| rumdl |", "| go |", "| node |", "| ref |"} {
+			for _, absent := range []string{"| rumdl |", "| go |", "| node |", "| ref |", "| Scope |"} {
 				if strings.Contains(bodyText, absent) {
 					t.Fatalf("body kept %q:\n%s", absent, bodyText)
 				}
