@@ -36,7 +36,7 @@ mise_lock() {
   fi
 }
 
-lock_scope() {
+detect_scope() {
   local scope=$1
   local config_dir=$2
   local global_flag=$3
@@ -44,7 +44,6 @@ lock_scope() {
   local fresh="$TEMP_DIR/$scope-fresh.json"
   local plan="$TEMP_DIR/$scope-plan.json"
   local writes="$TEMP_DIR/$scope-writes.txt"
-  local line tool write_age
 
   mise_lock "$config_dir" "$global_flag" --bump --dry-run --json --minimum-release-age "$age" >"$aged"
   mise_lock "$config_dir" "$global_flag" --bump --dry-run --json --minimum-release-age 0s >"$fresh"
@@ -55,6 +54,15 @@ lock_scope() {
     --age "$age" \
     --emergency-tool "$emergency" \
     --out "$plan" >"$writes"
+}
+
+apply_scope() {
+  local scope=$1
+  local config_dir=$2
+  local global_flag=$3
+  local writes="$TEMP_DIR/$scope-writes.txt"
+  local line tool write_age
+
   if [[ "${MISE_LOCK_DRY_RUN:-}" == 1 ]]; then
     return
   fi
@@ -75,8 +83,14 @@ lock_scope() {
 }
 
 cd "$REPO_DIR"
-lock_scope project "$TEMP_DIR/global" ""
-lock_scope global "$REPO_DIR/files/home/.config/mise" --global
+detect_scope project "$TEMP_DIR/global" ""
+detect_scope global "$REPO_DIR/files/home/.config/mise" --global
+if [[ -n "$emergency" ]] && ! grep -F -x -q -- "$emergency 0s" "$TEMP_DIR/project-writes.txt" "$TEMP_DIR/global-writes.txt"; then
+  echo "updater did not adopt emergency tool $emergency" >&2
+  exit 2
+fi
+apply_scope project "$TEMP_DIR/global" ""
+apply_scope global "$REPO_DIR/files/home/.config/mise" --global
 
 title_file="${MISE_LOCK_PR_TITLE_FILE:-$TEMP_DIR/title.txt}"
 body_file="${MISE_LOCK_PR_BODY_FILE:-$TEMP_DIR/body.md}"

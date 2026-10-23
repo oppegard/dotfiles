@@ -261,14 +261,13 @@ fi
 			want := "" +
 				"project lock --bump --dry-run --json --minimum-release-age 7d\n" +
 				"project lock --bump --dry-run --json --minimum-release-age 0s\n" +
+				"global lock --global --bump --dry-run --json --minimum-release-age 7d\n" +
+				"global lock --global --bump --dry-run --json --minimum-release-age 0s\n" +
 				"project lock --bump --json --minimum-release-age 7d bun\n" +
 				"project lock --bump --json --minimum-release-age 7d ruby\n"
 			if emergency == "hk" {
 				want += "project lock --bump --json --minimum-release-age 0s hk\n"
 			}
-			want += "" +
-				"global lock --global --bump --dry-run --json --minimum-release-age 7d\n" +
-				"global lock --global --bump --dry-run --json --minimum-release-age 0s\n"
 			if commands := readPolicyLog(t, filepath.Join(temp, "commands")); commands != want {
 				t.Fatalf("lock commands = %q, want %q:\n%s", commands, want, output)
 			}
@@ -328,6 +327,27 @@ fi
 		}
 		if !strings.Contains(string(output), "| ruby | tools | major |") {
 			t.Fatalf("dry run omitted the pending report:\n%s", output)
+		}
+		assertLockTempCleaned(t, temp)
+	})
+
+	t.Run("missing-emergency", func(t *testing.T) {
+		temp, repo, bin := prepareLockUpdate(t, stub)
+		for file, contents := range fixtures {
+			writePolicyFixture(t, filepath.Join(temp, file), contents)
+		}
+		cmd := lockUpdateCommand(t, temp, repo, bin, "FIXTURE_DIR="+temp, "MISE_LOCK_EMERGENCY_TOOL=not-a-tool")
+		output, err := cmd.CombinedOutput()
+		if err == nil {
+			t.Fatalf("updater adopted a missing emergency tool:\n%s", output)
+		}
+		if !strings.Contains(string(output), "updater did not adopt emergency tool not-a-tool") {
+			t.Fatalf("updater failure was not the missing tool:\n%s", output)
+		}
+		for _, line := range strings.Split(readPolicyLog(t, filepath.Join(temp, "commands")), "\n") {
+			if line != "" && !strings.Contains(line, "--dry-run") {
+				t.Fatalf("missed emergency tool still wrote a lock: %q\n%s", line, output)
+			}
 		}
 		assertLockTempCleaned(t, temp)
 	})
