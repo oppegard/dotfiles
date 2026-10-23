@@ -319,9 +319,6 @@ fi
 			if !strings.Contains(bodyText, "- [shellcheck 0.11.0](https://github.com/koalaman/shellcheck/releases) (Project)") {
 				t.Fatalf("body linked the pending shellcheck release:\n%s", bodyText)
 			}
-			if !strings.Contains(bodyText, "Pending is a newer release inside that window. This pull request locks the version in Change.") {
-				t.Fatalf("body omitted the pending sentence:\n%s", bodyText)
-			}
 			for _, want := range []string{
 				"| Package | Type | Update | Change | Pending | Scope |",
 				"|---|---|---|---|---|---|",

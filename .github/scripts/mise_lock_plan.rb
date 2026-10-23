@@ -246,11 +246,6 @@ def render(plans, age, emergency_tool)
     "---",
     "",
     "The age window is `#{age}` from `minimum_release_age`.",
-  ]
-  if show_pending
-    lines << "Pending is a newer release inside that window. This pull request locks the version in Change."
-  end
-  lines += [
     "Release notes name the version this pull request locks.",
     "",
     "Mise does not refuse a major bump of a `latest` or `lts` request.",
