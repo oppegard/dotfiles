@@ -239,12 +239,14 @@ fi
 		"project-0s.json": `[
   {"name":"bun","backend":"core:bun","old_versions":["1.4.3"],"new_versions":["1.4.5"]},
   {"name":"hk","backend":"github:jdx/hk","old_versions":["2.7.0"],"new_versions":["2.8.1"]},
-  {"name":"ruby","backend":"core:ruby","old_versions":["3.4.1"],"new_versions":["4.0.0"]}
+  {"name":"ruby","backend":"core:ruby","old_versions":["3.4.1"],"new_versions":["4.0.0"]},
+  {"name":"jactionlint","backend":"github:rhysd/actionlint","old_versions":["2.2.0"],"new_versions":["2.3.0"]}
 ]`,
 		"global-7d.json": `[
   {"name":"node","backend":"core:node","old_versions":["24.22.1"],"new_versions":["24.22.0"]}
 ]`,
 		"global-0s.json": `[
+  {"name":"hk","backend":"github:jdx/hk","old_versions":["2.7.1"],"new_versions":["2.8.1"]},
   {"name":"jactionlint","backend":"github:rhysd/actionlint","old_versions":["2.2.0"],"new_versions":["2.3.0"]}
 ]`,
 	}
@@ -282,6 +284,7 @@ fi
 				"project lock --bump --json ruby\n"
 			if emergency == "hk" {
 				want += "project lock --bump --json --minimum-release-age 0s hk\n"
+				want += "global lock --global --bump --json --minimum-release-age 0s hk\n"
 			}
 			if commands := readPolicyLog(t, filepath.Join(temp, "commands")); commands != want {
 				t.Fatalf("lock commands = %q, want %q:\n%s", commands, want, output)
@@ -295,31 +298,47 @@ fi
 				if !strings.Contains(bodyText, "Emergency bump for `hk` uses `--minimum-release-age 0s`.") {
 					t.Fatalf("body omitted the emergency line:\n%s", bodyText)
 				}
-				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.0` → `2.8.1` |  |") {
+				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.0` → `2.8.1` |  | Project |") {
 					t.Fatalf("body omitted the emergency hk row:\n%s", bodyText)
+				}
+				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.1` → `2.8.1` |  | Global |") {
+					t.Fatalf("body omitted the global emergency hk row:\n%s", bodyText)
+				}
+				if !strings.Contains(bodyText, "- [hk 2.8.1](https://github.com/jdx/hk/releases) (Project, Global)") {
+					t.Fatalf("body omitted the adopted hk release:\n%s", bodyText)
 				}
 			} else if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0\n" {
 				t.Fatalf("title = %q", titleText)
 			}
+			if emergency == "" {
+				if strings.Contains(bodyText, "### Release notes") {
+					t.Fatalf("body linked a pending release:\n%s", bodyText)
+				}
+				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.0` | `2.8.1` | Project |") {
+					t.Fatalf("body merged hk rows that differ:\n%s", bodyText)
+				}
+				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.1` | `2.8.1` | Global |") {
+					t.Fatalf("body omitted the global hk row:\n%s", bodyText)
+				}
+			}
 			for _, want := range []string{
-				"| Package | Type | Update | Change | Pending |",
-				"|---|---|---|---|---|",
-				"| bun | tools | patch | `1.4.3` → `1.4.4` | `1.4.5` |",
-				"| ruby | tools | major | `3.4.1` → `4.0.0` |  |",
-				"| [jactionlint](https://github.com/rhysd/actionlint) | tools | minor | `2.2.0` | `2.3.0` |",
+				"| Package | Type | Update | Change | Pending | Scope |",
+				"|---|---|---|---|---|---|",
+				"| bun | tools | patch | `1.4.3` → `1.4.4` | `1.4.5` | Project |",
+				"| ruby | tools | major | `3.4.1` → `4.0.0` |  | Project |",
+				"| [jactionlint](https://github.com/rhysd/actionlint) | tools | minor | `2.2.0` | `2.3.0` | Project, Global |",
 				"Mise does not refuse a major bump of a `latest` or `lts` request.",
 				"This job does not add a major filter.",
 				"The updater does not roll a locked version backward when that version is still inside the age window.",
 				"MISE_SAFE=1 hides an idiomatic Go pin, so this job does not bump it.",
 				"The age window is `7d` from `minimum_release_age`.",
-				"https://github.com/jdx/hk/releases",
-				"https://github.com/rhysd/actionlint/releases",
+				"Release notes name the version this pull request locks.",
 			} {
 				if !strings.Contains(bodyText, want) {
 					t.Fatalf("body omitted %q:\n%s", want, bodyText)
 				}
 			}
-			for _, absent := range []string{"| rumdl |", "| go |", "| node |", "| ref |", "| Scope |"} {
+			for _, absent := range []string{"| rumdl |", "| go |", "| node |", "| ref |", "https://github.com/rhysd/actionlint/releases"} {
 				if strings.Contains(bodyText, absent) {
 					t.Fatalf("body kept %q:\n%s", absent, bodyText)
 				}

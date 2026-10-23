@@ -185,6 +185,31 @@ def pending_cell(row)
   code_list(row["pending"])
 end
 
+def combine_rows(rows)
+  grouped = []
+  index = {}
+  rows.each do |row|
+    key = [row["name"], row["backend"], row["old"], row["adopted"], row["pending"], row["update"]]
+    existing = index[key]
+    if existing
+      existing["scopes"] << row["scope"] unless existing["scopes"].include?(row["scope"])
+      next
+    end
+
+    copy = row.dup
+    copy["scopes"] = [row["scope"]]
+    index[key] = copy
+    grouped << copy
+  end
+  grouped
+end
+
+def scope_cell(row)
+  labels = { "project" => "Project", "global" => "Global" }
+  order = { "project" => 0, "global" => 1 }
+  row["scopes"].sort_by { |scope| order.fetch(scope, 9) }.map { |scope| labels.fetch(scope, scope) }.join(", ")
+end
+
 def title_for(rows)
   adopted = rows.select { |row| !row["adopted"].empty? }
   pending = rows.select { |row| !row["pending"].empty? }
@@ -206,25 +231,26 @@ def title_for(rows)
 end
 
 def render(plans, age, emergency_tool)
-  rows = plans.flat_map { |plan| plan["rows"] }
+  rows = combine_rows(plans.flat_map { |plan| plan["rows"] })
   lines = [
     "This PR contains the following updates:",
     "",
-    "| Package | Type | Update | Change | Pending |",
-    "|---|---|---|---|---|",
+    "| Package | Type | Update | Change | Pending | Scope |",
+    "|---|---|---|---|---|---|",
   ]
-  lines << "| | | | | |" if rows.empty?
+  lines << "| | | | | | |" if rows.empty?
   rows.each do |row|
-    lines << "| #{package_cell(row)} | tools | #{row["update"]} | #{change_cell(row)} | #{pending_cell(row)} |"
+    lines << "| #{package_cell(row)} | tools | #{row["update"]} | #{change_cell(row)} | #{pending_cell(row)} | #{scope_cell(row)} |"
   end
   lines += [
     "",
     "---",
     "",
     "The age window is `#{age}` from `minimum_release_age`.",
-    "A pending version is a newer release that this run will not lock.",
+    "A pending version is a newer release inside the age window. This pull request does not lock it.",
     "Mise lock JSON has no pending field.",
-    "Pending is the `0s` resolution when that version is newer than the one this PR locks.",
+    "Pending is the `0s` resolution when that version is newer than the one this pull request locks.",
+    "Release notes name the version this pull request locks.",
     "",
     "Mise does not refuse a major bump of a `latest` or `lts` request.",
     "A prefix request such as `2` or `1.27` stays inside that prefix.",
@@ -239,17 +265,35 @@ def render(plans, age, emergency_tool)
       "Emergency bump for `#{emergency_tool}` uses `--minimum-release-age 0s`.",
     ]
   end
-  notes = []
+  entries = []
+  seen = {}
   rows.each do |row|
+    next if row["adopted"].empty?
+
     repo = github_repo(row["backend"])
     next if repo.nil?
 
-    version = (row["adopted"].empty? ? nil : row["adopted"]) ||
-      (row["pending"].empty? ? nil : row["pending"]) ||
-      row["old"]
-    version = version[0]
-    state = !row["pending"].empty? && row["adopted"].empty? ? "pending" : row["scope"]
-    notes << "- [#{row["name"]} #{version}](https://github.com/#{repo}/releases) (#{state})"
+    version = row["adopted"][0]
+    key = [row["name"], repo, version]
+    existing = seen[key]
+    if existing
+      row["scopes"].each do |scope|
+        existing["scopes"] << scope unless existing["scopes"].include?(scope)
+      end
+      next
+    end
+
+    entry = {
+      "name" => row["name"],
+      "repo" => repo,
+      "version" => version,
+      "scopes" => row["scopes"].dup,
+    }
+    seen[key] = entry
+    entries << entry
+  end
+  notes = entries.map do |entry|
+    "- [#{entry["name"]} #{entry["version"]}](https://github.com/#{entry["repo"]}/releases) (#{scope_cell(entry)})"
   end
   unless notes.empty?
     lines += ["", "### Release notes", ""]
