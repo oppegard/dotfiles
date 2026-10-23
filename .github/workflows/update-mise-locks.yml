@@ -51,14 +51,6 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
 
-      - name: Install Ruby for the lock planner
-        run: |
-          set -euo pipefail
-          if ! command -v ruby >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install --yes ruby
-          fi
-
       - name: Update project and global locks
         env:
           MISE_LOCK_PR_TITLE_FILE: ${{ runner.temp }}/mise-lock-title.txt

@@ -65,6 +65,27 @@ url = "https://github.com/jdx/jactionlint/releases/download/v2.2.0/jactionlint_2
 url_api = "https://api.github.com/repos/jdx/jactionlint/releases/assets/640875646"
 provenance = "github-attestations"
 
+[[tools.ruby]]
+version = "4.0.7"
+backend = "core:ruby"
+specifiers = ["4"]
+
+[tools.ruby.options]
+compile = "false"
+precompiled_url = "jdx/ruby"
+ruby_build_repo = "https://github.com/rbenv/ruby-build.git"
+ruby_install = "false"
+
+[tools.ruby."platforms.linux-x64"]
+checksum = "sha256:659c4c80138145f3be439b3e4275b616cc87022e9488b823d708ab75a77558a9"
+url = "https://github.com/jdx/ruby/releases/download/4.0.7-2/ruby-4.0.7.x86_64_linux.tar.gz"
+provenance = "github-attestations"
+
+[tools.ruby."platforms.macos-arm64"]
+checksum = "sha256:6ad0acc5b0c437a2514679ff9a0f925e8b66ad4e96357e9ae2764b622f5d88d4"
+url = "https://github.com/jdx/ruby/releases/download/4.0.7-2/ruby-4.0.7.macos.tar.gz"
+provenance = "github-attestations"
+
 [[tools.rumdl]]
 version = "0.3.0"
 backend = "aqua:rvben/rumdl"

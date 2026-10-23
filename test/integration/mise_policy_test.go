@@ -101,6 +101,10 @@ if [[ "$1 $2 $3" == "config get settings.minimum_release_age" ]]; then
   printf '%s\n' 7d
   exit 0
 fi
+if [[ "$1 $2 $3 $4" == "exec ruby -- ruby" ]]; then
+  shift 4
+  exec "$PLANNER_RUBY" "$@"
+fi
 [[ "$MISE_MINIMUM_RELEASE_AGE" == 7d ]]
 scope=project
 if [[ "$1 $2" == "lock --global" ]]; then
@@ -130,6 +134,12 @@ func prepareLockUpdate(t *testing.T, stub string) (string, string, string) {
 
 func lockUpdateCommand(t *testing.T, temp, repo, bin string, extra ...string) *exec.Cmd {
 	t.Helper()
+	which := exec.CommandContext(t.Context(), "mise", "which", "ruby")
+	which.Dir = filepath.Join("..", "..")
+	rubyPath, err := which.Output()
+	if err != nil {
+		t.Fatalf("mise which ruby: %v", err)
+	}
 	cmd := exec.CommandContext(t.Context(), "bash", filepath.Join(repo, ".github", "scripts", "update-mise-locks.sh"))
 	cmd.Dir = temp
 	cmd.Env = append([]string{
@@ -139,6 +149,7 @@ func lockUpdateCommand(t *testing.T, temp, repo, bin string, extra ...string) *e
 		"EXPECTED_REPO=" + repo,
 		"COMMAND_LOG=" + filepath.Join(temp, "commands"),
 		"SYSTEM_LOG=" + filepath.Join(temp, "system"),
+		"PLANNER_RUBY=" + strings.TrimSpace(string(rubyPath)),
 		"MISE_SAFE=0",
 		"MISE_CONFIG_DIR=/unrelated/global",
 		"MISE_SYSTEM_CONFIG_DIR=/unrelated/system",

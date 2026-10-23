@@ -128,15 +128,6 @@ jobs:
           export HOMEBREW_BUNDLE_CASK_SKIP
           brew bundle install --file=Brewfile --no-upgrade
 
-      - name: Install Ruby for lock planner tests
-        if: ${{ needs.detect-changes.outputs.integration_optional == 'false' && runner.os == 'Linux' }}
-        run: |
-          set -euo pipefail
-          if [[ ! -x /usr/bin/ruby ]]; then
-            sudo apt-get update
-            sudo apt-get install --yes ruby
-          fi
-
       - name: Run integration tests
         if: ${{ needs.detect-changes.outputs.integration_optional == 'false' }}
         run: mise run test:integration
