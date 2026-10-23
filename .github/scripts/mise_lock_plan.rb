@@ -92,26 +92,24 @@ def plan_scope(scope, aged, fresh)
   aged_by_name = index_changes(aged)
   fresh_by_name = index_changes(fresh)
   rows = []
-  aged_by_name.each_key do |name|
-    aged_change = aged_by_name[name]
+  aged_by_name.each do |name, aged_change|
     fresh_change = fresh_by_name[name]
     old = aged_change["old"]
-    backend = aged_change["backend"]
-    fresh_new = fresh_change && fresh_change["new"]
     aged_new = aged_change["new"]
-    next unless aged_new && list_is_forward(old, aged_new) == true
+    next unless list_is_forward(old, aged_new) == true
 
-    pending = nil
-    if fresh_new && fresh_new != aged_new && list_is_forward(aged_new, fresh_new) == true
+    fresh_new = fresh_change && fresh_change["new"]
+    pending = []
+    if fresh_new && list_is_forward(aged_new, fresh_new) == true
       pending = fresh_new
     end
     rows << {
       "scope" => scope,
       "name" => name,
-      "backend" => backend,
+      "backend" => aged_change["backend"],
       "old" => old,
       "adopted" => aged_new,
-      "pending" => pending || [],
+      "pending" => pending,
       "update" => update_kind(old, aged_new),
     }
   end
