@@ -18,3 +18,20 @@ These are my dotfiles. See @README.md.
 - `tombi`: Checks TOML formatting (excluding Tuna's config).
 - `trailing_whitespace`: Checks trailing whitespace.
 - `yamlfmt`: Checks YAML formatting.
+
+## Mise lock age
+
+`minimum_release_age = "7d"` in `mise.toml` and
+`files/home/.config/mise/config.toml` is the wait before a new release can be
+locked. Change the wait in those files. The GitHub workflow does not have its
+own age.
+
+`mise install --locked` keeps versions already in the lock. `mise lock --bump`
+and `mise upgrade` use the wait. A tool option named `minimum_release_age`
+overrides the setting for that tool.
+
+The nightly job sets `MISE_SAFE=1`. Safe mode ignores project settings, so the
+job reads `settings.minimum_release_age` from each file and exports
+`MISE_MINIMUM_RELEASE_AGE` for that lock. The pending probe and
+`emergency_tool` pass `--minimum-release-age 0s`, which overrides the setting
+and any tool option.

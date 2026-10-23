@@ -17,7 +17,6 @@ export MISE_AUTO_ENV=false
 export MISE_ENV=home
 export MISE_SAFE=1
 
-age="${MISE_LOCK_MINIMUM_RELEASE_AGE:-7d}"
 emergency="${MISE_LOCK_EMERGENCY_TOOL:-}"
 planner="$REPO_DIR/.github/scripts/mise_lock_plan.py"
 if [[ -n "$emergency" && ! "$emergency" =~ ^[A-Za-z0-9._:@/-]+$ ]]; then
@@ -25,14 +24,27 @@ if [[ -n "$emergency" && ! "$emergency" =~ ^[A-Za-z0-9._:@/-]+$ ]]; then
   exit 2
 fi
 
+config_age() {
+  local file=$1
+  local value
+  value="$(mise config get settings.minimum_release_age --file "$file")" || exit 1
+  value="${value//[[:space:]]/}"
+  if [[ -z "$value" ]]; then
+    echo "updater requires minimum_release_age in $file" >&2
+    exit 2
+  fi
+  printf '%s\n' "$value"
+}
+
 mise_lock() {
   local config_dir=$1
   local global_flag=$2
-  shift 2
+  local release_age=$3
+  shift 3
   if [[ "$global_flag" == --global ]]; then
-    MISE_CONFIG_DIR="$config_dir" mise lock --global "$@"
+    MISE_CONFIG_DIR="$config_dir" MISE_MINIMUM_RELEASE_AGE="$release_age" mise lock --global "$@"
   else
-    MISE_CONFIG_DIR="$config_dir" mise lock "$@"
+    MISE_CONFIG_DIR="$config_dir" MISE_MINIMUM_RELEASE_AGE="$release_age" mise lock "$@"
   fi
 }
 
@@ -40,18 +52,19 @@ detect_scope() {
   local scope=$1
   local config_dir=$2
   local global_flag=$3
+  local release_age=$4
   local aged="$TEMP_DIR/$scope-aged.json"
   local fresh="$TEMP_DIR/$scope-fresh.json"
   local plan="$TEMP_DIR/$scope-plan.json"
   local writes="$TEMP_DIR/$scope-writes.txt"
 
-  mise_lock "$config_dir" "$global_flag" --bump --dry-run --json --minimum-release-age "$age" >"$aged"
-  mise_lock "$config_dir" "$global_flag" --bump --dry-run --json --minimum-release-age 0s >"$fresh"
+  mise_lock "$config_dir" "$global_flag" "$release_age" --bump --dry-run --json >"$aged"
+  mise_lock "$config_dir" "$global_flag" "$release_age" --bump --dry-run --json --minimum-release-age 0s >"$fresh"
   python3 "$planner" plan \
     --scope "$scope" \
     --aged "$aged" \
     --fresh "$fresh" \
-    --age "$age" \
+    --age "$release_age" \
     --emergency-tool "$emergency" \
     --out "$plan" >"$writes"
 }
@@ -60,6 +73,7 @@ apply_scope() {
   local scope=$1
   local config_dir=$2
   local global_flag=$3
+  local release_age=$4
   local writes="$TEMP_DIR/$scope-writes.txt"
   local line tool write_age
 
@@ -74,30 +88,41 @@ apply_scope() {
       echo "updater refused tool name" >&2
       exit 2
     fi
-    if [[ "$write_age" != "$age" && "$write_age" != 0s ]]; then
+    if [[ "$write_age" == 0s ]]; then
+      mise_lock "$config_dir" "$global_flag" "$release_age" --bump --json --minimum-release-age 0s "$tool"
+    elif [[ "$write_age" == "$release_age" ]]; then
+      mise_lock "$config_dir" "$global_flag" "$release_age" --bump --json "$tool"
+    else
       echo "updater refused release age" >&2
       exit 2
     fi
-    mise_lock "$config_dir" "$global_flag" --bump --json --minimum-release-age "$write_age" "$tool"
   done <"$writes"
 }
 
 cd "$REPO_DIR"
-detect_scope project "$TEMP_DIR/global" ""
-detect_scope global "$REPO_DIR/files/home/.config/mise" --global
+project_age="$(config_age "$REPO_DIR/mise.toml")" || exit
+global_age="$(config_age "$REPO_DIR/files/home/.config/mise/config.toml")" || exit
+detect_scope project "$TEMP_DIR/global" "" "$project_age"
+detect_scope global "$REPO_DIR/files/home/.config/mise" --global "$global_age"
 if [[ -n "$emergency" ]] && ! grep -F -x -q -- "$emergency 0s" "$TEMP_DIR/project-writes.txt" "$TEMP_DIR/global-writes.txt"; then
   echo "updater did not adopt emergency tool $emergency" >&2
   exit 2
 fi
-apply_scope project "$TEMP_DIR/global" ""
-apply_scope global "$REPO_DIR/files/home/.config/mise" --global
+apply_scope project "$TEMP_DIR/global" "" "$project_age"
+apply_scope global "$REPO_DIR/files/home/.config/mise" --global "$global_age"
+
+if [[ "$project_age" == "$global_age" ]]; then
+  report_age=$project_age
+else
+  report_age="project $project_age, global $global_age"
+fi
 
 title_file="${MISE_LOCK_PR_TITLE_FILE:-$TEMP_DIR/title.txt}"
 body_file="${MISE_LOCK_PR_BODY_FILE:-$TEMP_DIR/body.md}"
 python3 "$planner" render \
   --plan "$TEMP_DIR/project-plan.json" \
   --plan "$TEMP_DIR/global-plan.json" \
-  --age "$age" \
+  --age "$report_age" \
   --emergency-tool "$emergency" \
   --title-file "$title_file" \
   --body-file "$body_file"

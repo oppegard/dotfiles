@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       emergency_tool:
-        description: Tool name that bypasses the 7 day age window
+        description: Tool name that bypasses minimum_release_age
         required: false
         type: string
 

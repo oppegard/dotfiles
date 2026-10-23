@@ -77,7 +77,7 @@ printf 'mise %s\n' "$*" >> "$HOME/commands"
 	}
 }
 
-const miseLockUpdateFiles = ".github/scripts/update-mise-locks.sh\x00.github/scripts/mise_lock_plan.py\x00files/home/.config/mise/config.toml\x00files/home/.config/mise/config.home.toml\x00"
+const miseLockUpdateFiles = ".github/scripts/update-mise-locks.sh\x00.github/scripts/mise_lock_plan.py\x00mise.toml\x00files/home/.config/mise/config.toml\x00files/home/.config/mise/config.home.toml\x00"
 
 const miseLockStubPrefix = `#!/bin/bash
 set -euo pipefail
@@ -88,6 +88,20 @@ set -euo pipefail
 [[ -d "$MISE_SYSTEM_CONFIG_DIR" && -z "$(ls -A "$MISE_SYSTEM_CONFIG_DIR")" ]]
 [[ -z "${MISE_GLOBAL_CONFIG_FILE+x}${MISE_CONFIG_FILE+x}${MISE_GLOBAL_CONFIG_ROOT+x}${MISE_SYSTEM_CONFIG_FILE+x}" ]]
 [[ -z "${MISE_OVERRIDE_CONFIG_FILENAMES+x}${MISE_OVERRIDE_TOOL_VERSIONS_FILENAMES+x}" ]]
+if [[ "$1 $2 $3" == "config get settings.minimum_release_age" ]]; then
+  file=""
+  prev=""
+  for arg in "$@"; do
+    if [[ "$prev" == --file ]]; then
+      file=$arg
+    fi
+    prev=$arg
+  done
+  grep -F -q -- 'minimum_release_age = "7d"' "$file"
+  printf '%s\n' 7d
+  exit 0
+fi
+[[ "$MISE_MINIMUM_RELEASE_AGE" == 7d ]]
 scope=project
 if [[ "$1 $2" == "lock --global" ]]; then
   scope=global
@@ -137,6 +151,7 @@ func lockUpdateCommand(t *testing.T, temp, repo, bin string, extra ...string) *e
 		"MISE_SYSTEM_CONFIG_FILE=/unrelated/system.toml",
 		"MISE_OVERRIDE_CONFIG_FILENAMES=unrelated.toml",
 		"MISE_OVERRIDE_TOOL_VERSIONS_FILENAMES=unrelated-versions",
+		"MISE_MINIMUM_RELEASE_AGE=1h",
 	}, extra...)
 	return cmd
 }
@@ -152,7 +167,7 @@ func assertLockTempCleaned(t *testing.T, temp string) {
 func TestMiseLockUpdateScopes(t *testing.T) {
 	stub := miseLockStubPrefix + `
 case "$*" in
-  "lock --bump --dry-run --json --minimum-release-age 7d"|"lock --bump --dry-run --json --minimum-release-age 0s"|"lock --global --bump --dry-run --json --minimum-release-age 7d"|"lock --global --bump --dry-run --json --minimum-release-age 0s")
+  "lock --bump --dry-run --json"|"lock --bump --dry-run --json --minimum-release-age 0s"|"lock --global --bump --dry-run --json"|"lock --global --bump --dry-run --json --minimum-release-age 0s")
     ;;
   *)
     echo "Unexpected mise command: $*" >&2
@@ -165,9 +180,9 @@ if [[ "$FAIL_SCOPE" == "$scope" ]]; then
 fi
 printf '%s\n' '[]'
 `
-	projectAged := "project lock --bump --dry-run --json --minimum-release-age 7d\n"
+	projectAged := "project lock --bump --dry-run --json\n"
 	projectFresh := "project lock --bump --dry-run --json --minimum-release-age 0s\n"
-	globalAged := "global lock --global --bump --dry-run --json --minimum-release-age 7d\n"
+	globalAged := "global lock --global --bump --dry-run --json\n"
 	globalFresh := "global lock --global --bump --dry-run --json --minimum-release-age 0s\n"
 	for _, failScope := range []string{"", "project", "global"} {
 		name := failScope
@@ -207,10 +222,10 @@ func TestMiseLockUpdatePlan(t *testing.T) {
 if [[ "$*" != *--dry-run* ]]; then
   exit 0
 fi
-if [[ "$*" == *"--minimum-release-age 7d"* ]]; then
-  cat "$FIXTURE_DIR/$scope-7d.json"
-else
+if [[ "$*" == *"--minimum-release-age 0s"* ]]; then
   cat "$FIXTURE_DIR/$scope-0s.json"
+else
+  cat "$FIXTURE_DIR/$scope-7d.json"
 fi
 `
 	fixtures := map[string]string{
@@ -259,12 +274,12 @@ fi
 				t.Fatalf("updater failed: %v\n%s", err, output)
 			}
 			want := "" +
-				"project lock --bump --dry-run --json --minimum-release-age 7d\n" +
+				"project lock --bump --dry-run --json\n" +
 				"project lock --bump --dry-run --json --minimum-release-age 0s\n" +
-				"global lock --global --bump --dry-run --json --minimum-release-age 7d\n" +
+				"global lock --global --bump --dry-run --json\n" +
 				"global lock --global --bump --dry-run --json --minimum-release-age 0s\n" +
-				"project lock --bump --json --minimum-release-age 7d bun\n" +
-				"project lock --bump --json --minimum-release-age 7d ruby\n"
+				"project lock --bump --json bun\n" +
+				"project lock --bump --json ruby\n"
 			if emergency == "hk" {
 				want += "project lock --bump --json --minimum-release-age 0s hk\n"
 			}
@@ -294,6 +309,7 @@ fi
 				"This job does not add a major filter.",
 				"The updater does not roll a locked version backward when that version is still inside the age window.",
 				"MISE_SAFE=1 hides an idiomatic Go pin, so this job does not bump it.",
+				"The age window is `7d` from `minimum_release_age`.",
 				"https://github.com/jdx/hk/releases",
 				"https://github.com/rhysd/actionlint/releases",
 			} {

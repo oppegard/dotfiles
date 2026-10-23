@@ -17,11 +17,11 @@ Run these commands from the repository root. Install the versions in `mise.lock`
 mise install --locked
 ```
 
-To update a tool within its `mise.toml` request, regenerate the lock with a 7
-day age window, then check and review the changes.
+To update a tool within its `mise.toml` request, regenerate the lock, then check
+and review the changes. The wait is `minimum_release_age` in `mise.toml`.
 
 ```sh
-mise lock --bump --minimum-release-age 7d shellcheck
+mise lock --bump shellcheck
 mise install --locked
 mise run lint
 mise run test:integration
@@ -40,11 +40,11 @@ Bootstrap installs the versions in
 and macOS arm64. Mise links it to `~/.config/mise/mise.lock`; native dependency
 sidecars in the adjacent `locks/` directory stay in the checkout.
 
-After bootstrap, update one global tool within its `config.toml` request. Use
-the same 7 day age window.
+After bootstrap, update one global tool within its `config.toml` request. The
+wait is `minimum_release_age` in that file.
 
 ```sh
-mise lock --global --bump --minimum-release-age 7d shellcheck
+mise lock --global --bump shellcheck
 mise -C ~ install --locked
 mise run lint
 mise run test:integration
@@ -59,9 +59,9 @@ Keep sidecars as generated; the lock verifies their content digest.
 ## Update locks on a schedule
 
 The `Update mise locks` workflow opens a pull request for `mise.lock` and
-`files/home/.config/mise/mise.lock`. It resolves each tool with
-`--minimum-release-age 7d` and locks a version only when that resolution is
-newer than the committed lock. A prefix request such as `2` or `1.27` stays
+`files/home/.config/mise/mise.lock`. It reads `minimum_release_age` from each
+config and locks a version only when that resolution is newer than the
+committed lock. A prefix request such as `2` or `1.27` stays
 inside that prefix. Mise does not refuse a major bump of a `latest` or `lts`
 request, and this workflow does not add a filter for one. The workflow sets
 `MISE_SAFE=1`. Safe mode hides the Go version read from `go.mod`, so the job

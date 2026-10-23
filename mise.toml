@@ -5,6 +5,7 @@ min_version = "2026.10.17"
 idiomatic_version_file_enable_tools = ["go"]
 lockfile = true
 lockfile_platforms = ["linux-x64", "macos-arm64"]
+minimum_release_age = "7d"
 
 
 [tools]

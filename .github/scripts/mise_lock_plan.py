@@ -206,7 +206,7 @@ def render(plans, age, emergency_tool):
     lines.extend(
         [
             "",
-            f"The age window is `{age}` (`mise lock --bump --minimum-release-age`).",
+            f"The age window is `{age}` from `minimum_release_age`.",
             "A pending version is a newer release that this run will not lock.",
             "Mise lock JSON has no pending field.",
             "Pending is the `0s` resolution when that version is newer than the one this PR locks.",
