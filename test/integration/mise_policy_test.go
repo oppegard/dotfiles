@@ -319,20 +319,15 @@ fi
 			if !strings.Contains(bodyText, "- [shellcheck 0.11.0](https://github.com/koalaman/shellcheck/releases) (Project)") {
 				t.Fatalf("body linked the pending shellcheck release:\n%s", bodyText)
 			}
-			if emergency == "" {
-				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.0` | `2.8.1` | Project |") {
-					t.Fatalf("body merged hk rows that differ:\n%s", bodyText)
-				}
-				if !strings.Contains(bodyText, "| [hk](https://github.com/jdx/hk) | tools | minor | `2.7.1` | `2.8.1` | Global |") {
-					t.Fatalf("body omitted the global hk row:\n%s", bodyText)
-				}
+			if !strings.Contains(bodyText, "Pending is a newer release inside that window. This pull request locks the version in Change.") {
+				t.Fatalf("body omitted the pending sentence:\n%s", bodyText)
 			}
 			for _, want := range []string{
 				"| Package | Type | Update | Change | Pending | Scope |",
 				"|---|---|---|---|---|---|",
 				"| bun | tools | patch | `1.4.3` → `1.4.4` | `1.4.5` | Project |",
 				"| ruby | tools | major | `3.4.1` → `4.0.0` |  | Project |",
-				"| [jactionlint](https://github.com/rhysd/actionlint) | tools | minor | `2.2.0` | `2.3.0` | Project, Global |",
+				"| [shellcheck](https://github.com/koalaman/shellcheck) | tools | minor | `0.10.0` → `0.11.0` | `0.11.1` | Project |",
 				"Mise does not refuse a major bump of a `latest` or `lts` request.",
 				"This job does not add a major filter.",
 				"The updater does not roll a locked version backward when that version is still inside the age window.",
@@ -344,7 +339,11 @@ fi
 					t.Fatalf("body omitted %q:\n%s", want, bodyText)
 				}
 			}
-			for _, absent := range []string{"| rumdl |", "| go |", "| node |", "| ref |", "https://github.com/rhysd/actionlint/releases", "shellcheck 0.11.1"} {
+			absent := []string{"| rumdl |", "| go |", "| node |", "| ref |", "| [jactionlint]", "https://github.com/rhysd/actionlint/releases", "shellcheck 0.11.1"}
+			if emergency == "" {
+				absent = append(absent, "| [hk]")
+			}
+			for _, absent := range absent {
 				if strings.Contains(bodyText, absent) {
 					t.Fatalf("body kept %q:\n%s", absent, bodyText)
 				}
@@ -369,7 +368,43 @@ fi
 			}
 		}
 		if !strings.Contains(string(output), "| ruby | tools | major |") {
-			t.Fatalf("dry run omitted the pending report:\n%s", output)
+			t.Fatalf("dry run omitted the ruby bump:\n%s", output)
+		}
+		if strings.Contains(string(output), "| [jactionlint]") || strings.Contains(string(output), "| [hk]") {
+			t.Fatalf("dry run listed a tool the lock does not change:\n%s", output)
+		}
+		assertLockTempCleaned(t, temp)
+	})
+
+	t.Run("no-pending-column", func(t *testing.T) {
+		temp, repo, bin := prepareLockUpdate(t, stub)
+		quiet := map[string]string{
+			"project-7d.json": `[{"name":"bun","backend":"core:bun","old_versions":["1.4.3"],"new_versions":["1.4.4"]}]`,
+			"project-0s.json": `[{"name":"bun","backend":"core:bun","old_versions":["1.4.3"],"new_versions":["1.4.4"]},{"name":"hk","backend":"github:jdx/hk","old_versions":["2.7.0"],"new_versions":["2.8.1"]}]`,
+			"global-7d.json":  `[]`,
+			"global-0s.json":  `[{"name":"hk","backend":"github:jdx/hk","old_versions":["2.7.1"],"new_versions":["2.8.1"]}]`,
+		}
+		for file, contents := range quiet {
+			writePolicyFixture(t, filepath.Join(temp, file), contents)
+		}
+		body := filepath.Join(temp, "body.md")
+		cmd := lockUpdateCommand(t, temp, repo, bin, "FIXTURE_DIR="+temp, "MISE_LOCK_PR_BODY_FILE="+body)
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			t.Fatalf("updater failed: %v\n%s", err, output)
+		}
+		bodyText := readPolicyLog(t, body)
+		for _, want := range []string{
+			"| Package | Type | Update | Change | Scope |",
+			"|---|---|---|---|---|",
+			"| bun | tools | patch | `1.4.3` → `1.4.4` | Project |",
+		} {
+			if !strings.Contains(bodyText, want) {
+				t.Fatalf("body omitted %q:\n%s", want, bodyText)
+			}
+		}
+		if strings.Contains(bodyText, "Pending") || strings.Contains(bodyText, "| [hk]") {
+			t.Fatalf("body kept a pending-only column or row:\n%s", bodyText)
 		}
 		assertLockTempCleaned(t, temp)
 	})

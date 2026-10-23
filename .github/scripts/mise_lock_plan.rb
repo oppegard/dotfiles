@@ -91,13 +91,9 @@ end
 def plan_scope(scope, aged, fresh, emergency_tool, age)
   aged_by_name = index_changes(aged)
   fresh_by_name = index_changes(fresh)
-  names = []
-  seen = {}
-  (aged_by_name.keys + fresh_by_name.keys).each do |name|
-    next if seen[name]
-
-    seen[name] = true
-    names << name
+  names = aged_by_name.keys
+  if !emergency_tool.empty? && fresh_by_name[emergency_tool] && !aged_by_name[emergency_tool]
+    names += [emergency_tool]
   end
   rows = []
   names.each do |name|
@@ -117,22 +113,20 @@ def plan_scope(scope, aged, fresh, emergency_tool, age)
       adopted = aged_new
       write_age = age
     end
-    kept = adopted.nil? ? old : adopted
+    next if adopted.nil?
+
     pending = nil
-    if fresh_new && fresh_new != kept && list_is_forward(kept, fresh_new) == true
+    if fresh_new && fresh_new != adopted && list_is_forward(adopted, fresh_new) == true
       pending = fresh_new
     end
-    next if adopted.nil? && pending.nil?
-
-    compared = adopted || pending || []
     rows << {
       "scope" => scope,
       "name" => name,
       "backend" => backend,
       "old" => old,
-      "adopted" => adopted || [],
+      "adopted" => adopted,
       "pending" => pending || [],
-      "update" => update_kind(old, compared),
+      "update" => update_kind(old, adopted),
       "age" => write_age,
     }
   end
@@ -173,10 +167,7 @@ def package_cell(row)
 end
 
 def change_cell(row)
-  old = code_list(row["old"])
-  return "#{old} → #{code_list(row["adopted"])}" unless row["adopted"].empty?
-
-  old
+  "#{code_list(row["old"])} → #{code_list(row["adopted"])}"
 end
 
 def pending_cell(row)
@@ -211,45 +202,55 @@ def scope_cell(row)
 end
 
 def title_for(rows)
-  adopted = rows.select { |row| !row["adopted"].empty? }
-  pending = rows.select { |row| !row["pending"].empty? }
-  chosen = adopted.empty? ? pending : adopted
-  field = adopted.empty? ? "pending" : "adopted"
-  prefix = adopted.empty? ? "pending" : "update"
-  if chosen.empty?
-    return "chore(mise): update tool locks"
-  end
-
   labels = []
-  chosen.each do |row|
-    label = "#{row["name"]} #{row[field][0]}"
+  rows.each do |row|
+    label = "#{row["name"]} #{row["adopted"][0]}"
     labels << label unless labels.include?(label)
   end
+  return "chore(mise): update tool locks" if labels.empty?
+
   shown = labels.take(2).join(", ")
   extra = labels.length > 2 ? " (+#{labels.length - 2})" : ""
-  "chore(mise): #{prefix} #{shown}#{extra}"
+  "chore(mise): update #{shown}#{extra}"
+end
+
+def table_row(row, show_pending)
+  cells = [package_cell(row), "tools", row["update"], change_cell(row)]
+  cells << pending_cell(row) if show_pending
+  cells << scope_cell(row)
+  "| #{cells.join(" | ")} |"
 end
 
 def render(plans, age, emergency_tool)
   rows = combine_rows(plans.flat_map { |plan| plan["rows"] })
+  show_pending = rows.any? { |row| !row["pending"].empty? }
+  if show_pending
+    header = "| Package | Type | Update | Change | Pending | Scope |"
+    separator = "|---|---|---|---|---|---|"
+    blank = "| | | | | | |"
+  else
+    header = "| Package | Type | Update | Change | Scope |"
+    separator = "|---|---|---|---|---|"
+    blank = "| | | | | |"
+  end
   lines = [
     "This PR contains the following updates:",
     "",
-    "| Package | Type | Update | Change | Pending | Scope |",
-    "|---|---|---|---|---|---|",
+    header,
+    separator,
   ]
-  lines << "| | | | | | |" if rows.empty?
-  rows.each do |row|
-    lines << "| #{package_cell(row)} | tools | #{row["update"]} | #{change_cell(row)} | #{pending_cell(row)} | #{scope_cell(row)} |"
-  end
+  lines << blank if rows.empty?
+  rows.each { |row| lines << table_row(row, show_pending) }
   lines += [
     "",
     "---",
     "",
     "The age window is `#{age}` from `minimum_release_age`.",
-    "A pending version is a newer release inside the age window. This pull request does not lock it.",
-    "Mise lock JSON has no pending field.",
-    "Pending is the `0s` resolution when that version is newer than the one this pull request locks.",
+  ]
+  if show_pending
+    lines << "Pending is a newer release inside that window. This pull request locks the version in Change."
+  end
+  lines += [
     "Release notes name the version this pull request locks.",
     "",
     "Mise does not refuse a major bump of a `latest` or `lts` request.",
@@ -268,8 +269,6 @@ def render(plans, age, emergency_tool)
   entries = []
   seen = {}
   rows.each do |row|
-    next if row["adopted"].empty?
-
     repo = github_repo(row["backend"])
     next if repo.nil?
 
@@ -335,8 +334,6 @@ def command_plan(argv)
   )
   File.write(options[:out], JSON.generate(plan))
   plan["rows"].each do |row|
-    next if row["adopted"].empty?
-
     puts "#{row["name"]} #{row["age"]}"
   end
 end

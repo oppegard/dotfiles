@@ -69,7 +69,9 @@ request, and this workflow does not add a filter for one. The workflow sets
 `MISE_SAFE=1`. Safe mode hides the Go version read from `go.mod`, so the job
 does not bump that pin. After changing `go.mod`, run `mise lock` yourself. A
 run that only finds versions inside the age window does not open a pull
-request, because no lock file changes.
+request, because no lock file changes. The table lists a tool only when its
+locked version changes. Pending is a newer release still inside the age
+window on that same row, and the column is omitted when no row has one.
 
 To bypass the age window for one tool, run the workflow and set
 `emergency_tool` to that tool's name. The run passes
