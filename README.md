@@ -17,11 +17,11 @@ Run these commands from the repository root. Install the versions in `mise.lock`
 mise install --locked
 ```
 
-To update a tool within its `mise.toml` request, regenerate the lock, then check
-and review the changes:
+To update a tool within its `mise.toml` request, regenerate the lock with a 7
+day age window, then check and review the changes.
 
 ```sh
-mise lock --bump shellcheck
+mise lock --bump --minimum-release-age 7d shellcheck
 mise install --locked
 mise run lint
 mise run test:integration
@@ -40,10 +40,11 @@ Bootstrap installs the versions in
 and macOS arm64. Mise links it to `~/.config/mise/mise.lock`; native dependency
 sidecars in the adjacent `locks/` directory stay in the checkout.
 
-After bootstrap, update one global tool within its `config.toml` request:
+After bootstrap, update one global tool within its `config.toml` request. Use
+the same 7 day age window.
 
 ```sh
-mise lock --global --bump shellcheck
+mise lock --global --bump --minimum-release-age 7d shellcheck
 mise -C ~ install --locked
 mise run lint
 mise run test:integration
@@ -54,6 +55,33 @@ Use `mise lock --global` to refresh metadata without changing locked versions.
 Commit the global config, lock, and generated sidecars together when applicable.
 Keep sidecars as generated; the lock verifies their content digest.
 `bin/setup.sh` still performs deliberate tool upgrades.
+
+## Update locks on a schedule
+
+The `Update mise locks` workflow opens a pull request for `mise.lock` and
+`files/home/.config/mise/mise.lock`. It resolves each tool with
+`--minimum-release-age 7d` and locks a version only when that resolution is
+newer than the committed lock. A prefix request such as `2` or `1.27` stays
+inside that prefix. Mise does not refuse a major bump of a `latest` or `lts`
+request, and this workflow does not add a filter for one.
+
+To bypass the age window for one tool, run the workflow and set
+`emergency_tool` to that tool's name. The run passes
+`--minimum-release-age 0s` for that name only.
+
+Set repository secrets `MISE_LOCKS_APP_ID` and `MISE_LOCKS_APP_PRIVATE_KEY`
+when pull request checks should start on their own. The workflow passes the
+app id to `actions/create-github-app-token`. That input is deprecated in favor
+of `client-id`. Without the secrets, the workflow uses `GITHUB_TOKEN` and
+dispatches `lint.yml` and `integration-tests.yml`.
+
+Set repository variable `MISE_LOCKS_AUTOMERGE` to `true` to turn on auto-merge
+for the lock pull request. Leave the variable unset to keep auto-merge off.
+Auto-merge cannot skip a major bump of a `latest` or `lts` tool. Allow
+auto-merge in the repository settings, and require the checks `Lint`,
+`Integration test (macos-latest)`, and `Integration test (ubuntu-26.04)`.
+If more than one merge method is allowed, `gh pr merge --auto` will not pick
+one, so allow a single method before turning the variable on.
 
 ## Integration tests
 

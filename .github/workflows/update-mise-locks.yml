@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "41 7 * * *"
   workflow_dispatch:
+    inputs:
+      emergency_tool:
+        description: Tool name that bypasses the 7 day age window
+        required: false
+        type: string
 
 permissions: {}
 
@@ -26,6 +31,7 @@ jobs:
       actions: write # Dispatch CI against the update branch.
     env:
       PR_BRANCH: automation/mise-locks
+      MISE_LOCKS_HAS_APP: ${{ secrets.MISE_LOCKS_APP_ID != '' && secrets.MISE_LOCKS_APP_PRIVATE_KEY != '' }}
     steps:
       - name: Check out default branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -39,27 +45,49 @@ jobs:
         with:
           install: false
 
+      - name: Create GitHub App token
+        id: app-token
+        if: ${{ env.MISE_LOCKS_HAS_APP == 'true' }}
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          # jactionlint ignore=deprecated-action-input
+          app-id: ${{ secrets.MISE_LOCKS_APP_ID }}
+          private-key: ${{ secrets.MISE_LOCKS_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
       - name: Update project and global locks
+        env:
+          MISE_LOCK_EMERGENCY_TOOL: ${{ github.event_name == 'workflow_dispatch' && inputs.emergency_tool || '' }}
+          MISE_LOCK_PR_TITLE_FILE: ${{ runner.temp }}/mise-lock-title.txt
+          MISE_LOCK_PR_BODY_FILE: ${{ runner.temp }}/mise-lock-body.md
         run: |
+          set -euo pipefail
           bash .github/scripts/update-mise-locks.sh
           # git add must receive existing paths even when no tool needs sidecars.
           mkdir -p .mise/locks files/home/.config/mise/locks
 
+      - name: Read generated pull request title
+        id: pr-text
+        run: |
+          set -euo pipefail
+          {
+            echo "title<<EOF"
+            cat "$RUNNER_TEMP/mise-lock-title.txt"
+            echo "EOF"
+          } >>"$GITHUB_OUTPUT"
+
       - name: Create or update lock pull request
         id: pull-request
-        # Keep branch reconciliation and active PR outputs for dispatch retries.
         # jactionlint ignore=superfluous-actions
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
-          token: ${{ github.token }}
+          token: ${{ steps.app-token.outputs.token || github.token }}
           branch: ${{ env.PR_BRANCH }}
           base: ${{ github.event.repository.default_branch }}
-          commit-message: "chore(mise): update tool locks"
-          title: "chore(mise): update tool locks"
-          body: |
-            Refresh project and global mise locks within the configured version requests.
-
-            The updater dispatches lint and the full macOS and Linux integration suite against this branch.
+          commit-message: ${{ steps.pr-text.outputs.title }}
+          title: ${{ steps.pr-text.outputs.title }}
+          body-path: ${{ runner.temp }}/mise-lock-body.md
           add-paths: |
             mise.lock
             .mise/locks/
@@ -67,7 +95,7 @@ jobs:
             files/home/.config/mise/locks/
 
       - name: Run CI on the active pull request head
-        if: ${{ steps.pull-request.outputs.pull-request-number != '' && steps.pull-request.outputs.pull-request-head-sha != '' }}
+        if: ${{ env.MISE_LOCKS_HAS_APP != 'true' && steps.pull-request.outputs.pull-request-number != '' && steps.pull-request.outputs.pull-request-head-sha != '' }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PR_HEAD_SHA: ${{ steps.pull-request.outputs.pull-request-head-sha }}
@@ -80,3 +108,12 @@ jobs:
           fi
           gh workflow run lint.yml --repo "$GITHUB_REPOSITORY" --ref "$PR_BRANCH"
           gh workflow run integration-tests.yml --repo "$GITHUB_REPOSITORY" --ref "$PR_BRANCH"
+
+      - name: Enable auto-merge
+        if: ${{ vars.MISE_LOCKS_AUTOMERGE == 'true' && steps.pull-request.outputs.pull-request-number != '' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
+          PR_NUMBER: ${{ steps.pull-request.outputs.pull-request-number }}
+        run: |
+          set -euo pipefail
+          gh pr merge --auto "$PR_NUMBER"

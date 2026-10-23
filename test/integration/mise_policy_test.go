@@ -77,64 +77,116 @@ printf 'mise %s\n' "$*" >> "$HOME/commands"
 	}
 }
 
+const miseLockUpdateFiles = ".github/scripts/update-mise-locks.sh\x00.github/scripts/mise_lock_plan.py\x00files/home/.config/mise/config.toml\x00files/home/.config/mise/config.home.toml\x00"
+
+const miseLockStubPrefix = `#!/bin/bash
+set -euo pipefail
+[[ "$PWD" == "$EXPECTED_REPO" ]]
+[[ "$MISE_SAFE" == 1 ]]
+[[ "$MISE_AUTO_ENV" == false && "$MISE_ENV" == home ]]
+[[ "$MISE_CEILING_PATHS" == "$(dirname "$EXPECTED_REPO")" ]]
+[[ -d "$MISE_SYSTEM_CONFIG_DIR" && -z "$(ls -A "$MISE_SYSTEM_CONFIG_DIR")" ]]
+[[ -z "${MISE_GLOBAL_CONFIG_FILE+x}${MISE_CONFIG_FILE+x}${MISE_GLOBAL_CONFIG_ROOT+x}${MISE_SYSTEM_CONFIG_FILE+x}" ]]
+[[ -z "${MISE_OVERRIDE_CONFIG_FILENAMES+x}${MISE_OVERRIDE_TOOL_VERSIONS_FILENAMES+x}" ]]
+scope=project
+if [[ "$1 $2" == "lock --global" ]]; then
+  scope=global
+  [[ "$MISE_CONFIG_DIR" == "$EXPECTED_REPO/files/home/.config/mise" ]]
+  [[ -f "$MISE_CONFIG_DIR/config.toml" && -f "$MISE_CONFIG_DIR/config.home.toml" ]]
+else
+  [[ -d "$MISE_CONFIG_DIR" && -z "$(ls -A "$MISE_CONFIG_DIR")" ]]
+fi
+printf '%s %s\n' "$scope" "$*" >> "$COMMAND_LOG"
+printf '%s\n' "$MISE_SYSTEM_CONFIG_DIR" > "$SYSTEM_LOG"
+`
+
+func prepareLockUpdate(t *testing.T, stub string) (string, string, string) {
+	t.Helper()
+	temp := t.TempDir()
+	temp, err := filepath.EvalSymlinks(temp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	repo := filepath.Join(temp, "repo")
+	bin := filepath.Join(temp, "bin")
+	copyTrackedFiles(t, filepath.Join("..", ".."), repo, miseLockUpdateFiles)
+	writePolicyFixture(t, filepath.Join(bin, "mise"), stub)
+	return temp, repo, bin
+}
+
+func lockUpdateCommand(t *testing.T, temp, repo, bin string, extra ...string) *exec.Cmd {
+	t.Helper()
+	cmd := exec.CommandContext(t.Context(), "bash", filepath.Join(repo, ".github", "scripts", "update-mise-locks.sh"))
+	cmd.Dir = temp
+	cmd.Env = append([]string{
+		"HOME=" + filepath.Join(temp, "home"),
+		"PATH=" + bin + ":/usr/bin:/bin",
+		"TMPDIR=" + temp,
+		"EXPECTED_REPO=" + repo,
+		"COMMAND_LOG=" + filepath.Join(temp, "commands"),
+		"SYSTEM_LOG=" + filepath.Join(temp, "system"),
+		"MISE_SAFE=0",
+		"MISE_CONFIG_DIR=/unrelated/global",
+		"MISE_SYSTEM_CONFIG_DIR=/unrelated/system",
+		"MISE_CEILING_PATHS=/unrelated/ancestor",
+		"MISE_AUTO_ENV=true",
+		"MISE_ENV=work,macos",
+		"MISE_GLOBAL_CONFIG_FILE=/unrelated/global.toml",
+		"MISE_CONFIG_FILE=/unrelated/config.toml",
+		"MISE_GLOBAL_CONFIG_ROOT=/unrelated/root",
+		"MISE_SYSTEM_CONFIG_FILE=/unrelated/system.toml",
+		"MISE_OVERRIDE_CONFIG_FILENAMES=unrelated.toml",
+		"MISE_OVERRIDE_TOOL_VERSIONS_FILENAMES=unrelated-versions",
+	}, extra...)
+	return cmd
+}
+
+func assertLockTempCleaned(t *testing.T, temp string) {
+	t.Helper()
+	system := strings.TrimSpace(readPolicyLog(t, filepath.Join(temp, "system")))
+	if _, err := os.Stat(system); !os.IsNotExist(err) {
+		t.Fatalf("updater did not clean its temporary config directory %s: %v", system, err)
+	}
+}
+
 func TestMiseLockUpdateScopes(t *testing.T) {
+	stub := miseLockStubPrefix + `
+case "$*" in
+  "lock --bump --dry-run --json --minimum-release-age 7d"|"lock --bump --dry-run --json --minimum-release-age 0s"|"lock --global --bump --dry-run --json --minimum-release-age 7d"|"lock --global --bump --dry-run --json --minimum-release-age 0s")
+    ;;
+  *)
+    echo "Unexpected mise command: $*" >&2
+    exit 1
+    ;;
+esac
+if [[ "$FAIL_SCOPE" == "$scope" ]]; then
+  echo "$scope lock failed" >&2
+  exit 7
+fi
+printf '%s\n' '[]'
+`
+	projectAged := "project lock --bump --dry-run --json --minimum-release-age 7d\n"
+	projectFresh := "project lock --bump --dry-run --json --minimum-release-age 0s\n"
+	globalAged := "global lock --global --bump --dry-run --json --minimum-release-age 7d\n"
+	globalFresh := "global lock --global --bump --dry-run --json --minimum-release-age 0s\n"
 	for _, failScope := range []string{"", "project", "global"} {
 		name := failScope
 		if name == "" {
 			name = "success"
 		}
 		t.Run(name, func(t *testing.T) {
-			temp := t.TempDir()
-			temp, err := filepath.EvalSymlinks(temp)
-			if err != nil {
-				t.Fatal(err)
-			}
-			repo := filepath.Join(temp, "repo")
-			bin := filepath.Join(temp, "bin")
-			copyTrackedFiles(t, filepath.Join("..", ".."), repo, ".github/scripts/update-mise-locks.sh\x00files/home/.config/mise/config.toml\x00files/home/.config/mise/config.home.toml\x00")
-			writePolicyFixture(t, filepath.Join(bin, "mise"), `#!/bin/bash
-set -euo pipefail
-[[ "$PWD" == "$EXPECTED_REPO" ]]
-[[ "$MISE_AUTO_ENV" == false && "$MISE_ENV" == home ]]
-[[ "$MISE_CEILING_PATHS" == "$(dirname "$EXPECTED_REPO")" ]]
-[[ -d "$MISE_SYSTEM_CONFIG_DIR" && -z "$(ls -A "$MISE_SYSTEM_CONFIG_DIR")" ]]
-[[ -z "${MISE_GLOBAL_CONFIG_FILE+x}${MISE_GLOBAL_CONFIG_ROOT+x}${MISE_SYSTEM_CONFIG_FILE+x}" ]]
-[[ -z "${MISE_OVERRIDE_CONFIG_FILENAMES+x}${MISE_OVERRIDE_TOOL_VERSIONS_FILENAMES+x}" ]]
-if [[ "$*" == 'lock --bump' ]]; then
-  scope=project
-  [[ -d "$MISE_CONFIG_DIR" && -z "$(ls -A "$MISE_CONFIG_DIR")" ]]
-elif [[ "$*" == 'lock --global --bump' ]]; then
-  scope=global
-  [[ "$MISE_CONFIG_DIR" == "$EXPECTED_REPO/files/home/.config/mise" ]]
-  [[ -f "$MISE_CONFIG_DIR/config.toml" && -f "$MISE_CONFIG_DIR/config.home.toml" ]]
-else
-  echo "Unexpected mise command: $*" >&2
-  exit 1
-fi
-printf '%s\n' "$scope" >> "$COMMAND_LOG"
-printf '%s\n' "$MISE_SYSTEM_CONFIG_DIR" > "$SYSTEM_LOG"
-if [[ "$FAIL_SCOPE" == "$scope" ]]; then
-  echo "$scope lock failed" >&2
-  exit 7
-fi
-echo "$scope lock updated"
-`)
-			cmd := exec.CommandContext(t.Context(), "bash", filepath.Join(repo, ".github", "scripts", "update-mise-locks.sh"))
-			cmd.Dir = temp
-			cmd.Env = []string{
-				"HOME=" + filepath.Join(temp, "home"), "PATH=" + bin + ":/usr/bin:/bin", "TMPDIR=" + temp,
-				"EXPECTED_REPO=" + repo, "COMMAND_LOG=" + filepath.Join(temp, "commands"), "SYSTEM_LOG=" + filepath.Join(temp, "system"), "FAIL_SCOPE=" + failScope,
-				"MISE_CONFIG_DIR=/unrelated/global", "MISE_SYSTEM_CONFIG_DIR=/unrelated/system", "MISE_CEILING_PATHS=/unrelated/ancestor", "MISE_AUTO_ENV=true", "MISE_ENV=work,macos",
-				"MISE_GLOBAL_CONFIG_FILE=/unrelated/global.toml", "MISE_GLOBAL_CONFIG_ROOT=/unrelated/root", "MISE_SYSTEM_CONFIG_FILE=/unrelated/system.toml",
-				"MISE_OVERRIDE_CONFIG_FILENAMES=unrelated.toml", "MISE_OVERRIDE_TOOL_VERSIONS_FILENAMES=unrelated-versions",
-			}
+			temp, repo, bin := prepareLockUpdate(t, stub)
+			cmd := lockUpdateCommand(t, temp, repo, bin, "FAIL_SCOPE="+failScope)
 			output, err := cmd.CombinedOutput()
 			if (err != nil) != (failScope != "") {
 				t.Fatalf("updater failure = %v, fail scope %q:\n%s", err, failScope, output)
 			}
-			want := "project\nglobal\n"
+			want := projectAged + projectFresh + globalAged + globalFresh
 			if failScope == "project" {
-				want = "project\n"
+				want = projectAged
+			}
+			if failScope == "global" {
+				want = projectAged + projectFresh + globalAged
 			}
 			if commands := readPolicyLog(t, filepath.Join(temp, "commands")); commands != want {
 				t.Fatalf("lock scope order = %q, want %q:\n%s", commands, want, output)
@@ -142,10 +194,155 @@ echo "$scope lock updated"
 			if failScope != "" && !strings.Contains(string(output), failScope+" lock failed") {
 				t.Fatalf("updater swallowed resolver failure:\n%s", output)
 			}
-			system := strings.TrimSpace(readPolicyLog(t, filepath.Join(temp, "system")))
-			if _, err := os.Stat(system); !os.IsNotExist(err) {
-				t.Fatalf("updater did not clean its temporary config directory %s: %v", system, err)
+			if failScope == "" && !strings.Contains(string(output), "chore(mise): update tool locks\n") {
+				t.Fatalf("updater omitted the empty title:\n%s", output)
 			}
+			assertLockTempCleaned(t, temp)
 		})
+	}
+}
+
+func TestMiseLockUpdatePlan(t *testing.T) {
+	stub := miseLockStubPrefix + `
+if [[ "$*" != *--dry-run* ]]; then
+  exit 0
+fi
+if [[ "$*" == *"--minimum-release-age 7d"* ]]; then
+  cat "$FIXTURE_DIR/$scope-7d.json"
+else
+  cat "$FIXTURE_DIR/$scope-0s.json"
+fi
+`
+	fixtures := map[string]string{
+		"project-7d.json": `[
+  {"name":"rumdl","backend":"github:rvben/rumdl","old_versions":["0.3.0"],"new_versions":["0.2.79"]},
+  {"name":"go","backend":"core:go","old_versions":["1.27.1"],"new_versions":[]},
+  {"name":"ref","backend":"core:ref","old_versions":["main"],"new_versions":["next"]},
+  {"name":"bun","backend":"core:bun","old_versions":["1.4.3"],"new_versions":["1.4.4"]},
+  {"name":"ruby","backend":"core:ruby","old_versions":["3.4.1"],"new_versions":["4.0.0"]}
+]`,
+		"project-0s.json": `[
+  {"name":"bun","backend":"core:bun","old_versions":["1.4.3"],"new_versions":["1.4.5"]},
+  {"name":"hk","backend":"github:jdx/hk","old_versions":["2.7.0"],"new_versions":["2.8.1"]},
+  {"name":"ruby","backend":"core:ruby","old_versions":["3.4.1"],"new_versions":["4.0.0"]}
+]`,
+		"global-7d.json": `[
+  {"name":"node","backend":"core:node","old_versions":["24.22.1"],"new_versions":["24.22.0"]}
+]`,
+		"global-0s.json": `[
+  {"name":"jactionlint","backend":"github:rhysd/actionlint","old_versions":["2.2.0"],"new_versions":["2.3.0"]}
+]`,
+	}
+	for _, emergency := range []string{"", "hk"} {
+		name := "adopt"
+		if emergency != "" {
+			name = "emergency"
+		}
+		t.Run(name, func(t *testing.T) {
+			temp, repo, bin := prepareLockUpdate(t, stub)
+			for file, contents := range fixtures {
+				writePolicyFixture(t, filepath.Join(temp, file), contents)
+			}
+			title := filepath.Join(temp, "title.txt")
+			body := filepath.Join(temp, "body.md")
+			extra := []string{
+				"FIXTURE_DIR=" + temp,
+				"MISE_LOCK_PR_TITLE_FILE=" + title,
+				"MISE_LOCK_PR_BODY_FILE=" + body,
+			}
+			if emergency != "" {
+				extra = append(extra, "MISE_LOCK_EMERGENCY_TOOL="+emergency)
+			}
+			cmd := lockUpdateCommand(t, temp, repo, bin, extra...)
+			output, err := cmd.CombinedOutput()
+			if err != nil {
+				t.Fatalf("updater failed: %v\n%s", err, output)
+			}
+			want := "" +
+				"project lock --bump --dry-run --json --minimum-release-age 7d\n" +
+				"project lock --bump --dry-run --json --minimum-release-age 0s\n" +
+				"project lock --bump --json --minimum-release-age 7d bun\n" +
+				"project lock --bump --json --minimum-release-age 7d ruby\n"
+			if emergency == "hk" {
+				want += "project lock --bump --json --minimum-release-age 0s hk\n"
+			}
+			want += "" +
+				"global lock --global --bump --dry-run --json --minimum-release-age 7d\n" +
+				"global lock --global --bump --dry-run --json --minimum-release-age 0s\n"
+			if commands := readPolicyLog(t, filepath.Join(temp, "commands")); commands != want {
+				t.Fatalf("lock commands = %q, want %q:\n%s", commands, want, output)
+			}
+			titleText := readPolicyLog(t, title)
+			bodyText := readPolicyLog(t, body)
+			if emergency == "hk" {
+				if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0 (+1)\n" {
+					t.Fatalf("title = %q", titleText)
+				}
+				if !strings.Contains(bodyText, "Emergency bump for `hk` uses `--minimum-release-age 0s`.") {
+					t.Fatalf("body omitted the emergency line:\n%s", bodyText)
+				}
+				if !strings.Contains(bodyText, "| hk | tools | minor | `2.7.0` → `2.8.1` |  | project |") {
+					t.Fatalf("body omitted the emergency hk row:\n%s", bodyText)
+				}
+			} else if titleText != "chore(mise): update bun 1.4.4, ruby 4.0.0\n" {
+				t.Fatalf("title = %q", titleText)
+			}
+			for _, want := range []string{
+				"| bun | tools | patch | `1.4.3` → `1.4.4` | `1.4.5` | project |",
+				"| ruby | tools | major | `3.4.1` → `4.0.0` |  | project |",
+				"| jactionlint | tools | minor | `2.2.0` | `2.3.0` | global |",
+				"Mise does not refuse a major bump of a `latest` or `lts` request.",
+				"This job does not add a major filter.",
+				"The updater does not roll a locked version backward when that version is still inside the age window.",
+				"https://github.com/jdx/hk/releases",
+				"https://github.com/rhysd/actionlint/releases",
+			} {
+				if !strings.Contains(bodyText, want) {
+					t.Fatalf("body omitted %q:\n%s", want, bodyText)
+				}
+			}
+			for _, absent := range []string{"| rumdl |", "| go |", "| node |", "| ref |"} {
+				if strings.Contains(bodyText, absent) {
+					t.Fatalf("body kept %q:\n%s", absent, bodyText)
+				}
+			}
+			assertLockTempCleaned(t, temp)
+		})
+	}
+
+	t.Run("dry-run", func(t *testing.T) {
+		temp, repo, bin := prepareLockUpdate(t, stub)
+		for file, contents := range fixtures {
+			writePolicyFixture(t, filepath.Join(temp, file), contents)
+		}
+		cmd := lockUpdateCommand(t, temp, repo, bin, "FIXTURE_DIR="+temp, "MISE_LOCK_DRY_RUN=1")
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			t.Fatalf("dry run failed: %v\n%s", err, output)
+		}
+		for _, line := range strings.Split(readPolicyLog(t, filepath.Join(temp, "commands")), "\n") {
+			if line != "" && !strings.Contains(line, "--dry-run") {
+				t.Fatalf("dry run wrote a lock: %q\n%s", line, output)
+			}
+		}
+		if !strings.Contains(string(output), "| ruby | tools | major |") {
+			t.Fatalf("dry run omitted the pending report:\n%s", output)
+		}
+		assertLockTempCleaned(t, temp)
+	})
+}
+
+func TestMiseLockUpdateRejectsEmergencyName(t *testing.T) {
+	temp, repo, bin := prepareLockUpdate(t, miseLockStubPrefix+"exit 1\n")
+	cmd := lockUpdateCommand(t, temp, repo, bin, "MISE_LOCK_EMERGENCY_TOOL=hk;touch")
+	output, err := cmd.CombinedOutput()
+	if err == nil {
+		t.Fatalf("updater accepted an emergency tool name:\n%s", output)
+	}
+	if !strings.Contains(string(output), "updater refused emergency tool name") {
+		t.Fatalf("updater failure was not the name check:\n%s", output)
+	}
+	if _, err := os.Stat(filepath.Join(temp, "commands")); !os.IsNotExist(err) {
+		t.Fatalf("rejected emergency tool still invoked mise: %v", err)
 	}
 }
