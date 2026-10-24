@@ -77,7 +77,7 @@ mkdir -p \
 chmod 700 "$HOME/.ssh"
 
 gum_print "👨‍🍳 👨‍🍳 👨‍🍳  MISE BOOTSTRAP  👨‍🍳 👨‍🍳 👨‍🍳"
-mise -C "$MISE_CONFIG_DIR" bootstrap --locked
+mise -C "$MISE_CONFIG_DIR" bootstrap --locked --prune-dotfiles
 mise -C "$MISE_CONFIG_DIR" bootstrap packages upgrade --yes
 
 gum_print "🧹 🧹 🧹  MISE PRUNE  🧹 🧹 🧹"
