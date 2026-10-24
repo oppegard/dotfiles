@@ -56,7 +56,7 @@ printf 'mise %s\n' "$*" >> "$HOME/commands"
 				t.Fatalf("setup failed with stubs: %v\n%s", err, output)
 			}
 			commands := readPolicyLog(t, filepath.Join(home, "commands"))
-			for _, want := range []string{"mise install --locked gum\n", "mise bootstrap --locked\n", "mise bootstrap packages upgrade --yes\n", "mise prune --tools --yes\n"} {
+			for _, want := range []string{"mise install --locked gum\n", "mise bootstrap --locked --prune-dotfiles\n", "mise bootstrap packages upgrade --yes\n", "mise prune --tools --yes\n"} {
 				if !strings.Contains(commands, want) {
 					t.Errorf("setup lacks %q:\n%s", want, commands)
 				}
