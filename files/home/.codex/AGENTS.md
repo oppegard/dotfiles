@@ -29,6 +29,7 @@ Apply these rules to coding and non-coding tasks:
 - `merman-cli` is installed. Validate each Mermaid diagram with
   `merman-cli lint diagram.mmd` before you present it.
 - Use prose for simple answers and details a diagram cannot show.
+- End any turn that reports on long-running or delegated work with a short status: **Goal**, **Done**, **Next**, **Needs you** (or "nothing").
 
 ## Task references
 
