@@ -42,8 +42,12 @@ func TestSetupUsesCommittedToolLocks(t *testing.T) {
 			writePolicyFixture(t, filepath.Join(bin, "mise"), `#!/bin/bash
 set -eu
 if [[ "$1" == activate ]]; then exit 0; fi
-shift 2
-printf 'mise %s\n' "$*" >> "$HOME/commands"
+if [[ "$1" == -C ]]; then
+  shift 2
+  printf 'mise -C %s\n' "$*" >> "$HOME/commands"
+else
+  printf 'mise %s\n' "$*" >> "$HOME/commands"
+fi
 `)
 			for _, name := range []string{"git", "brew", "open"} {
 				writePolicyFixture(t, filepath.Join(bin, name), "#!/bin/bash\nprintf '%s %s\\n' '"+name+"' \"$*\" >> \"$HOME/commands\"\n")
@@ -56,12 +60,25 @@ printf 'mise %s\n' "$*" >> "$HOME/commands"
 				t.Fatalf("setup failed with stubs: %v\n%s", err, output)
 			}
 			commands := readPolicyLog(t, filepath.Join(home, "commands"))
-			for _, want := range []string{"mise install --locked gum\n", "mise bootstrap --locked --prune-dotfiles\n", "mise bootstrap packages upgrade --yes\n", "mise prune --tools --yes\n"} {
+			for _, want := range []string{
+				"mise install --locked gum\n",
+				"mise -C bootstrap --locked --skip tools --prune-dotfiles\n",
+				"mise bootstrap --only tools --locked\n",
+				"mise -C bootstrap packages upgrade --yes\n",
+				"mise -C prune --tools --yes\n",
+			} {
 				if !strings.Contains(commands, want) {
 					t.Errorf("setup lacks %q:\n%s", want, commands)
 				}
 			}
-			for _, forbidden := range []string{"mise upgrade", "mise install gum\n", "mise bootstrap\n", "MISE UPGRADE"} {
+			for _, forbidden := range []string{
+				"mise upgrade",
+				"mise install gum\n",
+				"mise -C install --locked gum\n",
+				"mise bootstrap\n",
+				"mise -C bootstrap --locked --prune-dotfiles\n",
+				"MISE UPGRADE",
+			} {
 				if strings.Contains(commands, forbidden) {
 					t.Errorf("setup must not request %q:\n%s", forbidden, commands)
 				}
