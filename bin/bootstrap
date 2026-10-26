@@ -96,7 +96,11 @@ bootstrap_mise() {
 
 mise_bootstrap() {
 	debug "Running mise bootstrap..."
-	mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap --locked
+	# Link dotfiles before installing tools. mise 2026.10.19 keeps versions from
+	# a project lockfile reached through the ~/.config/mise/mise.lock symlink,
+	# but it drops the download URLs. The global config may use that symlink.
+	mise -C "$DOTFILES_ROOT/files/home/.config/mise" bootstrap --locked --skip tools
+	mise bootstrap --only tools --locked
 }
 main() {
 	if [ "$#" -ne 0 ]; then
