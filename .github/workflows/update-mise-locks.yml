@@ -2,7 +2,8 @@ name: Update mise locks
 
 on:
   schedule:
-    - cron: "41 7 * * *"
+    - cron: "22 2 * * 2"
+      timezone: "America/Denver"
   workflow_dispatch:
 
 permissions: {}

@@ -398,7 +398,7 @@ tools from Step 2 provide Git for the clone.
   6. Exports the live BetterDisplay portable keys back into the repository.
   7. Opens BetterDisplay and Clocker in the background.
 
-  Mise-managed tool versions come from the committed locks. A nightly workflow
+  Mise-managed tool versions come from the committed locks. A weekly workflow
   proposes lock updates in a pull request and runs lint and the full integration
   suite on its branch. Setup fails if a required locked download is missing;
   review the locks before retrying.
