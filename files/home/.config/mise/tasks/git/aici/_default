@@ -1,0 +1,71 @@
+#!/bin/bash
+#MISE description="Draft a staged commit message and review it in Git's editor"
+#MISE raw=true
+#MISE quiet=true
+#MISE dir="{{ cwd }}"
+#MISE tools={gum="2"}
+
+set -euo pipefail
+
+if [[ $# -eq 1 && ($1 == -h || $1 == --help) ]]; then
+	cat <<'HELP'
+Usage: git aici
+
+Draft a commit message from staged changes, then review it in Git's editor.
+Save and close the editor to commit. Exit the editor with failure or erase
+its message to cancel.
+HELP
+	exit 0
+fi
+if [[ $# -ne 0 ]]; then
+	printf 'Usage: git aici [-h|--help]\n' >&2
+	exit 1
+fi
+
+if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) != true ]]; then
+	printf 'git aici: run inside a Git working tree.\n' >&2
+	exit 1
+fi
+
+umask 077
+workdir=$(mktemp -d "${TMPDIR:-/tmp}/git-aici.XXXXXXXX")
+trap 'rm -rf -- "$workdir"' EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+patch_file=$workdir/staged.patch
+message_file=$workdir/message
+check_file=$workdir/current.patch
+
+diff_args=(
+	--cached --no-relative --no-color --no-ext-diff --no-textconv
+	--ignore-submodules=none --submodule=short
+)
+git diff "${diff_args[@]}" -- >"$patch_file"
+if [[ ! -s $patch_file ]]; then
+	printf 'git aici: no staged changes.\n' >&2
+	exit 1
+fi
+
+spinners=(line dot minidot jump pulse points globe moon monkey meter hamburger)
+spinner=${spinners[RANDOM % ${#spinners[@]}]}
+if ! gum spin --show-error --spinner "$spinner" --title 'Generating commit message...' -- \
+	mise run --quiet git:aici:generate "$workdir"; then
+	printf 'git aici: commit message generation failed.\n' >&2
+	if [[ -f $workdir/codex.log ]]; then
+		cat "$workdir/codex.log" >&2
+	fi
+	exit 1
+fi
+if [[ ! -s $message_file ]] || ! LC_ALL=C grep -q '[^[:space:]]' "$message_file"; then
+	printf 'git aici: Codex returned an empty commit message.\n' >&2
+	exit 1
+fi
+
+git diff "${diff_args[@]}" -- >"$check_file"
+if ! cmp -s "$patch_file" "$check_file"; then
+	printf 'git aici: staged changes changed during generation; run again.\n' >&2
+	exit 1
+fi
+
+git commit --edit --file "$message_file"

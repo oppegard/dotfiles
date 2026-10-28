@@ -3,6 +3,7 @@
 # - https://www.brantonboehm.com/code/conditional-git-config/
 # -
 [alias]
+	aici = !mise run --quiet git:aici
 	# branches by recency
 	brr = for-each-ref --sort=-committerdate refs/heads/ refs/remotes/ --format='%(if)%(HEAD)%(then)*%(else)%(if)%(worktreepath)%(then)+%(else) %(end)%(end) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 	ci = commit

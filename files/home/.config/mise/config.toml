@@ -49,6 +49,7 @@ mode = "symlink-each"
 "~/.config/mise/config.macos.toml" = "~/.dotfiles/files/home/.config/mise/config.macos.toml"
 "~/.config/mise/config.toml" = "~/.dotfiles/files/home/.config/mise/config.toml"
 "~/.config/mise/mise.lock" = "~/.dotfiles/files/home/.config/mise/mise.lock"
+"~/.config/mise/tasks" = "~/.dotfiles/files/home/.config/mise/tasks"
 "~/.config/mise/miserc.toml" = {
   source = "~/.dotfiles/files/home/.config/mise/miserc.toml.tera",
   mode = "template"
