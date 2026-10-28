@@ -1,0 +1,12 @@
+/* Option B: whole editor in PragmataPro Mono Liga ( denser notes ). */
+:root {
+  --font-text: "PragmataPro Mono Liga", ui-monospace, monospace;
+  --font-monospace: "PragmataPro Mono Liga", ui-monospace, monospace;
+  --font-interface: "PragmataPro Mono Liga", ui-monospace, monospace;
+}
+
+body {
+  font-variant-ligatures: contextual;
+  font-feature-settings: "calt" 1, "dlig" 0;
+  letter-spacing: normal;
+}
