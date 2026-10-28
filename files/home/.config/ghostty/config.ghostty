@@ -1,5 +1,8 @@
-font-family = "PragmataPro Mono"
+font-family = "PragmataPro Mono Liga"
 font-size = 16
+font-feature = -dlig
+font-feature = ss13 # curved git branch viz
+font-feature = ss15 # [BUG], [ERR], etc
 theme = "tokyonight"
 macos-icon = "holographic"
 # 128MB scrollback in bytes (per-terminal)
