@@ -117,7 +117,32 @@ font-feature = ss13
 
 **ss19 Math glyphs monoline.** Math symbols drop to a single stroke weight. Useful when a formula should match the rest of the mono text.
 
-Other sets, from the same name table:
+The stylistic set names below are the name-table strings in `PragmataPro_Mono_R_liga_0903.ttf`. They are copied as the font spells them.
+
+| Tag | Name |
+| --- | --- |
+| `ss03` | Fraktur |
+| `ss04` | Fraktur Bold |
+| `ss05` | Poker |
+| `ss06` | Script |
+| `ss07` | Script Bold |
+| `ss08` | Serif Bold |
+| `ss09` | Serif Italic |
+| `ss10` | Serif Bold Italic |
+| `ss11` | Braille |
+| `ss12` | Discretionary legatures |
+| `ss13` | Git tree |
+| `ss14` | pre2020 style |
+| `ss15` | Tags |
+| `ss16` | Serif |
+| `ss17` | LCD numbers |
+| `ss18` | Optional Tags # BUG // BUG |
+| `ss19` | Math glyphs monoline |
+| `ss20` | Reversed background |
+
+`ss15`, `ss18`, and `ss20` are present in the Liga files. The plain files do not include those three.
+
+Character variants in the same files:
 
 | Tag | What it does | Suggestion |
 | --- | --- | --- |
@@ -126,15 +151,6 @@ Other sets, from the same name table:
 | `cv02`, `cv03` | Alternate ampersands | Optional |
 | `cv04` | Three-line equals | Optional |
 | `cv05` | Present in the file | See the Handbook |
-| `ss04` | Fraktur Bold | With `ss03`, if you want it heavier |
-| `ss05` | Poker cards | Novelty |
-| `ss06`, `ss07` | Script, Script Bold | Novelty |
-| `ss08`, `ss09`, `ss10`, `ss16` | Serif math styles | Math-heavy notes |
-| `ss11` | Braille with helpers | When you read braille |
-| `ss12` | Discretionary ligatures, including card codes | Leave off |
-| `ss14` | Pre-2020 letterforms | Nostalgia |
-| `ss15`, `ss18` | Tags such as `[BUG]` | Liga files only |
-| `ss20` | Reversed background for `[text]` | Liga files only |
 
 Two more built-ins:
 
