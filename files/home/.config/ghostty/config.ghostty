@@ -1,5 +1,6 @@
-font-family = "PragmataPro Mono"
+font-family = "PragmataPro Mono Liga"
 font-size = 16
+font-feature = -dlig
 theme = "tokyonight"
 macos-icon = "holographic"
 # 128MB scrollback in bytes (per-terminal)

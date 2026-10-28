@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+# Report which PragmataPro families are installed, and whether Ghostty lists them.
+set -euo pipefail
+
+if [[ $# -ne 0 ]]; then
+	echo "Usage: pragmatapro-features" >&2
+	exit 2
+fi
+
+families=(
+	"PragmataPro"
+	"PragmataPro Liga"
+	"PragmataPro Mono"
+	"PragmataPro Mono Liga"
+)
+recommended="PragmataPro Mono Liga"
+
+os_list=$(mktemp)
+ghostty_list=$(mktemp)
+trap 'rm -f "$os_list" "$ghostty_list"' EXIT
+
+load_fc_list() {
+	fc-list : family | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | sed '/^$/d' | sort -u
+}
+
+load_system_profiler() {
+	system_profiler SPFontsDataType | sed -n \
+		-e '/^[[:space:]]*Family:[[:space:]]/ {
+      s/^[[:space:]]*Family:[[:space:]]*//
+      s/[[:space:]]*$//
+      p
+    }' \
+		-e '/^[[:space:]]\{4\}[^[:space:]].*:[[:space:]]*$/ {
+      s/^[[:space:]]\{4\}//
+      s/[[:space:]]*:[[:space:]]*$//
+      p
+    }' | sed '/^$/d' | sort -u
+}
+
+family_in_file() {
+	local family="$1"
+	local file="$2"
+	local line trimmed
+
+	while IFS= read -r line || [[ -n $line ]]; do
+		trimmed=${line#"${line%%[![:space:]]*}"}
+		trimmed=${trimmed%"${trimmed##*[![:space:]]}"}
+		trimmed=${trimmed%$'\r'}
+		trimmed=${trimmed#\"}
+		trimmed=${trimmed%\"}
+		case $trimmed in
+		"Family: $family" | "$family")
+			return 0
+			;;
+		esac
+	done <"$file"
+	return 1
+}
+
+os_name=$(uname -s)
+source_label=""
+
+if [[ $os_name == "Darwin" ]] && command -v system_profiler >/dev/null 2>&1; then
+	if load_system_profiler >"$os_list" && [[ -s $os_list ]]; then
+		source_label="system_profiler SPFontsDataType"
+	else
+		: >"$os_list"
+	fi
+fi
+
+if [[ -z $source_label ]] && command -v fc-list >/dev/null 2>&1; then
+	if load_fc_list >"$os_list" && [[ -s $os_list ]]; then
+		source_label="fc-list"
+	fi
+fi
+
+if [[ -z $source_label ]]; then
+	echo "error: cannot list fonts. On Linux, install fontconfig (fc-list). On macOS, system_profiler or fc-list is required." >&2
+	exit 2
+fi
+
+printf 'Source: %s\n\n' "$source_label"
+echo "Families:"
+
+recommended_installed=0
+for family in "${families[@]}"; do
+	if family_in_file "$family" "$os_list"; then
+		printf '  present   %s\n' "$family"
+		if [[ $family == "$recommended" ]]; then
+			recommended_installed=1
+		fi
+	else
+		printf '  missing   %s\n' "$family"
+	fi
+done
+
+echo
+ghostty_state="skipped"
+if command -v ghostty >/dev/null 2>&1; then
+	if ghostty +list-fonts >"$ghostty_list" 2>/dev/null; then
+		ghostty_state="listed"
+	else
+		ghostty_state="failed"
+	fi
+fi
+
+echo "Ghostty:"
+if [[ $ghostty_state == "listed" ]]; then
+	for family in "${families[@]}"; do
+		if family_in_file "$family" "$ghostty_list"; then
+			printf '  seen      %s\n' "$family"
+		else
+			printf '  not seen  %s\n' "$family"
+		fi
+	done
+elif [[ $ghostty_state == "failed" ]]; then
+	echo "  ghostty +list-fonts failed"
+else
+	echo "  not on PATH"
+fi
+
+echo
+status=0
+if [[ $recommended_installed -eq 0 ]]; then
+	printf 'Recommended family "%s" is not installed.\n' "$recommended"
+	status=1
+elif [[ $ghostty_state == "listed" ]]; then
+	if family_in_file "$recommended" "$ghostty_list"; then
+		printf 'Recommended family "%s" is installed, and Ghostty lists it.\n' "$recommended"
+	else
+		printf 'Recommended family "%s" is installed, but Ghostty does not list it.\n' "$recommended"
+		status=1
+	fi
+elif [[ $ghostty_state == "failed" ]]; then
+	printf 'Recommended family "%s" is installed. ghostty +list-fonts failed.\n' "$recommended"
+	status=1
+else
+	printf 'Recommended family "%s" is installed. Ghostty is not on PATH, so it was not checked.\n' "$recommended"
+fi
+
+echo "Guide: docs/pragmatapro.md"
+exit "$status"

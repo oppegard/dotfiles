@@ -1,0 +1,15 @@
+/* Option C: modular PragmataPro Liga for prose, Mono Liga for code.
+   Modular lets some symbols take 2 cells. Nice in reading view. */
+:root {
+  --font-text: "PragmataPro Liga", "PragmataPro", sans-serif;
+  --font-monospace: "PragmataPro Mono Liga", ui-monospace, monospace;
+}
+
+.markdown-source-view .cm-inline-code,
+.markdown-source-view .HyperMD-codeblock,
+.markdown-preview-view code,
+.markdown-preview-view pre {
+  font-family: var(--font-monospace);
+  font-feature-settings: "calt" 1, "dlig" 0;
+  letter-spacing: normal;
+}

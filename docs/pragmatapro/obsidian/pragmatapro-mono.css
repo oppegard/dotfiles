@@ -1,0 +1,18 @@
+/* Option A (recommended): monospace only for code.
+   Enable in Obsidian: Settings -> Appearance -> CSS snippets.
+   Also set Appearance -> Font -> Monospace font to "PragmataPro Mono Liga"
+   if the picker sees it. This snippet reinforces it and tunes ligatures. */
+:root {
+  --font-monospace: "PragmataPro Mono Liga", ui-monospace, monospace;
+}
+
+.markdown-source-view .cm-inline-code,
+.markdown-source-view .HyperMD-codeblock,
+.markdown-source-view .cm-hmd-frontmatter,
+.markdown-preview-view code,
+.markdown-preview-view pre {
+  font-family: var(--font-monospace);
+  font-variant-ligatures: contextual;
+  font-feature-settings: "calt" 1, "liga" 1, "dlig" 0;
+  letter-spacing: normal;
+}
