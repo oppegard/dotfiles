@@ -1,0 +1,5 @@
+.markdown-source-view.mod-cm6 .cm-inline-code,
+.markdown-source-view.mod-cm6 .HyperMD-codeblock,
+.markdown-preview-view code {
+	font-feature-settings: "calt" 1;
+}

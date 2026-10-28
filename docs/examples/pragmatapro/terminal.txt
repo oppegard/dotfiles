@@ -1,0 +1,43 @@
+PragmataPro 0.903 terminal specimen
+
+Compare the same text in Ghostty, Rex, and the IDEA terminal.
+The file contains plain text. It does not enable any font feature.
+
+Distinct characters
+0O  1Il  |!  ` ' "  { [ ( ) ] }  rn m  $ S  : ; , .
+
+Programming operators. Use Mono Liga with its default calt feature.
+!= == === !== =/= => -> <-> <= >= && || :: := ++ -- ...
+
+Selected badges. These need optional ss15 or ss18 support.
+[TODO] [ERROR] [WARN] [INFO] [FIXME]
+# TODO  # FIXME  // NOTE  // WARNING
+
+General brackets. ss20 changes more text than ss15 does.
+[plain text] [a-z] [0] [[wiki link]]
+
+Git graph. ss13 can curve the slash joins.
+*  main
+|\
+| * feature
+|/
+*  base
+
+Box drawing and alignment
+┌────────────┬────────────┐
+│ Fixed grid │ Crisp text │
+├────────────┼────────────┤
+│ 0123456789 │ abcdefghij │
+└────────────┴────────────┘
+
+Math and complex arrows. Compare Mono with the full modular family.
+∀ ∃ ∂ ∇ ∈ ∉ ∞ ∑ ∏ √ ∫ ∬ ∭ ⟶ ⟹ ⟷ ⟺
+
+Built-in icons. These tested codepoints exist in the supplied Mono font.
+ GitHub U+F09B     branch U+E0A0     Go U+E627
+
+Decorative words. ss12 changes these. Leave it off for ordinary work.
+love  warning  :)  shift
+
+Selection check. Move through each character, then copy this line.
+literal != === -> [TODO]
