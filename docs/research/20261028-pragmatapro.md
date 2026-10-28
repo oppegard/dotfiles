@@ -21,7 +21,10 @@ These are actual glyphs from your files, rendered with HarfBuzz. They are not
 screenshots of Ghostty, Rex, IDEA, or Obsidian. Application shaping can differ.
 
 The [setup guide](../how-to/pragmatapro.md) contains copyable settings and
-optional CSS. All active configs remain unchanged in this PR.
+optional CSS. This PR selects Mono Liga in the repository's Ghostty config
+and adds Rex's font preferences to its mise macOS defaults. The live machine
+remains unchanged. Apply these values later through the normal dotfile and
+bootstrap process.
 
 ## The four names describe two choices
 
@@ -188,9 +191,9 @@ actions. The Mac client stores font preferences in the `com.superlogical.rex`
 preference domain. These are separate systems. Rex does not read a native
 font TOML file in the inspected build.
 
-This repository already uses mise TOML to describe macOS preferences. It can
-describe a few Rex appearance keys the same way. The setup guide has a
-documentation-only example. It does not track or symlink the whole Rex plist,
+This repository already uses mise TOML to describe macOS preferences. This PR
+adds Rex's font family, size, and ligature setting to that table. The setup
+guide shows the included values. It does not track or symlink the whole Rex plist,
 which also holds live window, server, and session state.
 
 The observed family value is the family name, not the PostScript face name.

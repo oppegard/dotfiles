@@ -1,7 +1,9 @@
 # Use PragmataPro in your apps
 
-These are manual options. This PR applies none of them. Read the
-[font explanation](../research/20261028-pragmatapro.md) for the reasons.
+This PR configures Ghostty and Rex in the repository. It leaves the live
+machine unchanged. Apply those settings later through the normal dotfile
+and bootstrap process. The IDEA and Obsidian steps remain manual options.
+Read the [font explanation](../research/20261028-pragmatapro.md) for the reasons.
 
 ## Confirm the family first
 
@@ -24,8 +26,7 @@ The underlying characters must remain unchanged.
 
 ## Configure Ghostty
 
-The active repository config currently uses `PragmataPro Mono` at size 16.
-To adopt the recommendation later, select the Liga family:
+The Ghostty config included in this PR selects the Liga family at size 16:
 
 ```ini
 font-family = "PragmataPro Mono Liga"
@@ -77,7 +78,7 @@ not become Rex settings.
 
 ### Represent selected appearance settings in mise TOML
 
-For a later provisioning change, these values fit the repository's existing
+This PR includes these values in the repository's existing
 `[bootstrap.macos.defaults]` table in
 `files/home/.config/mise/config.macos.toml`:
 
@@ -89,15 +90,16 @@ For a later provisioning change, these values fit the repository's existing
 }
 ```
 
-This fragment belongs inside that existing table. It is not a standalone
+This fragment is part of that existing table. It is not a standalone
 Rex config. The family and numeric type were read from your preferences.
 The ligature key comes from the installed app, and its UI currently shows on.
 Provisioning and running-app reload behavior were not tested. Recheck these
 internal keys when Rex changes.
 
 The repository normally manages selected macOS preferences rather than whole
-third-party state files. A later change can explicitly opt in these narrow
-appearance keys. Do not symlink the whole Rex plist.
+third-party state files. These narrow appearance keys take effect through
+the normal bootstrap process when you apply it later. Do not symlink the
+whole Rex plist.
 
 ### Track bindings separately
 

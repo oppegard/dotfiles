@@ -66,14 +66,24 @@ as labeled. It embeds rasterized samples, not font software.
 Ghostty's installed `+validate-config --config-file=PATH` command checked
 temporary files with the documented family and feature settings. This checks
 syntax. It does not prove a particular application rendered every glyph.
+The same validator also checked the actual Ghostty config in the PR worktree.
 
 `merman-cli lint` checked both diagrams in the explanation. TOML parsing checked
-the Rex appearance example inside `[bootstrap.macos.defaults]`. The static
+the Rex appearance values inside `[bootstrap.macos.defaults]`. The static
 specimen was checked for control characters and aligned box widths.
 
 The Obsidian CSS selectors match the installed 1.14.5 stylesheet. No real
 vault was changed, so theme-specific overrides and actual-vault rendering
 remain unverified. No IDEA terminal ligature result is claimed.
+
+This PR includes the Ghostty family change and Rex appearance defaults in
+the repository configs. It does not apply them to the live machine.
+Application through the normal dotfile and bootstrap process remains a
+future step. Provisioning and running-app reload behavior remain unverified.
+Mise's read-only defaults status resolved all three Rex values from the actual
+PR config. It reported the family and size already set, with the explicit
+ligature preference unset. Live config file hashes, symlink targets, and
+Rex font preferences matched the snapshot taken before these PR edits.
 
 ## Local observations
 
