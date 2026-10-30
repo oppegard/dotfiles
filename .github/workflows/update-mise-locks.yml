@@ -27,7 +27,7 @@ jobs:
       actions: write # Dispatch CI against the update branch.
     env:
       PR_BRANCH: automation/mise-locks
-      MISE_LOCKS_HAS_APP: ${{ secrets.MISE_LOCKS_APP_ID != '' && secrets.MISE_LOCKS_APP_PRIVATE_KEY != '' }}
+      MISE_LOCKS_HAS_APP: ${{ secrets.MISE_LOCKS_APP_CLIENT_ID != '' && secrets.MISE_LOCKS_APP_PRIVATE_KEY != '' }}
     steps:
       - name: Check out default branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -46,8 +46,7 @@ jobs:
         if: ${{ env.MISE_LOCKS_HAS_APP == 'true' }}
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
-          # jactionlint ignore=deprecated-action-input
-          app-id: ${{ secrets.MISE_LOCKS_APP_ID }}
+          client-id: ${{ secrets.MISE_LOCKS_APP_CLIENT_ID }}
           private-key: ${{ secrets.MISE_LOCKS_APP_PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
