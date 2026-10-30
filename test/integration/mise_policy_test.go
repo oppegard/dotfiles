@@ -100,6 +100,7 @@ const miseLockStubPrefix = `#!/bin/bash
 set -euo pipefail
 [[ "$PWD" == "$EXPECTED_REPO" ]]
 [[ "$MISE_SAFE" == 1 ]]
+[[ "$MISE_LOCKFILE_AUTO_PRUNE" == false ]] || exit 1
 [[ "$MISE_AUTO_ENV" == false && "$MISE_ENV" == home ]]
 [[ "$MISE_CEILING_PATHS" == "$(dirname "$EXPECTED_REPO")" ]]
 [[ -d "$MISE_SYSTEM_CONFIG_DIR" && -z "$(ls -A "$MISE_SYSTEM_CONFIG_DIR")" ]]
@@ -168,6 +169,7 @@ func lockUpdateCommand(t *testing.T, temp, repo, bin string, extra ...string) *e
 		"SYSTEM_LOG=" + filepath.Join(temp, "system"),
 		"PLANNER_RUBY=" + strings.TrimSpace(string(rubyPath)),
 		"MISE_SAFE=0",
+		"MISE_LOCKFILE_AUTO_PRUNE=true",
 		"MISE_CONFIG_DIR=/unrelated/global",
 		"MISE_SYSTEM_CONFIG_DIR=/unrelated/system",
 		"MISE_CEILING_PATHS=/unrelated/ancestor",
