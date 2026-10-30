@@ -16,6 +16,7 @@ export MISE_CEILING_PATHS
 export MISE_AUTO_ENV=false
 export MISE_ENV=home
 export MISE_SAFE=1
+export MISE_LOCKFILE_AUTO_PRUNE=false
 
 planner="$REPO_DIR/.github/scripts/mise_lock_plan.rb"
 
