@@ -123,6 +123,23 @@ checksum = "sha256:caff76a7d070d8160c89bc39b6e85d98f24135b6fed038a3b4de2590d2510
 url = "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-darwin-arm64-v3.8.0.zip"
 url_api = "https://api.github.com/repos/git-lfs/git-lfs/releases/assets/532993595"
 
+[[tools."github:noirbizarre/git-wipe"]]
+version = "0.6.0"
+backend = "github:noirbizarre/git-wipe"
+specifiers = ["latest"]
+
+[tools."github:noirbizarre/git-wipe"."platforms.linux-x64"]
+checksum = "sha256:51be3e1f3a4210b14095b314d28ea860fd8c0a9abc7d8807fd9d97f246b9702c"
+checksum_source = "mise-versions"
+url = "https://github.com/noirbizarre/git-wipe/releases/download/0.6.0/git-wipe_0.6.0_linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/noirbizarre/git-wipe/releases/assets/665620559"
+
+[tools."github:noirbizarre/git-wipe"."platforms.macos-arm64"]
+checksum = "sha256:fc4d0d2975aa21fe27f6e57f4f08333bed612679ed95456a6e4a37b8721d07a0"
+checksum_source = "mise-versions"
+url = "https://github.com/noirbizarre/git-wipe/releases/download/0.6.0/git-wipe_0.6.0_darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/noirbizarre/git-wipe/releases/assets/665620510"
+
 [[tools.go]]
 version = "1.27.3"
 backend = "core:go"
