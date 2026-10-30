@@ -20,90 +20,92 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:Latias94/merman"]]
-version = "0.9.1"
+version = "0.9.2"
 backend = "aqua:Latias94/merman"
 specifiers = ["0.9"]
 
 [tools."aqua:Latias94/merman"."platforms.linux-x64"]
-checksum = "sha256:d74bee4c1123c6c681dcecf4eb0abd64add2fef846faa319c62afb5e09184d87"
-url = "https://github.com/Latias94/merman/releases/download/v0.9.1/merman-cli-x86_64-unknown-linux-gnu.tar.xz"
-url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/652933340"
+checksum = "sha256:7e33156646127bcd7794e7fd36cf76a7d19b501f77f945a186b98394a3451c55"
+checksum_source = "mise-versions"
+url = "https://github.com/Latias94/merman/releases/download/v0.9.2/merman-cli-x86_64-unknown-linux-gnu.tar.xz"
+url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/663557644"
 
 [tools."aqua:Latias94/merman"."platforms.macos-arm64"]
-checksum = "sha256:aa42b3c532cc0b7415bdb0f8e2f12d76a597aa12b373dc490c27a725a2984ce6"
-url = "https://github.com/Latias94/merman/releases/download/v0.9.1/merman-cli-aarch64-apple-darwin.tar.xz"
-url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/652933408"
+checksum = "sha256:68cdad1a3f45c2c9b95ac9b98c0a9d011c16f87bfb0c7177c17e23d8420f6b34"
+checksum_source = "mise-versions"
+url = "https://github.com/Latias94/merman/releases/download/v0.9.2/merman-cli-aarch64-apple-darwin.tar.xz"
+url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/663557611"
 
 [[tools."aqua:hashicorp/terraform"]]
-version = "1.16.6"
+version = "1.16.7"
 backend = "aqua:hashicorp/terraform"
 specifiers = ["1.16"]
 
 [tools."aqua:hashicorp/terraform"."platforms.linux-x64"]
-checksum = "sha256:38034b38d03096399a7a1264a14561a8029b2b496fd1f169452656e53968f1b7"
-url = "https://releases.hashicorp.com/terraform/1.16.6/terraform_1.16.6_linux_amd64.zip"
+checksum = "sha256:5454efcf7fc87f0c2113111b9a5c7182f0ca1c6f0f23a1e110a50770a8fe473b"
+url = "https://releases.hashicorp.com/terraform/1.16.7/terraform_1.16.7_linux_amd64.zip"
 
 [tools."aqua:hashicorp/terraform"."platforms.macos-arm64"]
-checksum = "sha256:85e1bc78ab45bdc5f82a7bac3929e37d072834a584d22583a2498dc67bb624cd"
-url = "https://releases.hashicorp.com/terraform/1.16.6/terraform_1.16.6_darwin_arm64.zip"
+checksum = "sha256:81e98d9186e0cd1bc88caeb2403453fdd4bdeedd574ca4dbe8fb6a2880c9c51a"
+url = "https://releases.hashicorp.com/terraform/1.16.7/terraform_1.16.7_darwin_arm64.zip"
 
 [[tools."aqua:terraform-linters/tflint"]]
-version = "0.64.0"
+version = "0.65.0"
 backend = "aqua:terraform-linters/tflint"
 specifiers = ["latest"]
 
 [tools."aqua:terraform-linters/tflint"."platforms.linux-x64"]
-checksum = "sha256:cca9d13e2e1d7a2c627af60ff899a3c9b74212899416aeb96ec764d2ef954537"
-url = "https://github.com/terraform-linters/tflint/releases/download/v0.64.0/tflint_linux_amd64.zip"
-url_api = "https://api.github.com/repos/terraform-linters/tflint/releases/assets/480528344"
+checksum = "sha256:d4c545ed2e29d6338604b586f34f544f380f70f243aa72f7b484713835eaec61"
+url = "https://github.com/terraform-linters/tflint/releases/download/v0.65.0/tflint_linux_amd64.zip"
+url_api = "https://api.github.com/repos/terraform-linters/tflint/releases/assets/666566850"
 provenance = "github-attestations"
 
 [tools."aqua:terraform-linters/tflint"."platforms.macos-arm64"]
-checksum = "sha256:2496e9cb3d24992d553b45e7c87a0fdc9449ca975233876247a9bfeda857e6c0"
-url = "https://github.com/terraform-linters/tflint/releases/download/v0.64.0/tflint_darwin_arm64.zip"
-url_api = "https://api.github.com/repos/terraform-linters/tflint/releases/assets/480528349"
+checksum = "sha256:5a71c63481ba56760864298011fdb7317a9ae80a0bbaeceefa35883c7f62ac71"
+url = "https://github.com/terraform-linters/tflint/releases/download/v0.65.0/tflint_darwin_arm64.zip"
+url_api = "https://api.github.com/repos/terraform-linters/tflint/releases/assets/666566854"
 provenance = "github-attestations"
 
 [[tools.bun]]
-version = "1.4.3"
+version = "1.4.4"
 backend = "core:bun"
 specifiers = ["1"]
 
 [tools.bun."platforms.linux-x64"]
-checksum = "sha256:3e730528d89775f03f87f05c06787c4df4099d0a37f3f252e7b829cb23816e18"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.3/bun-linux-x64.zip"
+checksum = "sha256:bf8ccbfb2b0b80159e0f9a6d15c55317add8077534dbc6130a3edb52fccb395c"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip"
 
 [tools.bun."platforms.linux-x64-baseline"]
-checksum = "sha256:1fc2edac843102909e3a1be1d8d9802cc6071cf074e67e88231f4ffe0f8b397b"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.3/bun-linux-x64-baseline.zip"
+checksum = "sha256:e0446eb55995772eb9894bebae9a6be368d985a8b9271ee124486f9946eedd76"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64-baseline.zip"
 
 [tools.bun."platforms.linux-x64-musl"]
-checksum = "sha256:6e9ea98554ea0d05efda5840ae292618aaa3adefd66b0853520c5c86a37eac9c"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.3/bun-linux-x64-musl.zip"
+checksum = "sha256:a5a8ccc5e74dcb883fe974f125a7bdb3b41e5195ed1b870e73f17effd3eb2b2d"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64-musl.zip"
 
 [tools.bun."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:4b5b0b5503f6ebf15161e8c56eb5a263134c05cd98a86dc11ee43ac5bda9862e"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.3/bun-linux-x64-musl-baseline.zip"
+checksum = "sha256:6e9c37098b293920aed28bfb51ab240e26d23bfdd9bbfecb3ad428ac166549bc"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64-musl-baseline.zip"
 
 [tools.bun."platforms.macos-arm64"]
-checksum = "sha256:80afd4c069b46a6fa8f3ec520bebc750a7843e4a8d5b9583d29ad436c00a3403"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.3/bun-darwin-aarch64.zip"
+checksum = "sha256:c240d7f0ccb90c263a849fcdb09b7ee62630d921348ed6aafda86b9d577bc510"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-darwin-aarch64.zip"
 
 [[tools.gh]]
-version = "2.102.0"
+version = "2.103.0"
 backend = "aqua:cli/cli"
 specifiers = ["2"]
 
 [tools.gh."platforms.linux-x64"]
-checksum = "sha256:bb766f710eef8ede859c18578c72c327597cd4c8a85b06001b1f3843c6019386"
-url = "https://github.com/cli/cli/releases/download/v2.102.0/gh_2.102.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/cli/cli/releases/assets/599854672"
+checksum = "sha256:fdd768eb70f6409f80fcfa9f3a1c0adf0fc98d827ab3ce0bed2ac22762c5d786"
+url = "https://github.com/cli/cli/releases/download/v2.103.0/gh_2.103.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/662956379"
 provenance = "github-attestations"
 
 [tools.gh."platforms.macos-arm64"]
-checksum = "sha256:da922c20d1792e5b2cbf375593d7a658acf034c12c84e007e71c76ef959c337e"
-url = "https://github.com/cli/cli/releases/download/v2.102.0/gh_2.102.0_macOS_arm64.zip"
-url_api = "https://api.github.com/repos/cli/cli/releases/assets/599854720"
+checksum = "sha256:54be566e9f614bea5de8021e95b9ad33dfee3b9d2ea120c9c294c00defaa5014"
+url = "https://github.com/cli/cli/releases/download/v2.103.0/gh_2.103.0_macOS_arm64.zip"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/662956481"
 provenance = "github-attestations"
 
 [[tools.git-lfs]]
@@ -152,38 +154,37 @@ url_api = "https://api.github.com/repos/charmbracelet/gum/releases/assets/585508
 provenance = "cosign"
 
 [[tools.hk]]
-version = "2.7.1"
+version = "2.8.1"
 backend = "packslip:github.com/jdx/hk"
 specifiers = ["latest"]
 
 [tools.hk."platforms.linux-x64"]
-checksum = "sha256:f6efe9b7febc22cb0ec071ab727ead597752dedb6a36c4d1a7fef94f6d2d8fbf"
-url = "https://github.com/jdx/hk/releases/download/v2.7.1/hk-x86_64-unknown-linux-gnu.tar.gz"
+checksum = "sha256:8033ca42aaf88412e789c281f7e2766526e60e12f95a16c03574aeb0a2c7a657"
+url = "https://github.com/jdx/hk/releases/download/v2.8.1/hk-x86_64-unknown-linux-gnu.tar.gz"
 signer = "sigstore-oidc:https://github.com/jdx/hk/.github/workflows/release.yml"
+repository_ids = { repository = "922514152" }
 
 [tools.hk."platforms.macos-arm64"]
-checksum = "sha256:18914b99e1fdcc0415ba77c8d01b1f4df73b109ed90b3f418053e2f3eaf84cbd"
-url = "https://github.com/jdx/hk/releases/download/v2.7.1/hk-aarch64-apple-darwin.tar.gz"
+checksum = "sha256:87d5288c1d19acd45885e35722f655a1e1498a1cb92f42c1490e7f1623aedddd"
+url = "https://github.com/jdx/hk/releases/download/v2.8.1/hk-aarch64-apple-darwin.tar.gz"
 signer = "sigstore-oidc:https://github.com/jdx/hk/.github/workflows/release.yml"
+repository_ids = { repository = "922514152" }
 
 [[tools.jactionlint]]
-version = "2.2.0"
+version = "2.3.0"
 backend = "github:jdx/jactionlint"
-specifiers = [
-    "2",
-    "2.2.0",
-]
+specifiers = ["2"]
 
 [tools.jactionlint."platforms.linux-x64"]
-checksum = "sha256:8137d5bfe266dd5e48d2af2306827785ce07c6988e04b1c3d6ad4776e97d27d2"
-url = "https://github.com/jdx/jactionlint/releases/download/v2.2.0/jactionlint_2.2.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/jactionlint/releases/assets/640875708"
+checksum = "sha256:907e6f6a59e181879f7e6936e19ee2eca1cbc51de134fb85460cfa8d65a71f28"
+url = "https://github.com/jdx/jactionlint/releases/download/v2.3.0/jactionlint_2.3.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/jactionlint/releases/assets/662210498"
 provenance = "github-attestations"
 
 [tools.jactionlint."platforms.macos-arm64"]
-checksum = "sha256:622b29b15a59618bc032163073209ffc434252e9a19eafd451e69207a50f266a"
-url = "https://github.com/jdx/jactionlint/releases/download/v2.2.0/jactionlint_2.2.0_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/jactionlint/releases/assets/640875646"
+checksum = "sha256:f96afa36578b21290203ae8df4fa7ac3bf5aba08ed288df28cb0530af7ca6e55"
+url = "https://github.com/jdx/jactionlint/releases/download/v2.3.0/jactionlint_2.3.0_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/jactionlint/releases/assets/662210452"
 provenance = "github-attestations"
 
 [[tools.lazydocker]]
@@ -217,17 +218,17 @@ url = "https://github.com/jesseduffield/lazygit/releases/download/v0.66.2/lazygi
 url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/646837816"
 
 [[tools.node]]
-version = "24.22.1"
+version = "26.12.1"
 backend = "core:node"
 specifiers = ["lts"]
 
 [tools.node."platforms.linux-x64"]
-checksum = "sha256:eb6728e77c576a35162c122c45ccadf224d89ff00abc8dae46cc2897c6002d7c"
-url = "https://nodejs.org/dist/v24.22.1/node-v24.22.1-linux-x64.tar.gz"
+checksum = "sha256:0fd1eb7770598f52a21995edf6ed35fc690400fa437c2386af329519e9143132"
+url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
-checksum = "sha256:89c682593d76cd44233fa53b1563264e7de9cbb189cad169135c5b4fadfbc0a7"
-url = "https://nodejs.org/dist/v24.22.1/node-v24.22.1-darwin-arm64.tar.gz"
+checksum = "sha256:1901d539912c02afa10d1cc126943a8855a7eedebe830119463470db5e6c59e8"
+url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-darwin-arm64.tar.gz"
 
 [[tools.ripgrep]]
 version = "15.2.0"
@@ -245,7 +246,7 @@ url = "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15
 url_api = "https://api.github.com/repos/BurntSushi/ripgrep/releases/assets/478118851"
 
 [[tools.ruby]]
-version = "4.0.7"
+version = "4.0.9"
 backend = "core:ruby"
 specifiers = ["4"]
 
@@ -256,13 +257,13 @@ ruby_build_repo = "https://github.com/rbenv/ruby-build.git"
 ruby_install = "false"
 
 [tools.ruby."platforms.linux-x64"]
-checksum = "sha256:659c4c80138145f3be439b3e4275b616cc87022e9488b823d708ab75a77558a9"
-url = "https://github.com/jdx/ruby/releases/download/4.0.7-2/ruby-4.0.7.x86_64_linux.tar.gz"
+checksum = "sha256:7e74db7ddb8f44f534fa4937d98b6d1691e053c5c190af6d130464b0467e87c4"
+url = "https://github.com/jdx/ruby/releases/download/4.0.9-1/ruby-4.0.9.x86_64_linux.tar.gz"
 provenance = "github-attestations"
 
 [tools.ruby."platforms.macos-arm64"]
-checksum = "sha256:6ad0acc5b0c437a2514679ff9a0f925e8b66ad4e96357e9ae2764b622f5d88d4"
-url = "https://github.com/jdx/ruby/releases/download/4.0.7-2/ruby-4.0.7.macos.tar.gz"
+checksum = "sha256:6eca5d2aaf6bb6c805daa31b4139a3c974526f41dae990ab0cef0ee3db8ea5d1"
+url = "https://github.com/jdx/ruby/releases/download/4.0.9-1/ruby-4.0.9.macos.tar.gz"
 provenance = "github-attestations"
 
 [[tools.shellcheck]]
