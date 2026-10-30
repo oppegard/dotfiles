@@ -3,6 +3,8 @@
 
 require "json"
 require "optparse"
+require "digest"
+require "fileutils"
 
 def parse_numeric(version)
   text = version.strip
@@ -76,29 +78,46 @@ end
 def index_changes(changes)
   indexed = {}
   changes.each do |change|
-    versions = change["new_versions"] || []
-    next if versions.empty?
+    old = change.fetch("old_versions")
+    versions = change.fetch("new_versions")
+    next if old.empty? || versions.empty?
 
     indexed[change["name"]] = {
       "backend" => change["backend"],
-      "old" => change["old_versions"] || [],
+      "old" => old,
       "new" => versions,
     }
   end
   indexed
 end
 
-def plan_scope(scope, aged, fresh)
+def candidate_versions(name, bindings, change)
+  old = change.fetch("old")
+  new = change.fetch("new")
+  abort "invalid version candidate for #{name}" unless old.length == new.length
+  unless old.sort == bindings.map { |binding| binding.fetch("version") }.sort
+    abort "stale version selection for #{name}"
+  end
+  bindings.map do |binding|
+    choices = old.zip(new).filter_map { |from, to| to if from == binding.fetch("version") }.uniq
+    abort "ambiguous version candidate for #{name}" unless choices.length == 1
+
+    choices.first
+  end
+end
+
+def plan_scope(scope, aged, fresh, snapshot)
   aged_by_name = index_changes(aged)
   fresh_by_name = index_changes(fresh)
   rows = []
   aged_by_name.each do |name, aged_change|
     fresh_change = fresh_by_name[name]
-    old = aged_change["old"]
-    aged_new = aged_change["new"]
+    bindings = snapshot.fetch(name) { abort "unknown planned tool #{name}" }
+    old = bindings.map { |binding| binding.fetch("version") }
+    aged_new = candidate_versions(name, bindings, aged_change)
     next unless list_is_forward(old, aged_new) == true
 
-    fresh_new = fresh_change && fresh_change["new"]
+    fresh_new = candidate_versions(name, bindings, fresh_change) if fresh_change
     pending = []
     if fresh_new && list_is_forward(aged_new, fresh_new) == true
       pending = fresh_new
@@ -141,29 +160,39 @@ def code_list(versions)
   versions.map { |version| "`#{version}`" }.join(", ")
 end
 
-def package_cell(row)
-  repo = github_repo(row["backend"])
-  name = row["name"]
-  return name if repo.nil?
+def versions(row, side)
+  row.fetch(side).map { |binding| binding.fetch("version") }
+end
 
-  "[#{name}](https://github.com/#{repo})"
+def backends(row, side)
+  row.fetch(side).map { |binding| binding.fetch("backend") }
+end
+
+def version_changed?(row)
+  versions(row, "before") != versions(row, "after")
+end
+
+def backend_changed?(row)
+  backends(row, "before") != backends(row, "after")
+end
+
+def package_cell(row)
+  repos = backends(row, "after").map { |backend| github_repo(backend) }.uniq
+  name = row["name"].gsub("|", "\\|").gsub("\n", " ")
+  return name if repos.length != 1 || repos[0].nil?
+
+  "[#{name}](https://github.com/#{repos[0]})"
 end
 
 def change_cell(row)
-  "#{code_list(row["old"])} → #{code_list(row["adopted"])}"
-end
-
-def pending_cell(row)
-  return "" if row["pending"].empty?
-
-  code_list(row["pending"])
+  "#{code_list(versions(row, "before"))} → #{code_list(versions(row, "after"))}"
 end
 
 def combine_rows(rows)
   grouped = []
   index = {}
   rows.each do |row|
-    key = [row["name"], row["backend"], row["old"], row["adopted"], row["pending"], row["update"]]
+    key = [row["name"], row["before"], row["after"], row["pending"]]
     existing = index[key]
     if existing
       existing["scopes"] << row["scope"] unless existing["scopes"].include?(row["scope"])
@@ -185,99 +214,92 @@ def scope_cell(row)
 end
 
 def title_for(rows)
-  labels = []
-  rows.each do |row|
-    label = "#{row["name"]} #{row["adopted"][0]}"
-    labels << label unless labels.include?(label)
+  labels = rows.group_by { |row| row["name"] }.map do |name, tool_rows|
+    upgraded = tool_rows.find { |row| version_changed?(row) }
+    upgraded ? "#{name} #{versions(upgraded, "after")[0]}" : "#{name} backend"
   end
-  return "chore(mise): update tool locks" if labels.empty?
+  return "chore(mise): update tools" if labels.empty?
 
   shown = labels.take(2).join(", ")
   extra = labels.length > 2 ? " (+#{labels.length - 2})" : ""
   "chore(mise): update #{shown}#{extra}"
 end
 
-def table_row(row, show_pending)
-  cells = [package_cell(row), "tools", row["update"], change_cell(row)]
-  cells << pending_cell(row) if show_pending
-  cells << scope_cell(row)
-  "| #{cells.join(" | ")} |"
-end
-
 def render(plans, age)
-  rows = combine_rows(plans.flat_map { |plan| plan["rows"] })
-  show_pending = rows.any? { |row| !row["pending"].empty? }
-  if show_pending
-    header = "| Package | Type | Update | Change | Pending | Scope |"
-    separator = "|---|---|---|---|---|---|"
-    blank = "| | | | | | |"
-  else
-    header = "| Package | Type | Update | Change | Scope |"
-    separator = "|---|---|---|---|---|"
-    blank = "| | | | | |"
+  rows = combine_rows(plans.flat_map { |plan| plan.fetch("rows") })
+  upgrades = rows.select { |row| version_changed?(row) }
+  migrations = rows.select { |row| backend_changed?(row) }
+  show_pending = upgrades.any? { |row| !row["pending"].empty? }
+  lines = ["This PR contains the following updates:", ""]
+  unless upgrades.empty?
+    headers = ["Package", "Type", "Update", "Change"]
+    headers << "Pending" if show_pending
+    headers << "Scope"
+    lines << "| #{headers.join(" | ")} |"
+    lines << "|#{Array.new(headers.length, "---").join("|")}|"
+    upgrades.each do |row|
+      cells = [package_cell(row), "tools", update_kind(versions(row, "before"), versions(row, "after")), change_cell(row)]
+      cells << code_list(row["pending"]) if show_pending
+      cells << scope_cell(row)
+      lines << "| #{cells.join(" | ")} |"
+    end
   end
-  lines = [
-    "This PR contains the following updates:",
-    "",
-    header,
-    separator,
-  ]
-  lines << blank if rows.empty?
-  rows.each { |row| lines << table_row(row, show_pending) }
+  unless migrations.empty?
+    lines += ["", "### Backend changes", "", "| Package | Version | Old backend | New backend | Scope |", "|---|---|---|---|---|"]
+    migrations.each do |row|
+      version = version_changed?(row) ? change_cell(row) : code_list(versions(row, "after"))
+      cells = [package_cell(row), version, code_list(backends(row, "before")), code_list(backends(row, "after")), scope_cell(row)]
+      lines << "| #{cells.join(" | ")} |"
+    end
+  end
+  lines << "No tool changes." if rows.empty?
   lines += [
-    "",
-    "---",
-    "",
+    "", "---", "",
     "The age window is `#{age}` from `minimum_release_age`.",
-    "Release notes name the version this pull request locks.",
-    "",
+    "Release notes name the version this pull request locks.", "",
     "Mise does not refuse a major bump of a `latest` or `lts` request.",
     "A prefix request such as `2` or `1.27` stays inside that prefix.",
-    "This job does not add a major filter.",
-    "",
+    "This job does not add a major filter.", "",
     "The updater does not roll a locked version backward when that version is still inside the age window.",
     "MISE_SAFE=1 hides an idiomatic Go pin, so this job does not bump it.",
   ]
-  entries = []
-  seen = {}
-  rows.each do |row|
-    repo = github_repo(row["backend"])
-    next if repo.nil?
+  notes = {}
+  upgrades.each do |row|
+    row["before"].zip(row["after"]).each do |old, binding|
+      next if old["version"] == binding["version"]
 
-    version = row["adopted"][0]
-    key = [row["name"], repo, version]
-    existing = seen[key]
-    if existing
-      row["scopes"].each do |scope|
-        existing["scopes"] << scope unless existing["scopes"].include?(scope)
-      end
-      next
+      repo = github_repo(binding["backend"])
+      next if repo.nil?
+
+      key = [row["name"], repo, binding["version"]]
+      notes[key] ||= { "scopes" => [] }
+      notes[key]["scopes"] |= row["scopes"]
     end
-
-    entry = {
-      "name" => row["name"],
-      "repo" => repo,
-      "version" => version,
-      "scopes" => row["scopes"].dup,
-    }
-    seen[key] = entry
-    entries << entry
-  end
-  notes = entries.map do |entry|
-    "- [#{entry["name"]} #{entry["version"]}](https://github.com/#{entry["repo"]}/releases) (#{scope_cell(entry)})"
   end
   unless notes.empty?
     lines += ["", "### Release notes", ""]
-    lines += notes
+    notes.each do |(name, repo, version), entry|
+      lines << "- [#{name} #{version}](https://github.com/#{repo}/releases) (#{scope_cell(entry)})"
+    end
   end
   [title_for(rows), "#{lines.join("\n")}\n"]
 end
 
-def read_changes(path)
+def canonical_lock(path)
+  File.join(File.realpath(File.dirname(path)), File.basename(path))
+end
+
+def read_changes(path, lock)
   data = JSON.parse(File.read(path))
   abort "#{path} must be a JSON array" unless data.is_a?(Array)
 
-  data
+  selected = canonical_lock(lock)
+  data.select do |change|
+    candidate = change["lockfile"]
+    abort "invalid candidate lockfile" unless candidate.is_a?(String) && !candidate.empty?
+
+    canonical_lock(candidate) == selected
+  end
 end
 
 def require_option(options, key)
@@ -286,19 +308,12 @@ def require_option(options, key)
 end
 
 def command_plan(argv)
-  options = {}
-  parser = OptionParser.new do |opts|
-    opts.on("--scope SCOPE") { |value| options[:scope] = value }
-    opts.on("--aged PATH") { |value| options[:aged] = value }
-    opts.on("--fresh PATH") { |value| options[:fresh] = value }
-    opts.on("--out PATH") { |value| options[:out] = value }
-  end
-  parser.parse!(argv)
-  %i[scope aged fresh out].each { |key| require_option(options, key) }
+  options = command_options(argv, %i[scope aged fresh snapshot lock out])
   plan = plan_scope(
     options[:scope],
-    read_changes(options[:aged]),
-    read_changes(options[:fresh])
+    read_changes(options[:aged], options[:lock]),
+    read_changes(options[:fresh], options[:lock]),
+    JSON.parse(File.read(options[:snapshot]))
   )
   File.write(options[:out], JSON.generate(plan))
   plan["rows"].each do |row|
@@ -323,6 +338,192 @@ def command_render(argv)
   File.write(options[:body_file], body)
 end
 
+def command_options(argv, keys, flags = [])
+  options = {}
+  OptionParser.new do |parser|
+    keys.each { |key| parser.on("--#{key.to_s.tr("_", "-")} VALUE") { |value| options[key] = value } }
+    flags.each { |flag| parser.on("--#{flag}") { options[flag] = true } }
+  end.parse!(argv)
+  keys.each { |key| require_option(options, key) }
+  abort "unexpected arguments: #{argv.join(" ")}" unless argv.empty?
+
+  options
+end
+
+def read_snapshot(path)
+  JSON.parse(File.read(path))
+end
+
+def command_snapshot(argv)
+  options = command_options(argv, %i[lock out])
+  require "bundler/inline"
+  gemfile do
+    source "https://rubygems.org"
+    gem "toml-rb", "= 6.0.0", require: "toml-rb"
+  end
+  document = TomlRB.load_file(options[:lock])
+  abort "unsupported lockfile format" unless document["lockfile_version"] == 3
+
+  tools = document.fetch("tools")
+  tools.each do |name, bindings|
+    abort "invalid bindings for #{name}" unless bindings.is_a?(Array) && !bindings.empty?
+
+    bindings.each do |binding|
+      %w[version backend].each do |field|
+        value = binding[field]
+        abort "invalid #{field} for #{name}" unless value.is_a?(String) && !value.empty? && !value.match?(/[\n\r]/)
+      end
+      specifiers = binding.fetch("specifiers", [])
+      abort "invalid specifiers for #{name}" unless specifiers.is_a?(Array) && specifiers.all? { |value| value.is_a?(String) }
+    end
+    abort "invalid tool name" if name.empty? || name.match?(/[\n\r]/)
+  end
+  File.write(options[:out], JSON.generate(tools))
+end
+
+def match_bindings(name, before, after)
+  abort "binding count changed for #{name}" unless before.length == after.length
+  return before.zip(after) if before.length == 1
+
+  indices = [before, after].map do |bindings|
+    indexed = {}
+    bindings.each do |binding|
+      identity = binding.fetch("specifiers", []).sort
+      abort "ambiguous request identity for #{name}" if identity.empty? || indexed.key?(identity)
+
+      indexed[identity] = binding
+    end
+    indexed
+  end
+  abort "request identities changed for #{name}" unless indices[0].keys.sort == indices[1].keys.sort
+
+  indices[0].map { |identity, binding| [binding, indices[1].fetch(identity)] }
+end
+
+def same_tools(before, after)
+  abort "lock tool set changed" unless before.keys.sort == after.keys.sort
+end
+
+def command_verify_migration(argv)
+  options = command_options(argv, %i[before after])
+  before = read_snapshot(options[:before])
+  after = read_snapshot(options[:after])
+  same_tools(before, after)
+  before.each do |name, bindings|
+    match_bindings(name, bindings, after.fetch(name)).each do |old, new|
+      abort "backend migration changed version for #{name}" unless old["version"] == new["version"]
+    end
+  end
+end
+
+def binding_record(binding)
+  { "version" => binding.fetch("version"), "backend" => binding.fetch("backend"), "specifiers" => binding.fetch("specifiers", []).sort }
+end
+
+def command_reconcile(argv)
+  options = command_options(argv, %i[scope before migrated after plan fresh lock out])
+  before, migrated, after = %i[before migrated after].map { |key| read_snapshot(options[key]) }
+  same_tools(before, migrated)
+  same_tools(migrated, after)
+  selections = read_snapshot(options[:plan]).fetch("rows").to_h { |row| [row.fetch("name"), row] }
+  fresh = index_changes(read_changes(options[:fresh], options[:lock]))
+  rows = []
+  before.each do |name, original|
+    migration_pairs = match_bindings(name, original, migrated.fetch(name))
+    final_pairs = match_bindings(name, migrated.fetch(name), after.fetch(name))
+    finals = final_pairs.to_h { |left, right| [left, right] }
+    final = migration_pairs.map { |_, middle| finals.fetch(middle) }
+    selection = selections[name]
+    middle_bindings = migrated.fetch(name)
+    selected = selection ? selection.fetch("adopted") : middle_bindings.map { |binding| binding.fetch("version") }
+    by_binding = middle_bindings.zip(selected).to_h
+    expected = migration_pairs.map { |_, middle| by_binding.fetch(middle) }
+    abort "unexpected final version for #{name}" unless final.map { |binding| binding.fetch("version") } == expected
+
+    migration_pairs.zip(final).each do |(old, middle), adopted|
+      abort "backend migration changed version for #{name}" unless old["version"] == middle["version"]
+      abort "unexpected final backend for #{name}" unless middle["backend"] == adopted["backend"]
+    end
+    pending = []
+    fresh_versions = candidate_versions(name, middle_bindings, fresh[name]) if fresh[name]
+    if fresh_versions
+      fresh_by_binding = middle_bindings.zip(fresh_versions).to_h
+      ordered_fresh = migration_pairs.map { |_, middle| fresh_by_binding.fetch(middle) }
+      pending = ordered_fresh if list_is_forward(expected, ordered_fresh) == true
+    end
+    ordered = original.zip(final, pending).sort_by { |old, _, _| old.fetch("specifiers", []).sort }
+    row = {
+      "scope" => options[:scope], "name" => name,
+      "before" => ordered.map { |old, _, _| binding_record(old) },
+      "after" => ordered.map { |_, adopted, _| binding_record(adopted) },
+      "pending" => pending.empty? ? [] : ordered.map { |_, _, version| version },
+    }
+    rows << row if version_changed?(row) || backend_changed?(row)
+  end
+  File.write(options[:out], JSON.generate({ "scope" => options[:scope], "rows" => rows }))
+end
+
+ARTIFACT_PATHS = %w[mise.lock .mise/locks files/home/.config/mise/mise.lock files/home/.config/mise/locks].freeze
+
+def reject_link(root, relative)
+  path = root
+  relative.split("/").each do |part|
+    path = File.join(path, part)
+    abort "refusing artifact symlink #{path}" if File.symlink?(path)
+  end
+end
+
+def artifact_hashes(root)
+  files = {}
+  ARTIFACT_PATHS.each do |relative|
+    reject_link(root, relative)
+    path = File.join(root, relative)
+    paths = File.directory?(path) ? Dir.glob("#{path}/**/*", File::FNM_DOTMATCH) : [path]
+    paths.sort.each do |file|
+      name = file.delete_prefix("#{root}/")
+      reject_link(root, name)
+      next if File.directory?(file) || !File.exist?(file)
+
+      abort "artifact must be a regular file: #{file}" unless File.file?(file)
+
+      files[name] = Digest::SHA256.file(file).hexdigest
+    end
+  end
+  files
+end
+
+def command_artifacts(argv)
+  options = command_options(argv, %i[source staged manifest], %i[publish])
+  source = artifact_hashes(options[:source])
+  staged = artifact_hashes(options[:staged])
+  unless options[:publish]
+    abort "source artifacts changed while copying" unless source == staged
+
+    File.write(options[:manifest], JSON.generate(source))
+    return
+  end
+  original = read_snapshot(options[:manifest])
+  abort "source artifacts changed during update" unless source == original
+
+  (source.keys | staged.keys).each do |relative|
+    next if source[relative] == staged[relative]
+
+    target = File.join(options[:source], relative)
+    if staged.key?(relative)
+      FileUtils.mkdir_p(File.dirname(target))
+      temporary = "#{target}.mise-update-#{Process.pid}"
+      begin
+        FileUtils.cp(File.join(options[:staged], relative), temporary)
+        File.rename(temporary, target)
+      ensure
+        FileUtils.rm_f(temporary)
+      end
+    else
+      File.unlink(target)
+    end
+  end
+end
+
 def main(argv)
   command = argv.shift
   case command
@@ -330,8 +531,16 @@ def main(argv)
     command_plan(argv)
   when "render"
     command_render(argv)
+  when "snapshot"
+    command_snapshot(argv)
+  when "verify-migration"
+    command_verify_migration(argv)
+  when "reconcile"
+    command_reconcile(argv)
+  when "artifacts"
+    command_artifacts(argv)
   else
-    abort "usage: mise_lock_plan.rb plan|render ..."
+    abort "usage: mise_lock_plan.rb plan|snapshot|verify-migration|reconcile|artifacts|render ..."
   end
 end
 
