@@ -166,11 +166,11 @@ depends = ["claude:check"]
 shell = "bash -c"
 run = [
   '"{{ env.HOME }}/.dotfiles/bin/check-meet-system-audio.command"',
-  { task = "1password:check" },
+  { task = "check-op-vaults" },
 ]
 
 
-[tasks."1password:check"]
+[tasks.check-op-vaults]
 description = "Check access to 1Password vaults"
 shell = "bash -c"
 timeout = "60s"
