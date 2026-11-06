@@ -105,6 +105,12 @@ tap_to_click = true
   TrackpadTwoFingerFromRightEdgeSwipeGesture = 0,  # Disable the two-finger swipe from the right edge on an Apple Bluetooth trackpad.
 }
 
+"com.superlogical.rex" = {
+  "Workspace.terminalFontName" = "PragmataPro Mono Liga",
+  "Workspace.terminalFontPointSize" = 16.0,
+  "Workspace.terminalAllowsLigatures" = true,
+}
+
 
 [[bootstrap.macos.defaults_entries]]  # Internal keyboard: remap capslock -> ctrl
 domain = "NSGlobalDomain"
