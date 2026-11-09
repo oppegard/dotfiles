@@ -20,21 +20,21 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:Latias94/merman"]]
-version = "0.9.2"
+version = "0.9.3"
 backend = "aqua:Latias94/merman"
 specifiers = ["0.9"]
 
 [tools."aqua:Latias94/merman"."platforms.linux-x64"]
-checksum = "sha256:7e33156646127bcd7794e7fd36cf76a7d19b501f77f945a186b98394a3451c55"
+checksum = "sha256:e93dbf741319190d53107c4277b373d357dcdad3f4f7e50f114a51c9b682109b"
 checksum_source = "mise-versions"
-url = "https://github.com/Latias94/merman/releases/download/v0.9.2/merman-cli-x86_64-unknown-linux-gnu.tar.xz"
-url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/663557644"
+url = "https://github.com/Latias94/merman/releases/download/v0.9.3/merman-cli-x86_64-unknown-linux-gnu.tar.xz"
+url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/691053511"
 
 [tools."aqua:Latias94/merman"."platforms.macos-arm64"]
-checksum = "sha256:68cdad1a3f45c2c9b95ac9b98c0a9d011c16f87bfb0c7177c17e23d8420f6b34"
+checksum = "sha256:387665c30cb416e0cbaa659e9a7be73cc6694f3b797807a234efeb3b7b935732"
 checksum_source = "mise-versions"
-url = "https://github.com/Latias94/merman/releases/download/v0.9.2/merman-cli-aarch64-apple-darwin.tar.xz"
-url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/663557611"
+url = "https://github.com/Latias94/merman/releases/download/v0.9.3/merman-cli-aarch64-apple-darwin.tar.xz"
+url_api = "https://api.github.com/repos/Latias94/merman/releases/assets/691053464"
 
 [[tools."aqua:hashicorp/terraform"]]
 version = "1.16.7"
@@ -171,36 +171,36 @@ url_api = "https://api.github.com/repos/charmbracelet/gum/releases/assets/585508
 provenance = "cosign"
 
 [[tools.hk]]
-version = "2.9.0"
+version = "2.11.0"
 backend = "packslip:github.com/jdx/hk"
 specifiers = ["latest"]
 
 [tools.hk."platforms.linux-x64"]
-checksum = "sha256:db1021a8920b71c161e26bef246c5b00a3ea6aa480b6cb837ee098ffeb8c41a1"
-url = "https://github.com/jdx/hk/releases/download/v2.9.0/hk-x86_64-unknown-linux-gnu.tar.gz"
+checksum = "sha256:a461eb97df8e60c4447d1fdaa74a3d31598d7aba0d7a68ceebad0ff0405c3b5b"
+url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-x86_64-unknown-linux-gnu.tar.gz"
 signer = "sigstore-oidc:https://github.com/jdx/hk/.github/workflows/release.yml"
 repository_ids = { repository = "922514152" }
 
 [tools.hk."platforms.macos-arm64"]
-checksum = "sha256:c7c4d85fd44e88d54b2bf8f9fc38165e278983f54210c095a3e3e8c593e4b720"
-url = "https://github.com/jdx/hk/releases/download/v2.9.0/hk-aarch64-apple-darwin.tar.gz"
+checksum = "sha256:65cc3490e93522b55abe8ae42c2b5ffe452f9fe58282455ad59d10bc0deab272"
+url = "https://github.com/jdx/hk/releases/download/v2.11.0/hk-aarch64-apple-darwin.tar.gz"
 signer = "sigstore-oidc:https://github.com/jdx/hk/.github/workflows/release.yml"
 repository_ids = { repository = "922514152" }
 
 [[tools.jactionlint]]
-version = "2.3.0"
+version = "2.4.0"
 backend = "packslip:github.com/jdx/jactionlint"
 specifiers = ["2"]
 
 [tools.jactionlint."platforms.linux-x64"]
-checksum = "sha256:907e6f6a59e181879f7e6936e19ee2eca1cbc51de134fb85460cfa8d65a71f28"
-url = "https://github.com/jdx/jactionlint/releases/download/v2.3.0/jactionlint_2.3.0_linux_amd64.tar.gz"
+checksum = "sha256:26ddba81db28fffc51163175c070ee1a9d1150260de4b5232f01d9b749f32d8e"
+url = "https://github.com/jdx/jactionlint/releases/download/v2.4.0/jactionlint_2.4.0_linux_amd64.tar.gz"
 signer = "sigstore-oidc:https://github.com/jdx/jactionlint/.github/workflows/release.yaml"
 repository_ids = { repository = "1404951382" }
 
 [tools.jactionlint."platforms.macos-arm64"]
-checksum = "sha256:f96afa36578b21290203ae8df4fa7ac3bf5aba08ed288df28cb0530af7ca6e55"
-url = "https://github.com/jdx/jactionlint/releases/download/v2.3.0/jactionlint_2.3.0_darwin_arm64.tar.gz"
+checksum = "sha256:349a13dbffdd25376898a256d195806afda08ba97ccc6378cbf2dd11a77ef8e7"
+url = "https://github.com/jdx/jactionlint/releases/download/v2.4.0/jactionlint_2.4.0_darwin_arm64.tar.gz"
 signer = "sigstore-oidc:https://github.com/jdx/jactionlint/.github/workflows/release.yaml"
 repository_ids = { repository = "1404951382" }
 
@@ -235,17 +235,17 @@ url = "https://github.com/jesseduffield/lazygit/releases/download/v0.66.2/lazygi
 url_api = "https://api.github.com/repos/jesseduffield/lazygit/releases/assets/646837816"
 
 [[tools.node]]
-version = "26.12.1"
+version = "26.13.0"
 backend = "core:node"
 specifiers = ["lts"]
 
 [tools.node."platforms.linux-x64"]
-checksum = "sha256:0fd1eb7770598f52a21995edf6ed35fc690400fa437c2386af329519e9143132"
-url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.gz"
+checksum = "sha256:5848553868b402d3fabb5b09270649977780a390f832155721025a08b5104455"
+url = "https://nodejs.org/dist/v26.13.0/node-v26.13.0-linux-x64.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
-checksum = "sha256:1901d539912c02afa10d1cc126943a8855a7eedebe830119463470db5e6c59e8"
-url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-darwin-arm64.tar.gz"
+checksum = "sha256:d38bd5e5a2ddce6bbb5ce45e46e208337da4d51fffe611e567fd32073d6439f6"
+url = "https://nodejs.org/dist/v26.13.0/node-v26.13.0-darwin-arm64.tar.gz"
 
 [[tools.ripgrep]]
 version = "15.2.0"
