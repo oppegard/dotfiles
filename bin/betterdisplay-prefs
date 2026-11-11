@@ -116,15 +116,27 @@ export_sync_profile() {
 	echo "BetterDisplay synchronization profile exported; commit files/macos/BetterDisplay.plist."
 }
 
+betterdisplay_is_running() {
+	local status=0
+	pgrep -x BetterDisplay >/dev/null || status=$?
+	case "$status" in
+	0 | 1) return "$status" ;;
+	*)
+		echo "ERROR: Cannot inspect BetterDisplay processes (pgrep exited $status)." >&2
+		exit "$status"
+		;;
+	esac
+}
+
 quit_betterdisplay() {
-	if ! pgrep -x BetterDisplay >/dev/null 2>&1; then
+	if ! betterdisplay_is_running; then
 		return 0
 	fi
 
 	osascript -e 'tell application id "pro.betterdisplay.BetterDisplay" to quit'
 
 	for _ in {1..50}; do
-		if ! pgrep -x BetterDisplay >/dev/null 2>&1; then
+		if ! betterdisplay_is_running; then
 			return 0
 		fi
 		sleep 0.1
@@ -152,7 +164,16 @@ import_sync_profile() {
 	done
 	defaults import "$PREFERENCES_DOMAIN" "$preferences_path"
 	open "$APPLICATION_PATH"
-	echo "Imported BetterDisplay synchronization profile from dotfiles."
+	for _ in {1..50}; do
+		if betterdisplay_is_running; then
+			echo "Imported BetterDisplay synchronization profile from dotfiles."
+			return 0
+		fi
+		sleep 0.1
+	done
+
+	echo "ERROR: BetterDisplay did not start within 5 seconds." >&2
+	exit 1
 }
 
 case "${1:-}" in
