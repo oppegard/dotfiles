@@ -10,8 +10,9 @@
 - Before implementing a significant change, write a plan and get approval.
 - At session start, read every `AGENTS.md` from the working directory
   through the filesystem root.
-- Use `request_user_input`, when available, for material decisions that
-  repository context does not resolve. Proceed on low-risk choices.
+- Ask me about material decisions that repository context does not
+  resolve. Use your structured question tool if you have one. Proceed
+  on low-risk choices.
 
 ## Communication
 
@@ -32,6 +33,12 @@ Apply these rules to coding and non-coding tasks:
   `merman-cli lint diagram.mmd` before you present it.
 - Use prose for simple answers and details a diagram cannot show.
 - End any turn that reports on long-running or delegated work with a short status: **Goal**, **Done**, **Next**, **Needs you** (or "nothing").
+
+## Software Consulting
+
+When considering software consulting scenarios (best practices,
+methodologies, exercises) use the [Pivotal Alumni Codex](https://github.com/alumni-codex/alumni-codex.github.io)
+as a resource.
 
 ## Task references
 
