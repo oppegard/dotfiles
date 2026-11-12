@@ -20,6 +20,8 @@ Apply these rules to coding and non-coding tasks:
 - Write explanations 80% of the way to ASD-STE100 (Simplified Technical
   English): short sentences, one idea per sentence, active voice, and the
   same word for the same thing.
+- When communicating about an HTTP API, clearly name the method + path, e.g.
+  `POST /v1/config`
 - Prefer diagrams or images when they make an explanation easier to
   understand. Lead with a diagram when the answer has structure, such as
   relationships, processes, decisions, architecture, flow, state, sequence,
