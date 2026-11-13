@@ -144,6 +144,10 @@ value = [
 
 [dotfiles]
 "~/.config/borders/bordersrc" = "~/.dotfiles/files/home/.config/borders/bordersrc"
+"~/.config/karabiner/assets/complex_modifications/intellij-function-keys.json" = {
+  source = "~/.dotfiles/files/home/.config/karabiner/assets/complex_modifications/intellij-function-keys.json",
+  mode = "symlink"
+}
 "~/.config/linearmouse/linearmouse.json" = "~/.dotfiles/files/home/.config/linearmouse/linearmouse.json"
 "~/.homebrew/Brewfile" = "~/.dotfiles/Brewfile"
 "~/.local/bin/fix-tahoe-focus" = "~/.dotfiles/files/home/.local/bin/fix-tahoe-focus"
