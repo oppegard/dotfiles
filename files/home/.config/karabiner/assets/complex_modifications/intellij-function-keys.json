@@ -1,6 +1,16 @@
 {
-  "title": "Function keys in IntelliJ",
+  "title": "Caps Lock to Control and IntelliJ function keys",
   "rules": [
+    {
+      "description": "Caps Lock to Control",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {"key_code": "caps_lock", "modifiers": {"optional": ["any"]}},
+          "to": [{"key_code": "left_control"}]
+        }
+      ]
+    },
     {
       "description": "Use F1-F12 as function keys in IntelliJ",
       "manipulators": [
