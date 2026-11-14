@@ -1,9 +1,5 @@
 [dotfiles]
-"~/.config/keyd" = "~/.dotfiles/files/home/.config/keyd"
 "~/.config/omarchy" = "~/.dotfiles/files/home/.config/omarchy"
-"~/.config/uwsm" = "~/.dotfiles/files/home/.config/uwsm"
-"~/.config/walker" = "~/.dotfiles/files/home/.config/walker"
-"~/.config/waybar" = "~/.dotfiles/files/home/.config/waybar"
 "~/.local/bin/screen" = "~/.dotfiles/files/home/.local/bin/screen-5.0.1"
 "~/.local/bin/try" = "~/.dotfiles/files/home/.local/bin/try-linux-x86_64"
 
