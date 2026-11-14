@@ -1,5 +1,4 @@
 [dotfiles]
-"~/.config/hypr" = "~/.dotfiles/files/home/.config/hypr"
 "~/.config/keyd" = "~/.dotfiles/files/home/.config/keyd"
 "~/.config/omarchy" = "~/.dotfiles/files/home/.config/omarchy"
 "~/.config/uwsm" = "~/.dotfiles/files/home/.config/uwsm"
