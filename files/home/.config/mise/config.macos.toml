@@ -24,6 +24,19 @@ group = "wheel"
 mode = "0444"
 
 
+[bootstrap.files."/etc/codex/requirements.toml"]
+source = "~/.dotfiles/files/etc/codex/requirements.toml"
+owner = "root"
+group = "wheel"
+mode = "0644"
+
+
+[bootstrap.directories."/etc/codex"]
+owner = "root"
+group = "wheel"
+mode = "0755"
+
+
 [bootstrap.macos.trackpad]
 tap_to_click = true
 

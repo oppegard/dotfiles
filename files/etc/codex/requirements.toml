@@ -1,0 +1,21 @@
+guardian_extra_policy = """
+Anthropic's Claude service is an approved destination for pstack work
+on projects in my current request, including checkouts and worktrees.
+
+If my pstack configuration or explicit instructions select Claude,
+I authorize pstack-runner to use my signed-in Claude CLI for the assigned
+work: analysis, planning, review, implementation, refactoring, debugging,
+testing, and documentation.
+
+I authorize pstack-runner to send Claude the project material needed for
+the assigned work: relevant source code, diffs, plans, recorded decisions,
+review evidence, test logs, project metadata, and temporary prompt files
+that contain or derive from that material.
+
+Do not send credentials, secret values, or unrelated data in prompts or
+attachments.
+
+This approval covers Claude CLI calls and the transfer of project context.
+My task instructions and existing permissions still govern file changes,
+command execution, and other side effects.
+"""
