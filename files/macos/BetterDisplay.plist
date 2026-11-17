@@ -8,6 +8,8 @@
 	<false/>
 	<key>enabled@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001</key>
 	<true/>
+	<key>nits@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001</key>
+	<false/>
 	<key>syncConfigurationControlTargets@DisplayGroup:-1001</key>
 	<string>["mostAppropriateBrightness"]</string>
 	<key>syncEnabled@DisplayGroup:-1001</key>
