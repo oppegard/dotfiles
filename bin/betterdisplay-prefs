@@ -21,6 +21,7 @@ MANAGED_KEYS=(
 	"allowExternallyInduced@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001"
 	"delta@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001"
 	"enabled@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001"
+	"nits@SyncConfiguration:mostAppropriateBrightness@DisplayGroup:-1001"
 	"syncConfigurationControlTargets@DisplayGroup:-1001"
 	"syncEnabled@DisplayGroup:-1001"
 )
