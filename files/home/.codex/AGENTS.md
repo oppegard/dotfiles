@@ -70,6 +70,6 @@ arena runners: inherit-parent, codex:gpt-6.1-sol@high
 arena cross-judge pool: inherit-parent, codex:gpt-6.1-sol@high
 swarm workers: codex:gpt-6.1-sol@high
 architect runners: inherit-parent, codex:gpt-6.1-sol@high
-interrogate reviewers: claude:opus@xhigh, codex:gpt-6.1-sol@high
+interrogate reviewers: claude:opus@high, codex:gpt-6.1-sol@high
 codex writer sandbox: bounded
 <!-- pstack:models:end -->
