@@ -167,21 +167,80 @@ func TestClaudeCheckFailures(t *testing.T) {
 }
 
 func TestClaudeDaily(t *testing.T) {
+	checker, err := filepath.Abs(filepath.Join("..", "..", "bin", "check-1password"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	jq, err := exec.LookPath("jq")
+	if err != nil {
+		t.Fatal(err)
+	}
+	const fullOrder = "claude\naudio\naccounts\nuser1/vault1\nuser1/vault2\nempty account\naccount2/vault3\n"
 	for _, test := range []struct {
 		name, reply, audio, order string
-		fails                     bool
+		fails, locked             bool
 	}{
-		{name: "success", reply: "echo OK", audio: ":", order: "claude\naudio\n"},
+		{name: "success", reply: "echo OK", audio: ":", order: fullOrder},
 		{name: "Claude failure", reply: "echo 'Login required.'; exit 1", audio: ":", order: "claude\n", fails: true},
 		{name: "audio failure", reply: "echo OK", audio: "exit 3", order: "claude\naudio\n", fails: true},
+		{name: "1Password vault locked", reply: "echo OK", audio: ":", order: fullOrder, fails: true, locked: true},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			fixture := newClaudeTest(t)
+			if err := os.Symlink(checker, filepath.Join(fixture.home, ".dotfiles", "bin", "check-1password")); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.Symlink(jq, filepath.Join(fixture.bin, "jq")); err != nil {
+				t.Fatal(err)
+			}
+			if test.locked {
+				fixture.env = append(fixture.env, "TEST_OP_LOCKED=1")
+			}
 			fixture.stub(t, filepath.Join(fixture.bin, "claude"), "echo claude >> \"$HOME/order\"\n"+test.reply)
 			fixture.stub(t, filepath.Join(fixture.home, ".dotfiles", "bin", "check-meet-system-audio.command"), "echo audio >> \"$HOME/order\"\n"+test.audio)
+			fixture.stub(t, filepath.Join(fixture.bin, "op"), `
+if IFS= read -r line; then
+  echo 'op received stdin' >&2
+  exit 2
+fi
+case "$*" in
+  'account list --format=json')
+    echo accounts >> "$HOME/order"
+    echo '[{"user_uuid":"user1","account_uuid":"account1"},{"user_uuid":"empty"},{"account_uuid":"account2"}]'
+    ;;
+  'vault list --account user1 --format=json')
+    echo '[{"id":"vault1"},{"id":"vault2"}]'
+    ;;
+  'vault list --account empty --format=json')
+    echo 'empty account' >> "$HOME/order"
+    echo '[]'
+    ;;
+  'vault list --account account2 --format=json')
+    echo '[{"id":"vault3"}]'
+    ;;
+  'item list --account user1 --vault vault1'|'item list --account user1 --vault vault2'|'item list --account account2 --vault vault3')
+    printf '%s/%s\n' "$4" "$6" >> "$HOME/order"
+    if [[ $6 == vault3 && ${TEST_OP_LOCKED:-} == 1 ]]; then
+      echo 'Vault locked.' >&2
+      exit 1
+    fi
+    echo 'Private item title'
+    ;;
+  *)
+    printf 'Unexpected op invocation: %s\n' "$*" >&2
+    exit 2
+    ;;
+esac
+`)
 			output, err := fixture.run(t, fixture.mise, "run", "--skip-tools", "daily")
 			if (err != nil) != test.fails {
 				t.Fatalf("daily failure = %v, want %v:\n%s", err, test.fails, output)
+			}
+			if strings.Contains(output, "Private item title") {
+				t.Errorf("daily printed a 1Password item title:\n%s", output)
+			}
+			if test.locked && !strings.Contains(output, "vault vault3 in account account2") {
+				t.Errorf("daily did not identify the inaccessible vault:\n%s", output)
 			}
 			order, err := os.ReadFile(filepath.Join(fixture.home, "order"))
 			if err != nil || string(order) != test.order {
