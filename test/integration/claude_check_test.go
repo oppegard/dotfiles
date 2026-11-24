@@ -12,16 +12,17 @@ import (
 )
 
 type claudeTest struct {
-	home, bin, checker, mise string
-	env                      []string
+	home, project, bin, checker, mise string
+	env                               []string
 }
 
 func newClaudeTest(t *testing.T) claudeTest {
 	t.Helper()
 	home := t.TempDir()
+	project := filepath.Join(home, ".dotfiles")
 	bin := filepath.Join(home, "bin")
 	config := filepath.Join(home, ".config", "mise")
-	for _, dir := range []string{bin, config, filepath.Join(home, ".dotfiles", "bin")} {
+	for _, dir := range []string{bin, config, filepath.Join(project, "bin")} {
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatal(err)
 		}
@@ -37,16 +38,16 @@ func newClaudeTest(t *testing.T) claudeTest {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, name := range []string{"config.toml", "config.macos.toml"} {
-		contents, err := os.ReadFile(filepath.Join("..", "..", "files", "home", ".config", "mise", name))
+	for _, name := range []string{"mise.toml", "mise.macos.toml"} {
+		contents, err := os.ReadFile(filepath.Join("..", "..", name))
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := os.WriteFile(filepath.Join(config, name), contents, 0o644); err != nil {
+		if err := os.WriteFile(filepath.Join(project, name), contents, 0o644); err != nil {
 			t.Fatal(err)
 		}
 	}
-	checker := filepath.Join(home, ".dotfiles", "bin", "check-claude")
+	checker := filepath.Join(project, "bin", "check-claude")
 	contents, err := os.ReadFile(filepath.Join("..", "..", "bin", "check-claude"))
 	if err != nil {
 		t.Fatal(err)
@@ -54,7 +55,7 @@ func newClaudeTest(t *testing.T) claudeTest {
 	if err := os.WriteFile(checker, contents, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	return claudeTest{home: home, bin: bin, checker: checker, mise: mise, env: []string{
+	return claudeTest{home: home, project: project, bin: bin, checker: checker, mise: mise, env: []string{
 		"HOME=" + home,
 		"PATH=" + bin,
 		"XDG_CONFIG_HOME=" + filepath.Join(home, ".config"),
@@ -90,7 +91,7 @@ func (fixture claudeTest) run(t *testing.T, program string, args ...string) (str
 	ctx, cancel := context.WithTimeout(t.Context(), 60*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, program, args...)
-	cmd.Dir = fixture.home
+	cmd.Dir = fixture.project
 	cmd.Env = fixture.env
 	cmd.Stdin = strings.NewReader("stdin must not reach Claude\n")
 	cmd.WaitDelay = time.Second
@@ -178,7 +179,7 @@ func TestClaudeDaily(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			fixture := newClaudeTest(t)
 			fixture.stub(t, filepath.Join(fixture.bin, "claude"), "echo claude >> \"$HOME/order\"\n"+test.reply)
-			fixture.stub(t, filepath.Join(fixture.home, ".dotfiles", "bin", "check-meet-system-audio.command"), "echo audio >> \"$HOME/order\"\n"+test.audio)
+			fixture.stub(t, filepath.Join(fixture.project, "bin", "check-meet-system-audio.command"), "echo audio >> \"$HOME/order\"\n"+test.audio)
 			output, err := fixture.run(t, fixture.mise, "run", "--skip-tools", "daily")
 			if (err != nil) != test.fails {
 				t.Fatalf("daily failure = %v, want %v:\n%s", err, test.fails, output)

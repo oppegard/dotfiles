@@ -94,7 +94,7 @@ if [ "$__os" = "Darwin" ]; then
   brew cleanup # If lots of warnings, run `brew upgrade`
 
   gum_print "🍎️ 🍎️ 🍎️  MISE Mac Tasks  🍎️ 🍎️ 🍎️"
-  mise run -C "$MISE_CONFIG_DIR" betterdisplay:export
+  mise run -C "$DOTFILES_DIR" betterdisplay:export
 
   # Make sure programs that are installed are run, so that I can configure them to open at login
   open -g -a BetterDisplay
