@@ -349,7 +349,7 @@ tools from Step 2 provide Git for the clone.
   preferences:
 
   ```sh
-  mise -C "$HOME/src/dotfiles/files/home/.config/mise" run betterdisplay:import
+  mise -C "$HOME/src/dotfiles" run betterdisplay:import
   ```
 
   Confirm the task when prompted. It backs up the current BetterDisplay
@@ -362,7 +362,7 @@ tools from Step 2 provide Git for the clone.
 
   ```sh
   open -g -a BetterDisplay
-  mise -C "$HOME/src/dotfiles/files/home/.config/mise" run betterdisplay:import
+  mise -C "$HOME/src/dotfiles" run betterdisplay:import
   ```
 
   This step prevents a first-run cycle in `setup.sh`: the script installs
@@ -494,7 +494,7 @@ tools from Step 2 provide Git for the clone.
   ```sh
   mise doctor
   mise -C "$HOME/src/dotfiles/files/home/.config/mise" bootstrap status --missing
-  mise -C "$HOME/src/dotfiles/files/home/.config/mise" run betterdisplay:check
+  mise -C "$HOME/src/dotfiles" run betterdisplay:check
   brew bundle check --file="$HOME/src/dotfiles/Brewfile"
   git -C "$HOME/src/dotfiles" status --short
   ```
@@ -636,7 +636,7 @@ tools from Step 2 provide Git for the clone.
   ```sh
   brew install --cask betterdisplay
   open -g -a BetterDisplay
-  mise -C "$HOME/src/dotfiles/files/home/.config/mise" run betterdisplay:import
+  mise -C "$HOME/src/dotfiles" run betterdisplay:import
   cd "$HOME/src/dotfiles"
   ./bin/setup.sh
   ```

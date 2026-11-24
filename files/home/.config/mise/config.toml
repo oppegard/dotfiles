@@ -152,10 +152,3 @@ shellcheck = "latest"
 "aqua:hashicorp/terraform" = "1.16"
 "aqua:terraform-linters/tflint" = "latest"
 "github:noirbizarre/git-wipe" = "latest"
-
-
-[tasks."claude:check"]
-description = "Check Claude CLI readiness with one small request"
-shell = "bash -c"
-timeout = "45s"
-run = '"{{ env.HOME }}/.dotfiles/bin/check-claude"'

@@ -1,0 +1,40 @@
+[tasks.daily]
+description = "Run morning readiness checks for Claude and Google Meet audio"
+depends = ["claude:check"]
+shell = "bash -c"
+run = "bin/check-meet-system-audio.command"
+
+
+[tasks."macos-defaults:record"]
+description = "Record one interactive macOS defaults change"
+dir = "{{config_root}}/vendor/macos-defaults"
+shell = "bash -c"
+run = "bash ./diff.sh"
+
+
+[tasks."macos-defaults:unsupported:check"]
+description = "Verify reviewed host-scoped and complex macOS defaults"
+shell = "bash -c"
+run = "bin/macos-defaults-audit verify --manifest files/macos/unsupported-defaults.json"
+
+
+[tasks."betterdisplay:check"]
+description = "Check BetterDisplay sync profile against dotfiles"
+shell = "bash -c"
+run = "bin/betterdisplay-prefs check"
+
+
+[tasks."betterdisplay:export"]
+description = "Export BetterDisplay sync profile to dotfiles"
+shell = "bash -c"
+run = "bin/betterdisplay-prefs export"
+
+
+[tasks."betterdisplay:import"]
+description = "Import BetterDisplay sync profile from dotfiles"
+confirm = {
+  message = "Apply the dotfiles BetterDisplay sync profile?",
+  default = "no"
+}
+shell = "bash -c"
+run = "bin/betterdisplay-prefs import"

@@ -37,3 +37,10 @@ run = "hk fix --all"
 [tasks."test:integration"]
 description = "Run Go integration tests; bootstrap needs a disposable machine"
 run = "go test -v -count=1 -timeout=20m ./test/integration"
+
+
+[tasks."claude:check"]
+description = "Check Claude CLI readiness with one small request"
+shell = "bash -c"
+timeout = "45s"
+run = "bin/check-claude"
