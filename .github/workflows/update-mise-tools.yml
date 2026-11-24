@@ -2,7 +2,7 @@ name: Update mise tools
 
 on:
   schedule:
-    - cron: "22 2 * * 2"
+    - cron: "39 21 * * 1"
       timezone: "America/Denver"
   workflow_dispatch:
 
